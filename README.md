@@ -1,16 +1,87 @@
-# React + Vite
+# EWSD Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React frontend application built with Vite for the UOG Final Year EWSD project.
 
-Currently, two official plugins are available:
+## Prerequisites
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Before you begin, ensure you have the following installed:
+- Node.js (version 16 or higher)
+- npm (comes with Node.js) or yarn
+- Git
 
-## React Compiler
+## How to Clone and Install Dependencies
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 1. Clone the Repository
 
-## Expanding the ESLint configuration
+```bash
+git clone <repository-url>
+cd EWSD_FRONTEND
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 2. Install Dependencies
+
+```bash
+npm install
+```
+
+Alternatively, if you prefer yarn:
+```bash
+yarn install
+```
+
+### 3. Start the Development Server
+
+```bash
+npm run dev
+```
+
+The application will typically be available at `http://localhost:3000`
+
+## Troubleshooting
+
+### Merge Conflicts After Cloning
+
+If you encounter merge conflict markers (like `<<<<<<< HEAD`, `=======`, `>>>>>>>`) in your files after cloning, follow these steps:
+
+1. **Check for conflicted files:**
+   ```bash
+   git status
+   ```
+
+2. **Resolve conflicts in affected files:**
+   - Open the conflicted file(s) in your editor
+   - Remove the conflict markers (`<<<<<<< HEAD`, `=======`, `>>>>>>>`)
+   - Choose which version of the code to keep
+   - Save the file
+
+3. **Stage the resolved files:**
+   ```bash
+   git add <resolved-files>
+   ```
+
+4. **Complete the merge:**
+   ```bash
+   git commit
+   ```
+
+5. **Then install dependencies:**
+   ```bash
+   npm install
+   ```
+
+### Alternative: Reset to Clean State
+
+If merge conflicts persist, you can reset to a clean state:
+
+```bash
+git reset --hard HEAD
+npm install
+```
+
+## Technology Stack
+
+- **React 18** - UI framework
+- **Vite** - Build tool and development server
+- **React Router** - Client-side routing
+- **TailwindCSS** - Utility-first CSS framework
+- **HeroUI** - React component library
