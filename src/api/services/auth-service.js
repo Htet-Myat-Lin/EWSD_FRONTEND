@@ -8,4 +8,12 @@ export const AuthService = {
     register: async(payload) => {
         return (await axiosInstance.post("/register", payload)).data
     },
+
+    logout: async() => {
+        return (await axiosInstance.post("/logout")).data
+    },
+
+    getUser: async() => {
+        return (await axiosInstance.get("/user")).data
+    }
 }

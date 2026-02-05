@@ -1,25 +1,35 @@
 import { Form, Input, Button } from "@heroui/react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { AuthService } from "../api/services/auth-service";
 import { Spinner } from "@heroui/react";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
-  const { handleSubmit, register } = useForm({
+  const { handleSubmit, register, reset } = useForm({
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
+  const navigate = useNavigate()
+
+  const queryClient = useQueryClient()
+
+  // Login
   const { isPending, mutate, error } = useMutation({
     mutationFn: AuthService.login,
     onError: (err) => {
       console.error(err);
       toast.error("Login failed. Please try again.");
     },
-    onSuccess: () => {
+    onSuccess: async(data) => {
+      localStorage.setItem("access_token", data.access_token)
+      reset()
+      await queryClient.invalidateQueries({ queryKey: ["user"] })
+      navigate("/")
       toast.success("Login successful!");
     }
   });
