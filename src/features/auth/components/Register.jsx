@@ -48,7 +48,7 @@ export function Register() {
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
       <Form
-        className="w-full max-w-sm flex flex-col gap-4 p-8 shadow-md rounded-2xl bg-white"
+        className="w-full max-w-md flex flex-col gap-4 p-8 shadow-md rounded-2xl bg-white"
         onSubmit={handleSubmit(handleRegister)}
       >
         <h1 className="text-2xl font-bold mb-4">Register Here</h1>
@@ -68,6 +68,8 @@ export function Register() {
             name="username"
             placeholder="Enter your username"
             type="text"
+            isInvalid={!!errors.name}
+              errorMessage={errors.name?.message}
             {...register("name", {
               required: "Username is required",
               minLength: {
@@ -76,9 +78,6 @@ export function Register() {
               },
             })}
           />
-          {errors.name && (
-            <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>
-          )}
         </div>
 
         {/* Email */}
@@ -89,6 +88,8 @@ export function Register() {
             name="email"
             placeholder="Enter your email"
             type="email"
+            isInvalid={!!errors.email}
+            errorMessage={errors.email?.message}
             {...register("email", {
               required: "Email is required",
               pattern: {
@@ -97,9 +98,6 @@ export function Register() {
               },
             })}
           />
-          {errors.email && (
-            <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
-          )}
         </div>
 
         {/* Password */}
@@ -110,6 +108,8 @@ export function Register() {
             name="password"
             placeholder="Enter your password"
             type="password"
+            isInvalid={!!errors.password}
+            errorMessage={errors.password?.message}
             {...register("password", {
               required: "Password is required",
               minLength: {
@@ -118,11 +118,6 @@ export function Register() {
               },
             })}
           />
-          {errors.password && (
-            <p className="text-red-500 text-xs mt-1">
-              {errors.password.message}
-            </p>
-          )}
         </div>
 
         {/* Confirm Password */}
@@ -133,6 +128,8 @@ export function Register() {
             name="password"
             placeholder="Confirm your password"
             type="password"
+            isInvalid={!!errors.password_confirmation}
+            errorMessage={errors.password_confirmation?.message}
             {...register("password_confirmation", {
               required: "Password confirmation is required",
               validate: (value, formValues) => {
@@ -142,20 +139,16 @@ export function Register() {
               },
             })}
           />
-          {errors.password_confirmation && (
-            <p className="text-red-500 text-xs mt-1">
-              {errors.password_confirmation.message}
-            </p>
-          )}
         </div>
 
         {/* Faculty */}
         <div className="w-full">
           <Select
-              className="max-w-xs"
               label="Faculty"
               labelPlacement="outside-top"
               placeholder="Select your faculty"
+              isInvalid={!!errors.faculty_id}
+              errorMessage={errors.faculty_id?.message}
               {...register("faculty_id", {
                 required: "Faculty is required",
               })}
@@ -164,11 +157,6 @@ export function Register() {
                 <SelectItem value={faculty.id} key={faculty.id}>{faculty.name}</SelectItem>
               ))}
             </Select>
-            {errors.faculty_id && (
-            <p className="text-red-500 text-xs mt-1">
-              {errors.faculty_id.message}
-            </p>
-          )}
         </div>
 
         <Button
