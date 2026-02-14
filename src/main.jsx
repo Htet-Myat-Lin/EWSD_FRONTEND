@@ -6,6 +6,7 @@ import App from "./App.jsx";
 import { HeroUIProvider } from "@heroui/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
 
 const queryClient = new QueryClient();
 
@@ -14,7 +15,9 @@ createRoot(document.getElementById("root")).render(
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <HeroUIProvider>
-          <App />
+          <AuthProvider>
+            <App />
+          </AuthProvider>
         </HeroUIProvider>
       </BrowserRouter>
     </QueryClientProvider>
