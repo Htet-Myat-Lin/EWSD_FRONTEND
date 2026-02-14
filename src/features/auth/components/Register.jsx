@@ -1,18 +1,12 @@
-import { Form, Input, Button, Spinner, Select, SelectItem } from "@heroui/react";
+import { Form, Input, Button, Select, SelectItem } from "@heroui/react";
 import { useForm } from "react-hook-form";
 import { useRegister } from "../hooks/useRegister";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 import { useFaculties } from "../../faculty/hooks/useFaculty";
 
 export function Register() {
 
   // React Hook Form setup
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm({
+  const { handleSubmit, register, formState: { errors } } = useForm({
     defaultValues: {
       name: "",
       email: "",
@@ -27,15 +21,7 @@ export function Register() {
   const { data: faculties } = useFaculties()
 
   // user registration mutation hook
-  const { mutate, isPending, error, isSuccess } = useRegister()
-
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    if (isSuccess) {
-      navigate("/login");
-    }
-  }, [isSuccess, navigate]);
+  const { mutate, isPending, error } = useRegister()
 
   // Handle form submission
   const handleRegister = (payload) => {
@@ -176,8 +162,9 @@ export function Register() {
           color="primary"
           type="submit"
           className="w-full"
+          isLoading={isPending}
         >
-          {isPending ? <Spinner size="sm" color="default" /> : "Register"}
+          {isPending ? "Registering..." : "Register"}
         </Button>
       </Form>
     </div>
