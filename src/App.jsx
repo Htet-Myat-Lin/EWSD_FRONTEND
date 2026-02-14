@@ -3,6 +3,8 @@ import { HomePage } from "./pages/HomePage";
 import RegisterPage from "./pages/RegisterPage";
 import { ToastContainer, Slide } from "react-toastify";
 import LoginPage from "./pages/LoginPage";
+import UnauthorizedPage from "./pages/UnauthorizedPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
   return (
@@ -12,6 +14,8 @@ function App() {
         <Route index element={<HomePage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/unauthorized" element={<UnauthorizedPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
 
       {/* Toast */}

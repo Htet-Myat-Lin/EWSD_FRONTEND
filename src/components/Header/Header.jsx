@@ -67,9 +67,9 @@ export function Header() {
           className="sm:hidden"
         />
         <NavbarBrand>
-          <NavLink to="/" className="flex items-center gap-2">
+          <NavLink to="/" className="flex items-center gap-1">
             <AcmeLogo />
-            <p className="font-bold text-inherit tracking-tight">ACME</p>
+            <p className="font-bold text-inherit tracking-tight">KMD</p>
           </NavLink>
         </NavbarBrand>
       </NavbarContent>
