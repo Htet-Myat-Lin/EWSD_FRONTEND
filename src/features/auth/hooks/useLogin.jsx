@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-=======
 import { useMutation } from "@tanstack/react-query";
 import { AuthService } from "@/api/services/auth-service";
 import { useNavigate } from "react-router-dom";
@@ -28,4 +26,3 @@ export const useLogin = () => {
     },
   });
 };
->>>>>>> Stashed changes
