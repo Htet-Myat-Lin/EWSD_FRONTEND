@@ -1,12 +1,37 @@
-import { Form, Input, Button, Select, SelectItem } from "@heroui/react";
-import { useForm } from "react-hook-form";
+import {
+  Form,
+  Input,
+  Button,
+  Select,
+  SelectItem,
+  Checkbox,
+} from "@heroui/react";
+import { useForm, Controller } from "react-hook-form";
 import { useRegister } from "../hooks/useRegister";
 import { useFaculties } from "../../faculty/hooks/useFaculty";
+import {
+  LuUser,
+  LuMail,
+  LuLock,
+  LuSchool,
+  LuEye,
+  LuEyeOff,
+} from "react-icons/lu";
+import { LoginRegisterTabs } from "@/components/login-register/LoginRegisterTabs";
+import { useState } from "react";
+import { LoginRegisterHeading } from "@/components/login-register/LoginRegisterHeading";
 
 export function Register() {
+  const [isVisible, setIsVisible] = useState(false);
+  const toggleVisibility = () => setIsVisible(!isVisible);
 
   // React Hook Form setup
-  const { handleSubmit, register, formState: { errors } } = useForm({
+  const {
+    handleSubmit,
+    control,
+    register,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
       name: "",
       email: "",
@@ -14,147 +39,245 @@ export function Register() {
       password_confirmation: "",
       faculty_id: "",
     },
-    onChange: true
   });
 
   // Fetch faculty data
-  const { data: faculties } = useFaculties()
+  const { data: faculties } = useFaculties();
 
   // user registration mutation hook
-  const { mutate, isPending, error } = useRegister()
+  const { mutate, isPending, error } = useRegister();
 
   // Handle form submission
   const handleRegister = (payload) => {
-    mutate(payload)
-  }
+    // ensure faculty id is sent as a number if present
+    if (payload.faculty_id) payload.faculty_id = Number(payload.faculty_id);
+    mutate(payload);
+  };
 
   // Error Message from API
-  const errMsg = error?.response?.data ? Object.values(error.response.data.errors).flat().join(" ") : "Internal Server Error"
+  const errMsg = error?.response?.data
+    ? Object.values(error.response.data.errors).flat().join(" ")
+    : "Internal Server Error";
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
-      <Form
-        className="w-full max-w-md flex flex-col gap-4 p-8 shadow-md rounded-2xl bg-white"
-        onSubmit={handleSubmit(handleRegister)}
-      >
-        <h1 className="text-2xl font-bold mb-4">Register Here</h1>
-
-        {/* Api Response Error */}
-        {error && (
-          <p className="text-red-500 text-sm">
-            {errMsg}
-          </p>
-        )}
-
-        {/* Username */}
-        <div className="w-full">
-          <Input
-            label="Username"
-            labelPlacement="outside"
-            name="username"
-            placeholder="Enter your username"
-            type="text"
-            isInvalid={!!errors.name}
-              errorMessage={errors.name?.message}
-            {...register("name", {
-              required: "Username is required",
-              minLength: {
-                value: 2,
-                message: "Username must be at least 2 characters",
-              },
-            })}
-          />
-        </div>
-
-        {/* Email */}
-        <div className="w-full">
-          <Input
-            label="Email"
-            labelPlacement="outside"
-            name="email"
-            placeholder="Enter your email"
-            type="email"
-            isInvalid={!!errors.email}
-            errorMessage={errors.email?.message}
-            {...register("email", {
-              required: "Email is required",
-              pattern: {
-                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(edu|ac)(\.[a-z]{2,3})?$/i,
-                message: "Please enter a valid .edu email address",
-              },
-            })}
-          />
-        </div>
-
-        {/* Password */}
-        <div className="w-full">
-          <Input
-            label="Password"
-            labelPlacement="outside"
-            name="password"
-            placeholder="Enter your password"
-            type="password"
-            isInvalid={!!errors.password}
-            errorMessage={errors.password?.message}
-            {...register("password", {
-              required: "Password is required",
-              minLength: {
-                value: 8,
-                message: "Password must be at least 8 characters",
-              },
-            })}
-          />
-        </div>
-
-        {/* Confirm Password */}
-        <div className="w-full">
-          <Input
-            label="Password"
-            labelPlacement="outside"
-            name="password"
-            placeholder="Confirm your password"
-            type="password"
-            isInvalid={!!errors.password_confirmation}
-            errorMessage={errors.password_confirmation?.message}
-            {...register("password_confirmation", {
-              required: "Password confirmation is required",
-              validate: (value, formValues) => {
-                return (
-                  value === formValues.password || "Passwords do not match"
-                );
-              },
-            })}
-          />
-        </div>
-
-        {/* Faculty */}
-        <div className="w-full">
-          <Select
-              label="Faculty"
-              labelPlacement="outside-top"
-              placeholder="Select your faculty"
-              isInvalid={!!errors.faculty_id}
-              errorMessage={errors.faculty_id?.message}
-              {...register("faculty_id", {
-                required: "Faculty is required",
-              })}
-            >
-              {faculties?.map((faculty) => (
-                <SelectItem value={faculty.id} key={faculty.id}>{faculty.name}</SelectItem>
-              ))}
-            </Select>
-        </div>
-
-        <Button
-          disabled={isPending}
-          color="primary"
-          type="submit"
-          className="w-full"
-          isLoading={isPending}
+    <div className="flex items-center justify-center h-full w-full">
+      <div className="w-full max-w-lg p-6 bg-white rounded-lg">
+        <Form
+          className="w-full flex flex-col gap-5"
+          onSubmit={handleSubmit(handleRegister)}
         >
-          {isPending ? "Registering..." : "Register"}
-        </Button>
-      </Form>
+          <LoginRegisterHeading />
+
+          {/* Login & Register Toggle */}
+          <LoginRegisterTabs />
+
+          <div className="text-left">
+            <h2 className="text-xl font-bold">Create Account</h2>
+            <p className="text-default-500 text-sm">
+              Join the university magazine community
+            </p>
+          </div>
+
+          {/* Api Response Error */}
+          {error && <p className="text-red-500 text-sm">{errMsg}</p>}
+
+          {/* Username */}
+          <div className="w-full">
+            <Input
+              label="Full Name"
+              labelPlacement="outside"
+              name="name"
+              placeholder="Enter your full name"
+              type="text"
+              startContent={<LuUser size={18} className="text-gray-500" />}
+              isInvalid={!!errors.name}
+              errorMessage={errors.name?.message}
+              {...register("name", {
+                required: "Full name is required",
+                minLength: {
+                  value: 2,
+                  message: "Full name must be at least 2 characters",
+                },
+              })}
+            />
+          </div>
+
+          {/* Email */}
+          <div className="w-full">
+            <Input
+              label="Email"
+              labelPlacement="outside"
+              name="email"
+              placeholder="your.email@university.edu"
+              type="email"
+              startContent={<LuMail size={18} className="text-gray-500" />}
+              isInvalid={!!errors.email}
+              errorMessage={errors.email?.message}
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value:
+                    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(edu|ac)(\.[a-z]{2,3})?$/i,
+                  message: "Please enter a valid .edu email address",
+                },
+              })}
+            />
+            <p className="text-xs text-gray-500 mt-1">Use your university email address</p>
+          </div>
+
+          {/* Faculty */}
+          <div className="w-full">
+            <Controller
+              name="faculty_id"
+              control={control}
+              rules={{ required: "Faculty is required" }}
+              render={({ field }) => (
+                <Select
+                  label="Faculty"
+                  labelPlacement="outside-top"
+                  placeholder="Select your faculty"
+                  startContent={
+                    <LuSchool size={18} className="text-gray-500" />
+                  }
+                  isInvalid={!!errors.faculty_id}
+                  errorMessage={errors.faculty_id?.message}
+                  value={field.value}
+                  onChange={(val) => field.onChange(val)}
+                >
+                  {faculties?.map((faculty) => (
+                    <SelectItem value={String(faculty.id)} key={faculty.id}>
+                      {faculty.name}
+                    </SelectItem>
+                  ))}
+                </Select>
+              )}
+            />
+          </div>
+
+          {/* Password */}
+          <div className="w-full">
+            <Input
+              label="Password"
+              labelPlacement="outside"
+              name="password"
+              placeholder="Create a strong password"
+              type={isVisible ? "text" : "password"}
+              startContent={<LuLock size={18} className="text-gray-500" />}
+              endContent={
+                isVisible ? (
+                  <LuEye
+                    size={18}
+                    className="text-gray-500 cursor-pointer"
+                    onClick={toggleVisibility}
+                  />
+                ) : (
+                  <LuEyeOff
+                    size={18}
+                    className="text-gray-500 cursor-pointer"
+                    onClick={toggleVisibility}
+                  />
+                )
+              }
+              isInvalid={!!errors.password}
+              errorMessage={errors.password?.message}
+              {...register("password", {
+                required: "Password is required",
+                minLength: {
+                  value: 8,
+                  message: "Password must be at least 8 characters",
+                },
+              })}
+            />
+            <p className="text-xs text-gray-500 mt-1">At least 8 characters</p>
+          </div>
+
+          {/* Confirm Password */}
+          <div className="w-full">
+            <Input
+              label="Confirm Password"
+              labelPlacement="outside"
+              name="password_confirmation"
+              placeholder="Re-enter your password"
+              type={isVisible ? "text" : "password"}
+              endContent={
+                isVisible ? (
+                  <LuEye
+                    size={18}
+                    className="text-gray-500 cursor-pointer"
+                    onClick={toggleVisibility}
+                  />
+                ) : (
+                  <LuEyeOff
+                    size={18}
+                    className="text-gray-500 cursor-pointer"
+                    onClick={toggleVisibility}
+                  />
+                )
+              }
+              startContent={<LuLock size={18} className="text-gray-500" />}
+              isInvalid={!!errors.password_confirmation}
+              errorMessage={errors.password_confirmation?.message}
+              {...register("password_confirmation", {
+                required: "Password confirmation is required",
+                validate: (value, formValues) => {
+                  return (
+                    value === formValues.password || "Passwords do not match"
+                  );
+                },
+              })}
+            />
+          </div>
+
+          {/* Checkbox */}
+          <div className="border w-full border-gray-200 rounded-md p-4 bg-gray-50">
+            <Checkbox
+              color="default"
+              {...register("terms", {
+                required: "You must agree to the terms",
+              })}
+              isInvalid={!!errors.terms}
+            >
+              <span className="text-sm text-gray-600">
+                I agree to the{" "}
+                <a href="#" className="text-primary">
+                  Terms of Service
+                </a>{" "}
+                and{" "}
+                <a href="#" className="text-primary">
+                  Privacy Policy
+                </a>
+                .
+              </span>
+            </Checkbox>
+            {errors.terms && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.terms.message}
+              </p>
+            )}
+          </div>
+
+          <Button
+            disabled={isPending}
+            className="bg-linear-to-r from-blue-600 to-purple-600 text-white w-full"
+            type="submit"
+            isLoading={isPending}
+          >
+            {isPending ? "Registering..." : "Register"}
+          </Button>
+
+          <p className="text-center text-xs text-gray-600 w-full">
+            By registering, you'll be able to submit articles and contribute to
+            the university magazine
+          </p>
+
+          <p className="text-center text-sm text-gray-600 w-full">
+            Need help? Contact{" "}
+            <span className="text-gray-900 cursor-pointer">
+              support@university.edu
+            </span>
+          </p>
+        </Form>
+      </div>
     </div>
   );
 }

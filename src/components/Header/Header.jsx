@@ -15,7 +15,7 @@ import {
   DropdownMenu,
   Avatar,
 } from "@heroui/react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { useLogout } from "@/features/auth/hooks/useLogout";
 
@@ -46,6 +46,20 @@ export function Header() {
   const handleLogout = () => {
     logout();
   }
+
+  const navigate = useNavigate()
+
+  const redirectToDashboard = () => {
+    if (user?.role?.name === "admin") {
+      navigate("/admin/dashboard");
+    } else if (user?.role?.name === "student") {
+      navigate("/student/dashboard");
+    } else if (user?.role?.name === "marketing_coordinator") {
+      navigate("/marketing-coordinator/dashboard");
+    } else if (user?.role?.name === "marketing_manager") {
+      navigate("/marketing-manager/dashboard");
+    }
+  }
  
   const menuItems = [
     { name: "Home", route: "/" },
@@ -56,9 +70,8 @@ export function Header() {
 
   return (
     <Navbar
-      isBordered
       onMenuOpenChange={setIsMenuOpen}
-      className="bg-background/70 backdrop-blur-md"
+      className="bg-background/70 backdrop-blur-md sticky top-0 z-50"
     >
       {/* Mobile Toggle & Logo */}
       <NavbarContent>
@@ -109,8 +122,11 @@ export function Header() {
                 <p className="font-semibold">Signed in as</p>
                 <p className="font-semibold">{user?.email}</p>
               </DropdownItem>
+              <DropdownItem key="dashboard" color="primary" onClick={redirectToDashboard}>
+                Dashboard
+              </DropdownItem>
               <DropdownItem key="logout" color="danger" onClick={handleLogout}>
-                Log Out
+                Logout
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
