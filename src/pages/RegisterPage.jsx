@@ -1,4 +1,4 @@
-import { Header } from "@/components/Header/Header";
+import { Header } from "@/components/header/Header";
 import { Register } from "../features/auth/components/Register";
 
 export default function RegisterPage() {

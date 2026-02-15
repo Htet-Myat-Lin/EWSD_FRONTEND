@@ -4,15 +4,17 @@ import { useGetCurrentUser } from '@/features/auth/hooks/useGetCurrentUser'
 const AuthContext = createContext(null)
 
 export const AuthProvider = ({ children }) => {
-  const { data, isPending: loading } = useGetCurrentUser()
+  const { data, isPending } = useGetCurrentUser()
+  const [loading, setLoading] = useState(true)
   const [user, setUser] = useState(null)
 
   useEffect(() => {
-    if (data?.user) {
+    if (!isPending) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      setUser(data.user)
+      setLoading(false)
+      setUser(data?.user)
     }
-  }, [data])
+  }, [isPending, data])
 
   const value = useMemo(() => ({
     user,

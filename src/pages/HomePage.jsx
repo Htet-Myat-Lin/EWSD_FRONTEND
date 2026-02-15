@@ -1,4 +1,4 @@
-import { Header } from "@/components/Header/Header";
+import { Header } from "@/components/header/Header";
 import { Button } from "@heroui/react";
 
 export function HomePage() {
