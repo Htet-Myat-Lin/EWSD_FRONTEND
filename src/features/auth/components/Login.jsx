@@ -91,7 +91,7 @@ export function Login() {
           </div>
 
           <div className="w-full flex items-center justify-between">
-            <Checkbox color="default">
+            <Checkbox color="primary">
               <span className="text-gray-600 text-sm">Remember me</span>
             </Checkbox>
             <Link

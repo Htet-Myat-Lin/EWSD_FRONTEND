@@ -14,26 +14,48 @@ import {
   Dropdown,
   DropdownMenu,
   Avatar,
+  Chip,
+  Divider,
 } from "@heroui/react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { useLogout } from "@/features/auth/hooks/useLogout";
+import { 
+  HiHome,
+  HiDocumentText,
+  HiInformationCircle,
+  HiPhone,
+  HiUser,
+  HiLogout,
+  HiViewGrid,
+  HiMenu,
+  HiX
+} from "react-icons/hi";
 
 export const AcmeLogo = () => (
-  <svg
-    fill="none"
-    height="36"
-    viewBox="0 0 32 32"
-    width="36"
-    className="text-primary"
-  >
-    <path
-      clipRule="evenodd"
-      d="M17.6482 10.1305L15.8785 7.02583L7.02979 22.5499H10.5278L17.6482 10.1305ZM19.8798 14.0457L18.11 17.1983L19.394 19.4511H16.8453L15.1056 22.5499H24.7272L19.8798 14.0457Z"
-      fill="currentColor"
-      fillRule="evenodd"
-    />
-  </svg>
+  <div className="flex items-center gap-2">
+    <div className="relative">
+      <svg
+        fill="none"
+        height="40"
+        viewBox="0 0 32 32"
+        width="40"
+        className="text-primary drop-shadow-sm"
+      >
+        <path
+          clipRule="evenodd"
+          d="M17.6482 10.1305L15.8785 7.02583L7.02979 22.5499H10.5278L17.6482 10.1305ZM19.8798 14.0457L18.11 17.1983L19.394 19.4511H16.8453L15.1056 22.5499H24.7272L19.8798 14.0457Z"
+          fill="currentColor"
+          fillRule="evenodd"
+        />
+      </svg>
+      <div className="absolute -top-1 -right-1 w-2 h-2 bg-success rounded-full animate-pulse"></div>
+    </div>
+    <div className="flex flex-col">
+      <p className="font-bold text-inherit text-lg tracking-tight">KMD</p>
+      <p className="text-xs text-default-500">University Magazine</p>
+    </div>
+  </div>
 );
 
 export function Header() {
@@ -62,95 +84,138 @@ export function Header() {
   }
  
   const menuItems = [
-    { name: "Home", route: "/" },
-    { name: "Articles", route: "/articles" },
-    { name: "About", route: "/about" },
-    { name: "Contact", route: "/contact" },
+    { name: "Home", route: "/", icon: HiHome },
+    { name: "Articles", route: "/articles", icon: HiDocumentText },
+    { name: "About", route: "/about", icon: HiInformationCircle },
+    { name: "Contact", route: "/contact", icon: HiPhone },
   ];
 
   return (
     <Navbar
       onMenuOpenChange={setIsMenuOpen}
-      className="bg-background/70 backdrop-blur-md sticky top-0 z-50"
+      className="bg-background/80 backdrop-blur-lg border-b border-default-200 sticky top-0 z-50 shadow-sm"
+      maxWidth="full"
     >
       {/* Mobile Toggle & Logo */}
-      <NavbarContent>
+      <NavbarContent className="sm:hidden">
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          className="sm:hidden"
+          className="data-open:rotate-180 transition-transform duration-300"
+          icon={<HiMenu size={20} />}
         />
         <NavbarBrand>
           <NavLink to="/" className="flex items-center gap-1">
             <AcmeLogo />
-            <p className="font-bold text-inherit tracking-tight">KMD</p>
+          </NavLink>
+        </NavbarBrand>
+      </NavbarContent>
+
+      {/* Desktop Logo */}
+      <NavbarContent className="hidden sm:flex">
+        <NavbarBrand>
+          <NavLink to="/" className="flex items-center gap-1 hover:opacity-80 transition-opacity">
+            <AcmeLogo />
           </NavLink>
         </NavbarBrand>
       </NavbarContent>
 
       {/* Desktop Navigation */}
-      <NavbarContent className="hidden sm:flex gap-8" justify="center">
-        {menuItems.map((item) => (
-          <NavbarItem key={item.route} isActive={pathname === item.route}>
-            <Link
-              as={NavLink}
-              to={item.route}
-              color={pathname === item.route ? "primary" : "foreground"}
-              className="text-sm font-medium transition-opacity hover:opacity-70"
-            >
-              {item.name}
-            </Link>
-          </NavbarItem>
-        ))}
+      <NavbarContent className="hidden sm:flex gap-2" justify="center">
+        {menuItems.map((item) => {
+          const Icon = item.icon;
+          const isActive = pathname === item.route;
+          return (
+            <NavbarItem key={item.route} isActive={isActive}>
+              <Link
+                as={NavLink}
+                to={item.route}
+                color={isActive ? "primary" : "foreground"}
+                className={`text-sm font-medium transition-all duration-200 hover:scale-105 flex items-center gap-1 px-3 py-2 rounded-lg ${
+                  isActive 
+                    ? "bg-primary/10 text-primary shadow-sm" 
+                    : "hover:bg-default-100/50"
+                }`}
+              >
+                <Icon size={16} />
+                {item.name}
+              </Link>
+            </NavbarItem>
+          );
+        })}
       </NavbarContent>
 
       {/* Auth Actions */}
       {user ? (
-        <NavbarContent justify="end">
+        <NavbarContent justify="end" className="gap-2">
+          <Chip
+            size="sm"
+            variant="flat"
+            color="primary"
+            className="hidden md:inline-flex"
+          >
+            {user?.role?.name?.replace('_', ' ') || 'User'}
+          </Chip>
           <Dropdown placement="bottom-end">
             <DropdownTrigger>
               <Avatar
                 isBordered
                 as="button"
-                className="transition-transform"
+                className="transition-transform hover:scale-105"
                 color="primary"
                 name={user?.name}
                 size="sm"
+                src={user?.avatar}
+                fallback={<HiUser className="text-default-500" />}
               />
             </DropdownTrigger>
             <DropdownMenu aria-label="Profile Actions" variant="flat">
               <DropdownItem key="profile" className="h-14 gap-2">
-                <p className="font-semibold">Signed in as</p>
-                <p className="font-semibold">{user?.email}</p>
+                <div className="flex flex-col">
+                  <p className="font-semibold">{user?.name}</p>
+                  <p className="text-sm text-default-500">{user?.email}</p>
+                </div>
               </DropdownItem>
-              <DropdownItem key="dashboard" color="primary" onClick={redirectToDashboard}>
+              <Divider />
+              <DropdownItem 
+                key="dashboard" 
+                color="primary" 
+                onClick={redirectToDashboard}
+                startContent={<HiViewGrid size={16} />}
+              >
                 Dashboard
               </DropdownItem>
-              <DropdownItem key="logout" color="danger" onClick={handleLogout}>
+              <DropdownItem 
+                key="logout" 
+                color="danger" 
+                onClick={handleLogout}
+                startContent={<HiLogout size={16} />}
+              >
                 Logout
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </NavbarContent>
       ) : (
-        <NavbarContent justify="end">
+        <NavbarContent justify="end" className="gap-2">
           <NavbarItem className="hidden lg:flex">
-            <Link
+            <Button
               as={NavLink}
               to="/login"
-              color="foreground"
-              className="text-sm"
+              variant="light"
+              radius="full"
+              className="font-medium hover:bg-default-100"
             >
               Login
-            </Link>
+            </Button>
           </NavbarItem>
           <NavbarItem>
             <Button
               as={NavLink}
               to="/register"
               color="primary"
-              variant="flat"
+              variant="solid"
               radius="full"
-              className="font-semibold"
+              className="font-semibold bg-linear-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 shadow-md hover:shadow-lg transition-all duration-200"
             >
               Sign Up
             </Button>
@@ -159,20 +224,61 @@ export function Header() {
       )}
 
       {/* Mobile Menu */}
-      <NavbarMenu className="pt-6">
-        {menuItems.map((item) => (
-          <NavbarMenuItem key={item.route}>
-            <Link
-              as={NavLink}
-              to={item.route}
-              className="w-full py-2 text-lg"
-              color={pathname === item.route ? "primary" : "foreground"}
-              onPress={() => setIsMenuOpen(false)} // Auto-close menu on click
-            >
-              {item.name}
-            </Link>
-          </NavbarMenuItem>
-        ))}
+      <NavbarMenu className="pt-8 pb-4">
+        <div className="flex flex-col gap-2">
+          {menuItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = pathname === item.route;
+            return (
+              <NavbarMenuItem key={item.route}>
+                <Link
+                  as={NavLink}
+                  to={item.route}
+                  className={`w-full py-3 px-4 text-lg font-medium transition-colors duration-200 flex items-center gap-3 rounded-lg ${
+                    isActive 
+                      ? "text-primary bg-primary/10" 
+                      : "text-foreground hover:bg-default-100"
+                  }`}
+                  color={isActive ? "primary" : "foreground"}
+                  onPress={() => setIsMenuOpen(false)}
+                >
+                  <Icon size={20} />
+                  {item.name}
+                </Link>
+              </NavbarMenuItem>
+            );
+          })}
+          
+          {/* Mobile Auth Actions */}
+          {!user && (
+            <>
+              <Divider className="my-2" />
+              <NavbarMenuItem>
+                <Button
+                  as={NavLink}
+                  to="/login"
+                  variant="light"
+                  className="w-full justify-start"
+                  onPress={() => setIsMenuOpen(false)}
+                >
+                  Login
+                </Button>
+              </NavbarMenuItem>
+              <NavbarMenuItem>
+                <Button
+                  as={NavLink}
+                  to="/register"
+                  color="primary"
+                  variant="solid"
+                  className="w-full"
+                  onPress={() => setIsMenuOpen(false)}
+                >
+                  Sign Up
+                </Button>
+              </NavbarMenuItem>
+            </>
+          )}
+        </div>
       </NavbarMenu>
     </Navbar>
   );

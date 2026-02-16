@@ -231,7 +231,7 @@ export function Register() {
           {/* Checkbox */}
           <div className="border w-full border-gray-200 rounded-md p-4 bg-gray-50">
             <Checkbox
-              color="default"
+              color="primary"
               {...register("terms", {
                 required: "You must agree to the terms",
               })}
@@ -262,7 +262,7 @@ export function Register() {
             type="submit"
             isLoading={isPending}
           >
-            {isPending ? "Registering..." : "Register"}
+            {isPending ? "Creating..." : "Create an account"}
           </Button>
 
           <p className="text-center text-xs text-gray-600 w-full">
