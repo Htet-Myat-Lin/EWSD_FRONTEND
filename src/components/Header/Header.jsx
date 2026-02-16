@@ -33,7 +33,7 @@ import {
 } from "react-icons/hi";
 
 export const AcmeLogo = () => (
-  <div className="flex items-center gap-2">
+  <div className="flex items-center">
     <div className="relative">
       <svg
         fill="none"
@@ -49,7 +49,6 @@ export const AcmeLogo = () => (
           fillRule="evenodd"
         />
       </svg>
-      <div className="absolute -top-1 -right-1 w-2 h-2 bg-success rounded-full animate-pulse"></div>
     </div>
     <div className="flex flex-col">
       <p className="font-bold text-inherit text-lg tracking-tight">KMD</p>
@@ -97,14 +96,14 @@ export function Header() {
       maxWidth="full"
     >
       {/* Mobile Toggle & Logo */}
-      <NavbarContent className="sm:hidden">
+      <NavbarContent className="sm:hidden -space-x-3">
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           className="data-open:rotate-180 transition-transform duration-300"
           icon={<HiMenu size={20} />}
         />
         <NavbarBrand>
-          <NavLink to="/" className="flex items-center gap-1">
+          <NavLink to="/" className="flex items-center">
             <AcmeLogo />
           </NavLink>
         </NavbarBrand>
@@ -248,36 +247,6 @@ export function Header() {
               </NavbarMenuItem>
             );
           })}
-          
-          {/* Mobile Auth Actions */}
-          {!user && (
-            <>
-              <Divider className="my-2" />
-              <NavbarMenuItem>
-                <Button
-                  as={NavLink}
-                  to="/login"
-                  variant="light"
-                  className="w-full justify-start"
-                  onPress={() => setIsMenuOpen(false)}
-                >
-                  Login
-                </Button>
-              </NavbarMenuItem>
-              <NavbarMenuItem>
-                <Button
-                  as={NavLink}
-                  to="/register"
-                  color="primary"
-                  variant="solid"
-                  className="w-full"
-                  onPress={() => setIsMenuOpen(false)}
-                >
-                  Sign Up
-                </Button>
-              </NavbarMenuItem>
-            </>
-          )}
         </div>
       </NavbarMenu>
     </Navbar>
