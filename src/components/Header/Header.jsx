@@ -144,77 +144,53 @@ export function Header() {
       </NavbarContent>
 
       {/* Auth Actions */}
-      {user ? (
-        <NavbarContent justify="end" className="gap-2">
-          <Chip
-            size="sm"
-            variant="flat"
-            color="primary"
-            className="hidden md:inline-flex"
-          >
-            {user?.role?.name?.replace('_', ' ') || 'User'}
-          </Chip>
+       {user ? (
+        <NavbarContent justify="end">
           <Dropdown placement="bottom-end">
             <DropdownTrigger>
               <Avatar
                 isBordered
                 as="button"
-                className="transition-transform hover:scale-105"
+                className="transition-transform"
                 color="primary"
                 name={user?.name}
                 size="sm"
-                src={user?.avatar}
-                fallback={<HiUser className="text-default-500" />}
               />
             </DropdownTrigger>
             <DropdownMenu aria-label="Profile Actions" variant="flat">
               <DropdownItem key="profile" className="h-14 gap-2">
-                <div className="flex flex-col">
-                  <p className="font-semibold">{user?.name}</p>
-                  <p className="text-sm text-default-500">{user?.email}</p>
-                </div>
+                <p className="font-semibold">Signed in as</p>
+                <p className="font-semibold">{user?.email}</p>
               </DropdownItem>
-              <Divider />
-              <DropdownItem 
-                key="dashboard" 
-                color="primary" 
-                onClick={redirectToDashboard}
-                startContent={<HiViewGrid size={16} />}
-              >
+              <DropdownItem key="dashboard" color="danger" onClick={redirectToDashboard}>
                 Dashboard
               </DropdownItem>
-              <DropdownItem 
-                key="logout" 
-                color="danger" 
-                onClick={handleLogout}
-                startContent={<HiLogout size={16} />}
-              >
+              <DropdownItem key="logout" color="danger" onClick={handleLogout}>
                 Logout
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </NavbarContent>
       ) : (
-        <NavbarContent justify="end" className="gap-2">
+        <NavbarContent justify="end">
           <NavbarItem className="hidden lg:flex">
-            <Button
+            <Link
               as={NavLink}
               to="/login"
-              variant="light"
-              radius="full"
-              className="font-medium hover:bg-default-100"
+              color="foreground"
+              className="text-sm"
             >
               Login
-            </Button>
+            </Link>
           </NavbarItem>
           <NavbarItem>
             <Button
               as={NavLink}
               to="/register"
               color="primary"
-              variant="solid"
+              variant="flat"
               radius="full"
-              className="font-semibold bg-linear-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 shadow-md hover:shadow-lg transition-all duration-200"
+              className="font-semibold"
             >
               Sign Up
             </Button>
