@@ -6,6 +6,29 @@ import LoginPage from "./pages/LoginPage";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import { ProtectedRoute } from "./components/protect-route/ProtectedRoute";
+import { DashboardLayout } from "./components/layout/DashboardLayout";
+import { 	LuGauge, LuUsers, LuSchool, LuCalendarDays, LuHeartHandshake, LuBookPlus } from "react-icons/lu";
+import { TbCategory } from "react-icons/tb";
+
+const adminMenuItems = [
+  { name: "Dashboard", path: "/admin/dashboard", icon: <LuGauge size={20} />},
+  { name: "Users", path: "/admin/users", icon: <LuUsers size={20} /> },
+  { name: "Faculties", path: "/admin/faculties", icon: <LuSchool size={20} /> },
+  { name: "Academic Years", path: "/admin/academic-years", icon: <LuCalendarDays size={20} /> },
+  { name: "Categories", path: "/admin/categories", icon: <TbCategory size={20} /> },
+];
+
+const studentMenuItems = [
+  { name: "Dashboard", path: "/student/dashboard", icon: <LuGauge size={20} />},
+  { name: "Submit Contribution", path: "/student/submit-contribution", icon: <LuBookPlus size={20} /> },
+  { name: "My Contributions", path: "/student/my-contributions", icon: <LuHeartHandshake size={20} /> },
+];
+
+const marketingCoordinatorMenuItems = [
+  { name: "Dashboard", path: "/marketing-coordinator/dashboard", icon: <LuGauge size={20} />},
+  { name: "Students", path: "/marketing-coordinator/students", icon: <LuUsers size={20} /> },
+  { name: "Contributions", path: "/marketing-coordinator/contributions", icon: <LuHeartHandshake size={20} /> },
+];
 
 function App() {
   return (
@@ -17,8 +40,42 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
 
+        // Admin Routes
         <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
-          <Route path="/admin/dashboard" element={<h1>Admin Dashboard</h1>} />
+          <Route
+            path="/admin"
+            element={<DashboardLayout menuItems={adminMenuItems} />}
+          >
+            <Route path="dashboard" element={<div>Admin Dashboard</div>} />
+            <Route path="users" element={<div>Manage Users</div>} />
+            <Route path="faculties" element={<div>Manage Faculties</div>} />
+            <Route path="academic-years" element={<div>Manage Academic Years</div>} />
+            <Route path="categories" element={<div>Manage Categories</div>} />
+          </Route>
+        </Route>
+
+        // Student Routes
+        <Route element={<ProtectedRoute allowedRoles={["student"]} />}>
+          <Route
+            path="/student"
+            element={<DashboardLayout menuItems={studentMenuItems} />}
+          >
+            <Route path="dashboard" element={<div>Student Dashboard</div>} />
+            <Route path="submit-contribution" element={<div>Submit Contribution</div>} />
+            <Route path="my-contributions" element={<div>My Contributions</div>} />
+          </Route>
+        </Route>
+
+        // Marketing Coordinator Routes
+        <Route element={<ProtectedRoute allowedRoles={["marketing_coordinator"]} />}>
+          <Route
+            path="/marketing-coordinator"
+            element={<DashboardLayout menuItems={marketingCoordinatorMenuItems} />} 
+          >
+            <Route path="dashboard" element={<div>Marketing Coordinator Dashboard</div>} />
+            <Route path="students" element={<div>Manage Students</div>} />
+            <Route path="contributions" element={<div>Manage Contributions</div>} />
+          </Route>
         </Route>
 
         <Route path="/unauthorized" element={<UnauthorizedPage />} />

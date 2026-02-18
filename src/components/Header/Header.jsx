@@ -25,11 +25,7 @@ import {
   HiDocumentText,
   HiInformationCircle,
   HiPhone,
-  HiUser,
-  HiLogout,
-  HiViewGrid,
   HiMenu,
-  HiX
 } from "react-icons/hi";
 
 export const AcmeLogo = () => (
@@ -93,7 +89,7 @@ export function Header() {
     <Navbar
       onMenuOpenChange={setIsMenuOpen}
       className="bg-background/80 backdrop-blur-lg border-b border-default-200 sticky top-0 z-50 shadow-sm"
-      maxWidth="full"
+      maxWidth="xl"
     >
       {/* Mobile Toggle & Logo */}
       <NavbarContent className="sm:hidden -space-x-3">
@@ -162,7 +158,7 @@ export function Header() {
                 <p className="font-semibold">Signed in as</p>
                 <p className="font-semibold">{user?.email}</p>
               </DropdownItem>
-              <DropdownItem key="dashboard" color="danger" onClick={redirectToDashboard}>
+              <DropdownItem key="dashboard" color="primary" onClick={redirectToDashboard}>
                 Dashboard
               </DropdownItem>
               <DropdownItem key="logout" color="danger" onClick={handleLogout}>
