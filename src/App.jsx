@@ -9,6 +9,10 @@ import { ProtectedRoute } from "./components/protect-route/ProtectedRoute";
 import { DashboardLayout } from "./components/layout/DashboardLayout";
 import { 	LuGauge, LuUsers, LuSchool, LuCalendarDays, LuHeartHandshake, LuBookPlus } from "react-icons/lu";
 import { TbCategory } from "react-icons/tb";
+import { Users } from "./features/admin/components/Users";
+import { Faculties } from "./features/admin/components/Faculties";
+import { AcademicYears } from "./features/admin/components/AcademicYears";
+import { Categories } from "./features/admin/components/Categories";
 
 const adminMenuItems = [
   { name: "Dashboard", path: "/admin/dashboard", icon: <LuGauge size={20} />},
@@ -47,10 +51,10 @@ function App() {
             element={<DashboardLayout menuItems={adminMenuItems} />}
           >
             <Route path="dashboard" element={<div>Admin Dashboard</div>} />
-            <Route path="users" element={<div>Manage Users</div>} />
-            <Route path="faculties" element={<div>Manage Faculties</div>} />
-            <Route path="academic-years" element={<div>Manage Academic Years</div>} />
-            <Route path="categories" element={<div>Manage Categories</div>} />
+            <Route path="users" element={<Users />} />
+            <Route path="faculties" element={<Faculties />} />
+            <Route path="academic-years" element={<AcademicYears />} />
+            <Route path="categories" element={<Categories />} />
           </Route>
         </Route>
 
