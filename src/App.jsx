@@ -13,6 +13,7 @@ import { Users } from "./features/admin/components/Users";
 import { Faculties } from "./features/admin/components/Faculties";
 import { AcademicYears } from "./features/admin/components/AcademicYears";
 import { Categories } from "./features/admin/components/Categories";
+import { SubmitContribution } from "./features/student/components/SubmitContribution";
 
 const adminMenuItems = [
   { name: "Dashboard", path: "/admin/dashboard", icon: <LuGauge size={20} />},
@@ -65,7 +66,7 @@ function App() {
             element={<DashboardLayout menuItems={studentMenuItems} />}
           >
             <Route path="dashboard" element={<div>Student Dashboard</div>} />
-            <Route path="submit-contribution" element={<div>Submit Contribution</div>} />
+            <Route path="submit-contribution" element={<SubmitContribution />} />
             <Route path="my-contributions" element={<div>My Contributions</div>} />
           </Route>
         </Route>
