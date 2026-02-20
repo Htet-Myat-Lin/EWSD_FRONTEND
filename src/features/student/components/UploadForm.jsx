@@ -5,12 +5,7 @@ import { useCallback, useState } from "react";
 import { HiUpload } from "react-icons/hi";
 import { LuFileText, LuImage, LuX } from "react-icons/lu";
 
-
-export function UploadForm({
-  contributionType,
-  files,
-  onFilesChange,
-}) {
+export function UploadForm({ contributionType, files, onFilesChange }) {
   const [isDragOver, setIsDragOver] = useState(false);
 
   const accept =
@@ -23,26 +18,26 @@ export function UploadForm({
       e.preventDefault();
       setIsDragOver(false);
       const droppedFiles = Array.from(e.dataTransfer.files);
-      onFilesChange([...files, ...droppedFiles]);
+      onFilesChange(droppedFiles.length > 0 ? [droppedFiles[0]] : []);
     },
-    [files, onFilesChange]
+    [onFilesChange],
   );
 
   const handleFileInput = useCallback(
     (e) => {
       if (e.target.files) {
         const selected = Array.from(e.target.files);
-        onFilesChange([...files, ...selected]);
+        onFilesChange(selected.length > 0 ? [selected[0]] : []);
       }
     },
-    [files, onFilesChange]
+    [onFilesChange],
   );
 
   const removeFile = useCallback(
     (index) => {
       onFilesChange(files.filter((_, i) => i !== index));
     },
-    [files, onFilesChange]
+    [files, onFilesChange],
   );
 
   return (
@@ -77,15 +72,14 @@ export function UploadForm({
             <input
               type="file"
               accept={accept}
-              multiple={contributionType === "photography"}
               onChange={handleFileInput}
               className="hidden"
             />
           </label>
           <p className="mt-3 text-xs text-[#94a3b8] text-center">
             {contributionType === "article"
-              ? "Accepted formats: .doc, .docx, .pdf (Max 10MB)"
-              : "Accepted formats: .jpg, .png, .tiff, .raw (Max 25MB each)"}
+              ? "Accepted formats: .doc, .docx (Max 5MB)"
+              : "Accepted formats: .jpg, , .jpeg, .png (Max 5MB each)"}
           </p>
         </div>
 

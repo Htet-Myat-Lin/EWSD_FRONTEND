@@ -7,6 +7,8 @@ import { UploadForm } from "./UploadForm";
 import { ContributionTypeCard } from "./ContributionTypeCard";
 import { HiCamera } from "react-icons/hi";
 import { LuFileText } from "react-icons/lu";
+import { useStoreContribution } from "../hooks/useStoreContribution";
+import { useAcademicYears } from "../hooks/useAcademicYears";
 
 const steps = [
   { number: 1, label: "Type & Terms" },
@@ -26,12 +28,43 @@ export function SubmitContribution() {
     category_id: "",
   });
   const [files, setFiles] = useState([]);
+  const { data: yearsRes } = useAcademicYears();
 
-  const canProceedStep1 = contributionType && isAgreed;
+  const academicYears = yearsRes?.data ?? [];
+  const activeAcademicYear =
+    academicYears.find((year) => year.is_active) ?? academicYears[0];
+
+  const closureDateText = activeAcademicYear?.closure_date ?? null;
+  const isAfterClosureDate = (() => {
+    if (!closureDateText) return false;
+    const closureDate = new Date(`${closureDateText}T23:59:59`);
+    if (Number.isNaN(closureDate.getTime())) return false;
+    return new Date() > closureDate;
+  })();
+
+  const { mutate: storeContribution, isPending } = useStoreContribution(() => {
+    // Reset form after successful submission
+    setCurrentStep(1);
+    setContributionType(null);
+    setIsAgreed(false);
+    setFormData({
+      title: "",
+      abstract: "",
+      description: "",
+      academic_year_id: "",
+      category_id: "",
+    });
+    setFiles([]);
+  });
+
+  const canProceedStep1 = contributionType && isAgreed && !isAfterClosureDate;
   const textBodyFilled =
     contributionType === "article" ? formData.abstract : formData.description;
   const canProceedStep2 =
-    formData.title && textBodyFilled && formData.academic_year_id && formData.category_id;
+    formData.title &&
+    textBodyFilled &&
+    formData.academic_year_id &&
+    formData.category_id;
 
   const handleNext = () => {
     if (currentStep < 3) {
@@ -46,7 +79,17 @@ export function SubmitContribution() {
   };
 
   const handleSubmit = () => {
-    alert("Contribution submitted successfully! Thank you for your submission.");
+    const resolvedDescription =
+      contributionType === "article" ? formData.abstract : formData.description;
+    storeContribution({
+      title: formData.title,
+      abstract: formData.abstract,
+      description: resolvedDescription,
+      academic_year_id: formData.academic_year_id,
+      category_id: formData.category_id,
+      terms_accepted: true,
+      file: files[0],
+    });
   };
 
   return (
@@ -116,10 +159,12 @@ export function SubmitContribution() {
                   : "opacity-0 -translate-y-2 pointer-events-none h-0 overflow-hidden"
               }`}
             >
-              <TermsAndConditions
-                isAgreed={isAgreed}
-                onAgreeChange={setIsAgreed}
-              />
+              {!isAfterClosureDate && (
+                <TermsAndConditions
+                  isAgreed={isAgreed}
+                  onAgreeChange={setIsAgreed}
+                />
+              )}
             </div>
           </div>
         )}
@@ -144,6 +189,21 @@ export function SubmitContribution() {
           />
         )}
 
+        {currentStep === 1 && isAfterClosureDate && (
+          <div className="my-6 flex items-start gap-3 rounded-xl border-l-4 border-[#dc2626] bg-[#fef2f2] px-4 py-4 shadow-sm">
+            <div>
+              <p className="text-sm font-bold text-[#dc2626]">
+                Submissions Are Closed
+              </p>
+              <p className="mt-0.5 text-xs text-[#b91c1c]">
+                The closure date (
+                <span className="font-semibold">{closureDateText}</span>) has
+                passed. No new contributions can be accepted.
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Navigation Buttons */}
         <div className="mt-6 sm:mt-8 flex items-center justify-between gap-3">
           <div>
@@ -164,7 +224,9 @@ export function SubmitContribution() {
               <Button
                 color="primary"
                 onPress={handleNext}
-                isDisabled={currentStep === 1 ? !canProceedStep1 : !canProceedStep2}
+                isDisabled={
+                  currentStep === 1 ? !canProceedStep1 : !canProceedStep2
+                }
                 className="bg-[#1e3a5f] text-[#ffffff] text-xs sm:text-sm"
                 radius="lg"
                 size="md"
@@ -177,12 +239,13 @@ export function SubmitContribution() {
               <Button
                 color="primary"
                 onPress={handleSubmit}
-                isDisabled={files.length === 0}
+                isDisabled={files.length === 0 || isPending}
+                isLoading={isPending}
                 className="bg-[#1e3a5f] text-[#ffffff] text-xs sm:text-sm"
                 radius="lg"
                 size="md"
               >
-                Submit Contribution
+                {isPending ? "Submitting..." : "Submit Contribution"}
               </Button>
             )}
           </div>

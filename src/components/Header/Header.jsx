@@ -17,7 +17,7 @@ import {
   Chip,
   Divider,
 } from "@heroui/react";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { useLogout } from "@/features/auth/hooks/useLogout";
 import { 
@@ -29,7 +29,7 @@ import {
 } from "react-icons/hi";
 
 export const AcmeLogo = () => (
-  <div className="flex items-center">
+  <RouterLink to="/" className="flex items-center hover:opacity-80 transition-opacity">
     <div className="relative">
       <svg
         fill="none"
@@ -50,7 +50,7 @@ export const AcmeLogo = () => (
       <p className="font-bold text-inherit text-lg tracking-tight">KMD</p>
       <p className="text-xs text-default-500">University Magazine</p>
     </div>
-  </div>
+  </RouterLink>
 );
 
 export function Header() {
@@ -99,18 +99,14 @@ export function Header() {
           icon={<HiMenu size={20} />}
         />
         <NavbarBrand>
-          <NavLink to="/" className="flex items-center">
-            <AcmeLogo />
-          </NavLink>
+          <AcmeLogo />
         </NavbarBrand>
       </NavbarContent>
 
       {/* Desktop Logo */}
       <NavbarContent className="hidden sm:flex">
         <NavbarBrand>
-          <NavLink to="/" className="flex items-center gap-1 hover:opacity-80 transition-opacity">
-            <AcmeLogo />
-          </NavLink>
+          <AcmeLogo />
         </NavbarBrand>
       </NavbarContent>
 

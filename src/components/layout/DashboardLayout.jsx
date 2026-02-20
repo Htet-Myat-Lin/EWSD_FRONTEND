@@ -32,26 +32,28 @@ const SidebarContent = ({ menuItems }) => {
     <div className="flex flex-col h-full">
       {/* Sidebar Header / Logo */}
       <div className="flex items-center justify-center h-16 border-b border-divider">
-        <div className="relative">
-          <svg
-            fill="none"
-            height="40"
-            viewBox="0 0 32 32"
-            width="40"
-            className="text-primary drop-shadow-sm"
-          >
-            <path
-              clipRule="evenodd"
-              d="M17.6482 10.1305L15.8785 7.02583L7.02979 22.5499H10.5278L17.6482 10.1305ZM19.8798 14.0457L18.11 17.1983L19.394 19.4511H16.8453L15.1056 22.5499H24.7272L19.8798 14.0457Z"
-              fill="currentColor"
-              fillRule="evenodd"
-            />
-          </svg>
-        </div>
-        <div className="flex flex-col">
-          <p className="font-bold text-inherit text-lg tracking-tight">KMD</p>
-          <p className="text-xs text-default-500">University Magazine</p>
-        </div>
+        <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
+          <div className="relative">
+            <svg
+              fill="none"
+              height="40"
+              viewBox="0 0 32 32"
+              width="40"
+              className="text-primary drop-shadow-sm"
+            >
+              <path
+                clipRule="evenodd"
+                d="M17.6482 10.1305L15.8785 7.02583L7.02979 22.5499H10.5278L17.6482 10.1305ZM19.8798 14.0457L18.11 17.1983L19.394 19.4511H16.8453L15.1056 22.5499H24.7272L19.8798 14.0457Z"
+                fill="currentColor"
+                fillRule="evenodd"
+              />
+            </svg>
+          </div>
+          <div className="flex flex-col">
+            <p className="font-bold text-inherit text-lg tracking-tight">KMD</p>
+            <p className="text-xs text-default-500">University Magazine</p>
+          </div>
+        </Link>
       </div>
 
       {/* Navigation Links */}

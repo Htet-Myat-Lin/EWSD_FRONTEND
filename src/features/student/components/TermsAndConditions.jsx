@@ -1,11 +1,11 @@
 import { Card, CardBody, Checkbox } from "@heroui/react";
+import { useAcademicYears } from "../hooks/useAcademicYears";
 
-const terms = [
+const baseTerms = [
   "The submitted work is your original creation and does not violate any copyright.",
   "You grant the university permission to publish your work in the annual magazine.",
   "The university may edit your submission for clarity, grammar, and formatting.",
   "Your submission may be reviewed and commented on by your Faculty Marketing Coordinator.",
-  "You can edit your submission until the final closure date (2026-03-15).",
   "Selected contributions will be included in the final magazine publication.",
   "You retain copyright of your work but grant non-exclusive publication rights.",
 ];
@@ -14,6 +14,19 @@ export function TermsAndConditions({
   isAgreed,
   onAgreeChange,
 }) {
+  const { data: yearsRes } = useAcademicYears();
+
+  const academicYears = yearsRes?.data ?? [];
+  const targetYear =
+    academicYears.find((year) => year.is_active);
+  const finalClosureDate = targetYear?.final_closure_date ?? "TBD";
+
+  const terms = [
+    ...baseTerms.slice(0, 4),
+    `You can edit your submission until the final closure date (${finalClosureDate}).`,
+    ...baseTerms.slice(4),
+  ];
+
   return (
     <Card shadow="none" className="border border-[#e2e8f0]" radius="lg">
       <CardBody className="p-4 sm:p-6">
