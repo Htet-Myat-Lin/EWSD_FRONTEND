@@ -8,12 +8,14 @@ import NotFoundPage from "./pages/NotFoundPage";
 import { ProtectedRoute } from "./components/protect-route/ProtectedRoute";
 import { DashboardLayout } from "./components/layout/DashboardLayout";
 import { 	LuGauge, LuUsers, LuSchool, LuCalendarDays, LuHeartHandshake, LuBookPlus } from "react-icons/lu";
+import { CgProfile } from "react-icons/cg";
 import { TbCategory } from "react-icons/tb";
 import { Users } from "./features/admin/components/Users";
 import { Faculties } from "./features/admin/components/Faculties";
 import { AcademicYears } from "./features/admin/components/AcademicYears";
 import { Categories } from "./features/admin/components/Categories";
-import { SubmitContribution } from "./features/student/components/SubmitContribution";
+import { SubmitContribution } from "./features/student/submissions/components/SubmitContribution";
+import { UpdatePasswordForm } from "./features/student/profile/components/UpdatePasswordForm";
 
 const adminMenuItems = [
   { name: "Dashboard", path: "/admin/dashboard", icon: <LuGauge size={20} />},
@@ -27,6 +29,7 @@ const studentMenuItems = [
   { name: "Dashboard", path: "/student/dashboard", icon: <LuGauge size={20} />},
   { name: "Submit Contribution", path: "/student/submit-contribution", icon: <LuBookPlus size={20} /> },
   { name: "My Contributions", path: "/student/my-contributions", icon: <LuHeartHandshake size={20} /> },
+  { name: "Profile", path: "/student/update-password", icon: <CgProfile size={20} /> },
 ];
 
 const marketingCoordinatorMenuItems = [
@@ -68,6 +71,7 @@ function App() {
             <Route path="dashboard" element={<div>Student Dashboard</div>} />
             <Route path="submit-contribution" element={<SubmitContribution />} />
             <Route path="my-contributions" element={<div>My Contributions</div>} />
+            <Route path="update-password" element={<UpdatePasswordForm />} />
           </Route>
         </Route>
 

@@ -16,4 +16,7 @@ export const UserService = {
             confirm_action: true,
         })).data
     },
+    updatePassword: async (id, payload) => {
+        return (await axiosInstance.patch(`/users/${id}/password`, payload)).data
+    },
 }
