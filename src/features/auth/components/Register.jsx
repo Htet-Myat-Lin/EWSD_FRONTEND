@@ -16,10 +16,12 @@ import {
   LuSchool,
   LuEye,
   LuEyeOff,
+  LuShieldCheck
 } from "react-icons/lu";
 import { LoginRegisterTabs } from "@/components/login-register/LoginRegisterTabs";
 import { useState } from "react";
 import { LoginRegisterHeading } from "@/components/login-register/LoginRegisterHeading";
+import { useRoles } from "@/features/admin/hooks/useRoles";
 
 export function Register() {
   const [isVisible, setIsVisible] = useState(false);
@@ -38,11 +40,16 @@ export function Register() {
       password: "",
       password_confirmation: "",
       faculty_id: "",
+      role_id: "",
     },
   });
 
   // Fetch faculty data
   const { data: faculties } = useFaculties();
+
+  // Fetch role data
+  const { data: roles } = useRoles();
+  const rolesNeedRegistration = roles?.filter((role) => role.name === "student" || role.name === "guest")
 
   // user registration mutation hook
   const { mutate, isPending, error } = useRegister();
@@ -147,6 +154,35 @@ export function Register() {
                   {faculties?.map((faculty) => (
                     <SelectItem value={String(faculty.id)} key={faculty.id}>
                       {faculty.name}
+                    </SelectItem>
+                  ))}
+                </Select>
+              )}
+            />
+          </div>
+
+          {/* Role */}
+          <div className="w-full">
+            <Controller
+              name="role_id"
+              control={control}
+              rules={{ required: "Role is required" }}
+              render={({ field }) => (
+                <Select
+                  label="Role"
+                  labelPlacement="outside-top"
+                  placeholder="Select your role"
+                  startContent={
+                    <LuShieldCheck size={18} className="text-gray-500" />
+                  }
+                  isInvalid={!!errors.role_id}
+                  errorMessage={errors.role_id?.message}
+                  value={field.value}
+                  onChange={(val) => field.onChange(val)}
+                >
+                  {rolesNeedRegistration?.map((role) => (
+                    <SelectItem value={String(role.id)} key={role.id}>
+                      {role.name}
                     </SelectItem>
                   ))}
                 </Select>
