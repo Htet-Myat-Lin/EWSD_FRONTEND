@@ -7,7 +7,7 @@ import UnauthorizedPage from "./pages/UnauthorizedPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import { ProtectedRoute } from "./components/protect-route/ProtectedRoute";
 import { DashboardLayout } from "./components/layout/DashboardLayout";
-import { 	LuGauge, LuUsers, LuSchool, LuCalendarDays, LuHeartHandshake, LuBookPlus } from "react-icons/lu";
+import { 	LuGauge, LuUsers, LuSchool, LuCalendarDays, LuHeartHandshake, LuBookPlus, LuFileText } from "react-icons/lu";
 import { CgProfile } from "react-icons/cg";
 import { TbCategory } from "react-icons/tb";
 import { Users } from "./features/admin/components/Users";
@@ -16,6 +16,7 @@ import { AcademicYears } from "./features/admin/components/AcademicYears";
 import { Categories } from "./features/admin/components/Categories";
 import { SubmitContribution } from "./features/student/submissions/components/SubmitContribution";
 import { UpdatePasswordForm } from "./features/student/profile/components/UpdatePasswordForm";
+import { ContributionsList } from "./features/coordinator/contributions/components/ContributionsList";
 
 const adminMenuItems = [
   { name: "Dashboard", path: "/admin/dashboard", icon: <LuGauge size={20} />},
@@ -35,7 +36,7 @@ const studentMenuItems = [
 const marketingCoordinatorMenuItems = [
   { name: "Dashboard", path: "/marketing-coordinator/dashboard", icon: <LuGauge size={20} />},
   { name: "Students", path: "/marketing-coordinator/students", icon: <LuUsers size={20} /> },
-  { name: "Contributions", path: "/marketing-coordinator/contributions", icon: <LuHeartHandshake size={20} /> },
+  { name: "Contributions", path: "/marketing-coordinator/contributions", icon: <LuFileText size={20} /> },
 ];
 
 function App() {
@@ -83,7 +84,7 @@ function App() {
           >
             <Route path="dashboard" element={<div>Marketing Coordinator Dashboard</div>} />
             <Route path="students" element={<div>Manage Students</div>} />
-            <Route path="contributions" element={<div>Manage Contributions</div>} />
+            <Route path="contributions" element={<ContributionsList />} />
           </Route>
         </Route>
 
