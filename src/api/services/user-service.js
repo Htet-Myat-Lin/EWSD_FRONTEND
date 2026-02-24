@@ -19,4 +19,7 @@ export const UserService = {
     updatePassword: async (id, payload) => {
         return (await axiosInstance.patch(`/users/${id}/password`, payload)).data
     },
+    getFacultyStudents: async (page = 1) => {
+        return (await axiosInstance.get("/faculty/students", { params: { page } })).data
+    },
 }

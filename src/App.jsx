@@ -17,6 +17,7 @@ import { Categories } from "./features/admin/components/Categories";
 import { SubmitContribution } from "./features/student/submissions/components/SubmitContribution";
 import { UpdatePasswordForm } from "./features/student/profile/components/UpdatePasswordForm";
 import { ContributionsList } from "./features/coordinator/contributions/components/ContributionsList";
+import { StudentList } from "./features/coordinator/userlists/components/StudentList";
 
 const adminMenuItems = [
   { name: "Dashboard", path: "/admin/dashboard", icon: <LuGauge size={20} />},
@@ -83,7 +84,7 @@ function App() {
             element={<DashboardLayout menuItems={marketingCoordinatorMenuItems} />} 
           >
             <Route path="dashboard" element={<div>Marketing Coordinator Dashboard</div>} />
-            <Route path="students" element={<div>Manage Students</div>} />
+            <Route path="students" element={<StudentList />} />
             <Route path="contributions" element={<ContributionsList />} />
           </Route>
         </Route>
