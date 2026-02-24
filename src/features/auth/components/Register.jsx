@@ -19,7 +19,7 @@ import {
   LuShieldCheck
 } from "react-icons/lu";
 import { LoginRegisterTabs } from "@/components/login-register/LoginRegisterTabs";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { LoginRegisterHeading } from "@/components/login-register/LoginRegisterHeading";
 import { useRoles } from "@/features/admin/hooks/useRoles";
 
@@ -33,6 +33,8 @@ export function Register() {
     control,
     register,
     formState: { errors },
+    watch,
+    trigger
   } = useForm({
     defaultValues: {
       name: "",
@@ -43,6 +45,15 @@ export function Register() {
       role_id: "",
     },
   });
+
+  const roleId = watch("role_id");
+  const email = watch("email")
+  const studentRoleId = "1";
+
+  useEffect(() => {
+    // Re-validate the email field whenever the roleId changes
+   if (email)  trigger("email");
+  }, [roleId, trigger, email]);
 
   // Fetch faculty data
   const { data: faculties } = useFaculties();
@@ -123,13 +134,12 @@ export function Register() {
               {...register("email", {
                 required: "Email is required",
                 pattern: {
-                  value:
-                    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(edu|ac)(\.[a-z]{2,3})?$/i,
-                  message: "Please enter a valid .edu email address",
+                  value: roleId === studentRoleId ?	/^[a-z0-9._%+-]+@[a-z0-9.-]+\.(edu|ac)(\.[a-z]{2,3})*$/i : /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i,
+                  message: `Please enter a valid ${roleId === studentRoleId ? "student (edu)" : "guest"} email address`,
                 },
               })}
             />
-            <p className="text-xs text-gray-500 mt-1">Use your university email address</p>
+            <p className="text-xs text-gray-500 mt-1">Use your university email address for student</p>
           </div>
 
           {/* Faculty */}
