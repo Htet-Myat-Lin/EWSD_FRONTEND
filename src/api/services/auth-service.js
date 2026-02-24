@@ -13,7 +13,7 @@ export const AuthService = {
         return (await axiosInstance.post("/logout")).data
     },
 
-    getUser: async() => {
+    getCurrentUser: async() => {
         return (await axiosInstance.get("/user")).data
     }
 }
