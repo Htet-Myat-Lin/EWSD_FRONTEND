@@ -40,6 +40,7 @@ export const UserFormModal = ({ isOpen, onClose, user = null }) => {
     watch,
     reset,
     formState: { errors },
+    trigger
   } = useForm({
     defaultValues: {
       name: "",
@@ -49,6 +50,7 @@ export const UserFormModal = ({ isOpen, onClose, user = null }) => {
       password: "",
       password_confirmation: "",
     },
+    onChange: true
   });
 
   // Populate form when editing
@@ -85,25 +87,29 @@ export const UserFormModal = ({ isOpen, onClose, user = null }) => {
   const {
     mutate: createUser,
     isPending: isCreating,
-    error: createError,
   } = useCreateUser(handleClose);
 
   const {
     mutate: updateUser,
     isPending: isUpdating,
-    error: updateError,
   } = useUpdateUser(handleClose);
 
   const isPending = isCreating || isUpdating;
-  const error = isEditMode ? updateError : createError;
 
   // Watch selected role to conditionally show faculty
+  const guestRoleId = "3"
   const selectedRoleId = watch("role_id");
+  const email = watch("email")
   const selectedRole = roles?.find(
     (r) => String(r.id) === String(selectedRoleId)
   );
   const needsFaculty =
     selectedRole && !ROLES_WITHOUT_FACULTY.includes(selectedRole.name);
+  
+  useEffect(() => {
+    // Re-validate the email field whenever the roleId changes
+    if (email)  trigger("email");
+  }, [selectedRoleId, trigger, email]);
 
   const onSubmit = (payload) => {
     if (isEditMode) {
@@ -133,8 +139,6 @@ export const UserFormModal = ({ isOpen, onClose, user = null }) => {
     }
   };
 
-  // API validation errors
-  const apiErrors = error?.response?.data?.errors;
 
   return (
     <Modal isOpen={isOpen} onClose={handleClose} size="lg">
@@ -150,8 +154,8 @@ export const UserFormModal = ({ isOpen, onClose, user = null }) => {
               labelPlacement="outside"
               placeholder="Enter full name"
               startContent={<LuUser size={18} className="text-gray-500" />}
-              isInvalid={!!errors.name || !!apiErrors?.name}
-              errorMessage={errors.name?.message || apiErrors?.name?.[0]}
+              isInvalid={!!errors.name}
+              errorMessage={errors.name?.message}
               {...register("name", {
                 required: "Full name is required",
                 minLength: {
@@ -168,13 +172,13 @@ export const UserFormModal = ({ isOpen, onClose, user = null }) => {
               placeholder="user@university.edu"
               type="email"
               startContent={<LuMail size={18} className="text-gray-500" />}
-              isInvalid={!!errors.email || !!apiErrors?.email}
-              errorMessage={errors.email?.message || apiErrors?.email?.[0]}
+              isInvalid={!!errors.email}
+              errorMessage={errors.email?.message}
               {...register("email", {
                 required: "Email is required",
                 pattern: {
-                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: "Please enter a valid email address",
+                  value: selectedRoleId === guestRoleId ? /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i :	/^[a-z0-9._%+-]+@[a-z0-9.-]+\.(edu|ac)(\.[a-z]{2,3})*$/i,
+                  message: `Please enter a valid ${selectedRoleId !== guestRoleId ? "(edu)" : "guest"} email address`,
                 },
               })}
             />
@@ -192,9 +196,9 @@ export const UserFormModal = ({ isOpen, onClose, user = null }) => {
                   startContent={
                     <LuShield size={18} className="text-gray-500" />
                   }
-                  isInvalid={!!errors.role_id || !!apiErrors?.role_id}
+                  isInvalid={!!errors.role_id}
                   errorMessage={
-                    errors.role_id?.message || apiErrors?.role_id?.[0]
+                    errors.role_id?.message
                   }
                   selectedKeys={field.value ? [String(field.value)] : []}
                   onSelectionChange={(keys) => {
@@ -227,9 +231,9 @@ export const UserFormModal = ({ isOpen, onClose, user = null }) => {
                     startContent={
                       <LuSchool size={18} className="text-gray-500" />
                     }
-                    isInvalid={!!errors.faculty_id || !!apiErrors?.faculty_id}
+                    isInvalid={!!errors.faculty_id}
                     errorMessage={
-                      errors.faculty_id?.message || apiErrors?.faculty_id?.[0]
+                      errors.faculty_id?.message
                     }
                     selectedKeys={field.value ? [String(field.value)] : []}
                     onSelectionChange={(keys) => {
@@ -276,9 +280,9 @@ export const UserFormModal = ({ isOpen, onClose, user = null }) => {
                       />
                     )
                   }
-                  isInvalid={!!errors.password || !!apiErrors?.password}
+                  isInvalid={!!errors.password}
                   errorMessage={
-                    errors.password?.message || apiErrors?.password?.[0]
+                    errors.password?.message
                   }
                   {...register("password", {
                     required: "Password is required",
@@ -298,12 +302,10 @@ export const UserFormModal = ({ isOpen, onClose, user = null }) => {
                     <LuLock size={18} className="text-gray-500" />
                   }
                   isInvalid={
-                    !!errors.password_confirmation ||
-                    !!apiErrors?.password_confirmation
+                    !!errors.password_confirmation
                   }
                   errorMessage={
-                    errors.password_confirmation?.message ||
-                    apiErrors?.password_confirmation?.[0]
+                    errors.password_confirmation?.message
                   }
                   {...register("password_confirmation", {
                     required: "Password confirmation is required",
