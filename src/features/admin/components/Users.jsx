@@ -31,6 +31,7 @@ import {
 import { useUsers } from "../hooks/useUsers";
 import { useUpdateUserStatus } from "../hooks/useSuspendUser";
 import { UserFormModal } from "./UserFormModal";
+import { formatDate } from "@/utils/date";
 
 const columns = [
   { key: "id", label: "ID" },
@@ -138,7 +139,7 @@ export const Users = () => {
           </Chip>
         );
       case "created_at":
-        return new Date(user.created_at).toLocaleDateString();
+        return formatDate(user.created_at);
       case "actions":
         return (
           <div className="relative flex justify-center items-center">
