@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   Table,
   TableHeader,
@@ -15,13 +15,24 @@ import {
   SelectItem,
   Pagination,
   Button,
+  Input,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
 } from "@heroui/react";
+import { LuEllipsisVertical, LuCheck, LuX } from "react-icons/lu";
 import { useContributions } from "../hooks/useContributions";
+import { useCategories } from "../hooks/useCategories";
+import { useSelectContributions } from "../hooks/useSelectContributions";
 import { formatDate } from "@/utils/date";
+import { toast } from "react-toastify";
+
 
 const columns = [
   { key: "title", label: "Title" },
   { key: "student", label: "Student" },
+  { key: "cover_photo", label: "Cover Photo" },
   { key: "category", label: "Category" },
   { key: "academic_year", label: "Academic Year" },
   { key: "status", label: "Status" },
@@ -40,12 +51,24 @@ const getStatusColor = (status) => {
   return statusColors[status] || "default";
 };
 
-const renderCell = (contribution, columnKey, onSelect, onReject) => {
+const renderCell = (contribution, columnKey, onDropdownAction) => {
   switch (columnKey) {
     case "title":
       return contribution.title || "N/A";
     case "student":
       return contribution.user?.name || "N/A";
+    case "cover_photo":
+      return contribution.cover_photo_url ? (
+        <img
+          src={contribution.cover_photo_url}
+          alt={contribution.title}
+          className="w-16 h-16 object-cover rounded-lg"
+        />
+      ) : (
+        <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
+          <span className="text-xs text-gray-400">No image</span>
+        </div>
+      );
     case "category":
       return contribution.category?.name || "N/A";
     case "academic_year":
@@ -72,29 +95,41 @@ const renderCell = (contribution, columnKey, onSelect, onReject) => {
       ) : (
         <span className="text-gray-400">No file</span>
       );
-    case "actions":
+    case "actions": {
+      const isDisabled = contribution.status === "selected" || contribution.status === "rejected";
       return (
-        <div className="flex gap-2 justify-center">
-          <Button
-            size="sm"
-            color="success"
-            variant="flat"
-            onPress={() => onSelect(contribution.id)}
-            isDisabled={contribution.status === "selected" || contribution.status === "rejected"}
-          >
-            Select
-          </Button>
-          <Button
-            size="sm"
-            color="danger"
-            variant="flat"
-            onPress={() => onReject(contribution.id)}
-            isDisabled={contribution.status === "selected" || contribution.status === "rejected"}
-          >
-            Reject
-          </Button>
+        <div className="relative flex justify-center items-center">
+          <Dropdown>
+            <DropdownTrigger>
+              <Button isIconOnly size="sm" variant="light" isDisabled={isDisabled}>
+                <LuEllipsisVertical size={18} className="text-default-400" />
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu
+              aria-label="Contribution actions"
+              onAction={(key) => onDropdownAction(key, contribution)}
+            >
+              <DropdownItem
+                key="select"
+                color="success"
+                className="text-success"
+                startContent={<LuCheck size={16} />}
+              >
+                Select
+              </DropdownItem>
+              <DropdownItem
+                key="reject"
+                color="danger"
+                className="text-danger"
+                startContent={<LuX size={16} />}
+              >
+                Reject
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         </div>
       );
+    }
     default:
       return contribution[columnKey];
   }
@@ -103,7 +138,6 @@ const renderCell = (contribution, columnKey, onSelect, onReject) => {
 const statusOptions = [
   { key: "all", label: "All" },
   { key: "pending", label: "Pending" },
-  { key: "commented", label: "Commented" },
   { key: "selected", label: "Selected" },
   { key: "rejected", label: "Rejected" },
 ];
@@ -111,19 +145,65 @@ const statusOptions = [
 export const ContributionsList = () => {
   const [page, setPage] = useState(1);
   const [statusFilter, setStatusFilter] = useState("all");
+  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   
-  // Pass status to API, converting "all" to null
+  // Debounce search input
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchQuery);
+      setPage(1);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  // Pass filters to API, converting "all" to null
   const statusParam = statusFilter === "all" ? null : statusFilter;
-  const { data, isLoading, isError, error } = useContributions(page, statusParam);
+  const categoryParam = categoryFilter === "all" ? null : categoryFilter;
+  const searchParam = debouncedSearch || null;
+  
+  const { data, isLoading, isError, error } = useContributions(page, statusParam, categoryParam, searchParam);
+  const { data: categoriesData, isLoading: categoriesLoading } = useCategories();
+  const { mutate: selectContributions, isPending: isSelecting } = useSelectContributions();
 
-  const handleSelect = (contributionId) => {
-    console.log("Select contribution:", contributionId);
-    // TODO: Implement select logic
-  };
+  // Compute derived values before conditional returns
+  const contributions = data?.data ?? [];
+  const currentPage = data?.meta?.current_page ?? 1;
+  const lastPage = data?.meta?.last_page ?? 1;
+  const total = data?.meta?.total ?? 0;
 
-  const handleReject = (contributionId) => {
-    console.log("Reject contribution:", contributionId);
-    // TODO: Implement reject logic
+  const categoryOptions = useMemo(() => {
+    const categories = categoriesData?.data ?? [];
+    return [
+      { key: "all", label: "All Categories" },
+      ...categories.map(cat => ({ key: String(cat.id), label: cat.name }))
+    ];
+  }, [categoriesData]);
+
+  const activeFiltersCount = useMemo(() => {
+    return [
+      statusFilter !== "all",
+      categoryFilter !== "all",
+      debouncedSearch !== ""
+    ].filter(Boolean).length;
+  }, [statusFilter, categoryFilter, debouncedSearch]);
+
+  const handleDropdownAction = (key, contribution) => {
+    const action = key === "select" ? "selected" : "rejected";
+    
+    selectContributions(
+      { ids: [contribution.id], action },
+      {
+        onSuccess: (data) => {
+          toast.success(data.message || `Contribution ${action} successfully`);
+        },
+        onError: (error) => {
+          const message = error.response?.data?.message || `Failed to ${key} contribution`;
+          toast.error(message);
+        },
+      }
+    );
   };
 
   if (isLoading) {
@@ -147,15 +227,10 @@ export const ContributionsList = () => {
     );
   }
 
-  const contributions = data?.data ?? [];
-  const currentPage = data?.meta?.current_page ?? 1;
-  const lastPage = data?.meta?.last_page ?? 1;
-  const total = data?.meta?.total ?? 0;
-
   return (
     <div className="p-6 space-y-6">
       {/* Header Section */}
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+      <div className="flex flex-col gap-4">
         <div>
           <h1 className="text-2xl font-bold">Contributions</h1>
           <p className="text-sm text-gray-500 mt-1">
@@ -163,9 +238,22 @@ export const ContributionsList = () => {
           </p>
         </div>
         
-        <div className="flex items-center gap-3">
+        {/* Filters Section */}
+        <div className="flex flex-col sm:flex-row gap-3">
+          <Input
+            placeholder="Search by title, student, or academic year..."
+            value={searchQuery}
+            onValueChange={setSearchQuery}
+            isClearable
+            onClear={() => setSearchQuery("")}
+            className="flex-1"
+            size="sm"
+            variant="bordered"
+            aria-label="Search contributions"
+          />
+          
           <Select
-            label="Filter by Status"
+            label="Status"
             placeholder="Select status"
             selectedKeys={[statusFilter]}
             onSelectionChange={(keys) => {
@@ -173,12 +261,34 @@ export const ContributionsList = () => {
               setStatusFilter(selected);
               setPage(1);
             }}
-            className="w-48"
+            className="w-full sm:w-48"
             size="sm"
             variant="bordered"
             aria-label="Filter contributions by status"
           >
             {statusOptions.map((option) => (
+              <SelectItem key={option.key} value={option.key}>
+                {option.label}
+              </SelectItem>
+            ))}
+          </Select>
+
+          <Select
+            label="Category"
+            placeholder="Select category"
+            selectedKeys={[categoryFilter]}
+            onSelectionChange={(keys) => {
+              const selected = Array.from(keys)[0];
+              setCategoryFilter(selected);
+              setPage(1);
+            }}
+            className="w-full sm:w-48"
+            size="sm"
+            variant="bordered"
+            isLoading={categoriesLoading}
+            aria-label="Filter contributions by category"
+          >
+            {categoryOptions.map((option) => (
               <SelectItem key={option.key} value={option.key}>
                 {option.label}
               </SelectItem>
@@ -193,9 +303,9 @@ export const ContributionsList = () => {
           Showing <span className="font-semibold text-gray-900">{contributions.length}</span> of{" "}
           <span className="font-semibold text-gray-900">{total}</span> contribution{total !== 1 ? 's' : ''}
         </div>
-        {statusFilter !== "all" && (
+        {activeFiltersCount > 0 && (
           <Chip size="sm" variant="flat" color="primary">
-            Filtered by: {statusOptions.find(opt => opt.key === statusFilter)?.label}
+            {activeFiltersCount} filter{activeFiltersCount !== 1 ? 's' : ''} active
           </Chip>
         )}
       </div>
@@ -210,7 +320,10 @@ export const ContributionsList = () => {
           >
             <TableHeader columns={columns}>
               {(column) => (
-                <TableColumn key={column.key}>
+                <TableColumn 
+                  key={column.key}
+                  align={column.key === "actions" ? "center" : "start"}
+                >
                   {column.label}
                 </TableColumn>
               )}
@@ -223,7 +336,7 @@ export const ContributionsList = () => {
                 <TableRow key={contribution.id}>
                   {columns.map((column) => (
                     <TableCell key={column.key}>
-                      {renderCell(contribution, column.key, handleSelect, handleReject)}
+                      {renderCell(contribution, column.key, handleDropdownAction)}
                     </TableCell>
                   ))}
                 </TableRow>

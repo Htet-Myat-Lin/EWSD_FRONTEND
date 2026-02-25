@@ -28,8 +28,8 @@ export function SubmitContribution() {
     category_id: "",
   });
   const [files, setFiles] = useState([]);
+  const [coverPhoto, setCoverPhoto] = useState(null);
   const { data: yearsRes } = useAcademicYears();
-
   const academicYears = yearsRes?.data ?? [];
   const activeAcademicYear =
     academicYears.find((year) => year.is_active) ?? academicYears[0];
@@ -39,7 +39,8 @@ export function SubmitContribution() {
     if (!closureDateText) return false;
     const closureDate = new Date(`${closureDateText}T23:59:59`);
     if (Number.isNaN(closureDate.getTime())) return false;
-    return new Date() > closureDate;
+    const now = new Date();
+    return now > closureDate;
   })();
 
   const { mutate: storeContribution, isPending } = useStoreContribution(() => {
@@ -55,6 +56,7 @@ export function SubmitContribution() {
       category_id: "",
     });
     setFiles([]);
+    setCoverPhoto(null);
   });
 
   const canProceedStep1 = contributionType && isAgreed && !isAfterClosureDate;
@@ -89,6 +91,7 @@ export function SubmitContribution() {
       category_id: formData.category_id,
       terms_accepted: true,
       file: files[0],
+      cover_photo: coverPhoto,
     });
   };
 
@@ -177,6 +180,8 @@ export function SubmitContribution() {
             onFormDataChange={(data) =>
               setFormData((prev) => ({ ...prev, ...data }))
             }
+            coverPhoto={coverPhoto}
+            onCoverPhotoChange={setCoverPhoto}
           />
         )}
 

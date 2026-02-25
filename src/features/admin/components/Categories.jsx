@@ -15,7 +15,8 @@ const columns = [
 ];
 
 export const Categories = () => {
-  const { data: categories, isPending } = useCategories();
+  const { data, isPending } = useCategories();
+  const categories = data?.data ?? [];
 
   return (
     <div className="p-6">
@@ -27,7 +28,7 @@ export const Categories = () => {
           )}
         </TableHeader>
         <TableBody
-          items={categories ?? []}
+          items={categories}
           isLoading={isPending}
           loadingContent={<Spinner label="Loading categories..." />}
           emptyContent="No categories found."

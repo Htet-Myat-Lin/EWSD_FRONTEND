@@ -2,6 +2,7 @@ import { axiosInstance } from "../axios-instance"
 
 export const CategoryService = {
     getCategories: async () => {
-        return (await axiosInstance.get("/categories")).data
+        const response = (await axiosInstance.get("/categories")).data
+        return { data: Array.isArray(response) ? response : (response?.data ?? []) }
     },
 }
