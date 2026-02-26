@@ -5,6 +5,7 @@ import "@fontsource-variable/inter";
 import App from "./App.jsx";
 import { HeroUIProvider } from "@heroui/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 
@@ -20,6 +21,7 @@ createRoot(document.getElementById("root")).render(
           </AuthProvider>
         </HeroUIProvider>
       </BrowserRouter>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   </StrictMode>,
 );

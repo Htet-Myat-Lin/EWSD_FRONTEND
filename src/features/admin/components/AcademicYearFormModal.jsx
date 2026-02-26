@@ -96,6 +96,7 @@ export const AcademicYearFormModal = ({
   const isPending = isCreating || isUpdating;
 
   const onSubmit = (payload) => {
+    console.log(payload);
     if (isEditMode) {
       updateAcademicYear({ id: academicYear.id, ...payload });
     } else {

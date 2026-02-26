@@ -27,6 +27,9 @@ import {
   HiPhone,
   HiMenu,
 } from "react-icons/hi";
+import { resolveProfileImageUrl } from "@/utils/profile-image";
+
+
 
 export const AcmeLogo = () => (
   <RouterLink to="/" className="flex items-center hover:opacity-80 transition-opacity">
@@ -59,6 +62,7 @@ export function Header() {
 
   const { user } = useAuth();
   const { mutate: logout } = useLogout()
+  const profileImage = resolveProfileImageUrl(user?.profile_path);
 
   const handleLogout = () => {
     logout();
@@ -146,6 +150,7 @@ export function Header() {
                 className="transition-transform"
                 color="primary"
                 name={user?.name}
+                src={profileImage}
                 size="sm"
               />
             </DropdownTrigger>

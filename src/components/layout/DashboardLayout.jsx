@@ -21,7 +21,7 @@ import { LuLogOut, LuMenu, LuArrowLeft } from "react-icons/lu";
 import { useAuth } from "@/context/AuthContext";
 import { useLogout } from "@/features/auth/hooks/useLogout";
 import { Link as RouterLink } from "react-router-dom";
-
+import { resolveProfileImageUrl } from "@/utils/profile-image";
 // ----------------------------------------------------------------------
 // 1. Sidebar Component (Reused for Desktop & Mobile)
 // ----------------------------------------------------------------------
@@ -115,6 +115,7 @@ const SidebarContent = ({ menuItems }) => {
 export function DashboardLayout({ menuItems }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { user } = useAuth()
+  const profileImage = resolveProfileImageUrl(user?.profile_path);
 
   return (
     <div className="flex h-screen w-full bg-default-50">
@@ -155,6 +156,7 @@ export function DashboardLayout({ menuItems }) {
                   className="transition-transform"
                   color="primary"
                   name={user?.name}
+                  src={profileImage}
                   size="sm"
                 />
               </DropdownTrigger>

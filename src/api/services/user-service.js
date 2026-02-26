@@ -1,4 +1,5 @@
 import { axiosInstance } from "../axios-instance"
+import { toFormData } from "../../utils/to-form-data"
 
 export const UserService = {
     getUsers: async (page = 1) => {
@@ -18,6 +19,9 @@ export const UserService = {
     },
     updatePassword: async (id, payload) => {
         return (await axiosInstance.patch(`/users/${id}/password`, payload)).data
+    },
+    updateProfile: async (id, payload) => {
+        return (await axiosInstance.post(`/users/${id}/profile`, toFormData(payload))).data
     },
     getFacultyStudents: async (page = 1) => {
         return (await axiosInstance.get("/faculty/students", { params: { page } })).data

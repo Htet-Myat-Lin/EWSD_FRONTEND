@@ -15,7 +15,7 @@ import { Faculties } from "./features/admin/components/Faculties";
 import { AcademicYears } from "./features/admin/components/AcademicYears";
 import { Categories } from "./features/admin/components/Categories";
 import { SubmitContribution } from "./features/student/submissions/components/SubmitContribution";
-import { UpdatePasswordForm } from "./features/student/profile/components/UpdatePasswordForm";
+import { UpdateProfileForm } from "./features/student/profile/components/UpdateProfileForm";
 import { ContributionsList } from "./features/coordinator/contributions/components/ContributionsList";
 import { StudentList } from "./features/coordinator/userlists/components/StudentList";
 
@@ -31,13 +31,14 @@ const studentMenuItems = [
   { name: "Dashboard", path: "/student/dashboard", icon: <LuGauge size={20} />},
   { name: "Submit Contribution", path: "/student/submit-contribution", icon: <LuBookPlus size={20} /> },
   { name: "My Contributions", path: "/student/my-contributions", icon: <LuHeartHandshake size={20} /> },
-  { name: "Profile", path: "/student/update-password", icon: <CgProfile size={20} /> },
+  { name: "Profile", path: "/student/profile", icon: <CgProfile size={20} /> },
 ];
 
 const marketingCoordinatorMenuItems = [
   { name: "Dashboard", path: "/marketing-coordinator/dashboard", icon: <LuGauge size={20} />},
   { name: "Students", path: "/marketing-coordinator/students", icon: <LuUsers size={20} /> },
   { name: "Contributions", path: "/marketing-coordinator/contributions", icon: <LuFileText size={20} /> },
+  { name: "Profile", path: "/marketing-coordinator/profile", icon: <CgProfile size={20} /> },
 ];
 
 function App() {
@@ -73,7 +74,7 @@ function App() {
             <Route path="dashboard" element={<div>Student Dashboard</div>} />
             <Route path="submit-contribution" element={<SubmitContribution />} />
             <Route path="my-contributions" element={<div>My Contributions</div>} />
-            <Route path="update-password" element={<UpdatePasswordForm />} />
+            <Route path="profile" element={<UpdateProfileForm />} />
           </Route>
         </Route>
 
@@ -86,6 +87,7 @@ function App() {
             <Route path="dashboard" element={<div>Marketing Coordinator Dashboard</div>} />
             <Route path="students" element={<StudentList />} />
             <Route path="contributions" element={<ContributionsList />} />
+            <Route path="profile" element={<UpdateProfileForm />} />
           </Route>
         </Route>
 

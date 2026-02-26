@@ -165,7 +165,7 @@ export const ContributionsList = () => {
   
   const { data, isLoading, isError, error } = useContributions(page, statusParam, categoryParam, searchParam);
   const { data: categoriesData, isLoading: categoriesLoading } = useCategories();
-  const { mutate: selectContributions, isPending: isSelecting } = useSelectContributions();
+  const { mutate: selectContributions } = useSelectContributions();
 
   // Compute derived values before conditional returns
   const contributions = data?.data ?? [];
