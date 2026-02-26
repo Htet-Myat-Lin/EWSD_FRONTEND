@@ -190,7 +190,7 @@ export const Users = () => {
   const isSuspending = statusAction?.newStatus === "suspended";
 
   return (
-    <div className="p-6">
+    <div>
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-bold">User Management</h1>
         <Button
