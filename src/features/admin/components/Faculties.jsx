@@ -12,6 +12,7 @@ import { useFaculties } from "../../faculty/hooks/useFaculty";
 const columns = [
   { key: "id", label: "ID" },
   { key: "name", label: "Name" },
+  { key: "description", label: "Description" }
 ];
 
 export const Faculties = () => {

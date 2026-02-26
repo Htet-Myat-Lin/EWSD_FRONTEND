@@ -12,6 +12,8 @@ import { useCategories } from "../hooks/useCategories";
 const columns = [
   { key: "id", label: "ID" },
   { key: "name", label: "Name" },
+  { key: "type", label: "Category Type"},
+  { key: "description", label: "Description" }
 ];
 
 export const Categories = () => {
