@@ -184,7 +184,7 @@ export const AcademicYears = () => {
   const isActivating = statusAction?.isActive === true;
 
   return (
-    <div className="p-6">
+    <div>
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-bold">Academic Year Management</h1>
         <Button

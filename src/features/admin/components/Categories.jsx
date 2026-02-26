@@ -20,7 +20,7 @@ export const Categories = () => {
   const { data: categories, isPending } = useCategories();
 
   return (
-    <div className="p-6">
+    <div>
       <h1 className="text-2xl font-bold mb-4">Category Management</h1>
       <Table aria-label="Category list table" isStriped selectionMode="none">
         <TableHeader columns={columns}>

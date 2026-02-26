@@ -17,9 +17,10 @@ import {
 } from "@heroui/react";
 
 // Icons (using react-icons/lu for Lucide, you can use any)
-import { LuLogOut, LuMenu } from "react-icons/lu";
+import { LuLogOut, LuMenu, LuArrowLeft } from "react-icons/lu";
 import { useAuth } from "@/context/AuthContext";
 import { useLogout } from "@/features/auth/hooks/useLogout";
+import { Link as RouterLink } from "react-router-dom";
 
 // ----------------------------------------------------------------------
 // 1. Sidebar Component (Reused for Desktop & Mobile)
@@ -31,7 +32,7 @@ const SidebarContent = ({ menuItems }) => {
   return (
     <div className="flex flex-col h-full">
       {/* Sidebar Header / Logo */}
-      <div className="flex items-center justify-center h-16 border-b border-divider">
+      <div className="flex items-center justify-center h-16">
         <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
           <div className="relative">
             <svg
@@ -78,17 +79,31 @@ const SidebarContent = ({ menuItems }) => {
       </nav>
 
       {/* Sidebar Footer */}
-      <div className="p-4 border-t border-divider">
-        <Button
-          variant="light"
-          color="danger"
-          startContent={<LuLogOut size={20} />}
-          fullWidth
-          className="justify-start"
-          onClick={() => logout()}
-        >
-          Logout
-        </Button>
+      <div className="p-3 mt-auto border-t border-divider bg-default-50/50">
+        <div className="flex flex-col">
+          <Button
+            as={RouterLink}
+            to="/"
+            variant="light"
+            color="default"
+            startContent={<LuArrowLeft size={18} />}
+            fullWidth
+            className="justify-start text-default-600 hover:text-primary transition-colors"
+          >
+            Back to Home
+          </Button>
+          
+          <Button
+            variant="light"
+            color="danger"
+            startContent={<LuLogOut size={18} />}
+            fullWidth
+            className="justify-start opacity-80 hover:opacity-100"
+            onClick={() => logout()}
+          >
+            Logout
+          </Button>
+        </div>
       </div>
     </div>
   );
