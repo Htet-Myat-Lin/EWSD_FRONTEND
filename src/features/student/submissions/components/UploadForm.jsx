@@ -1,5 +1,3 @@
-"use client";
-
 import { Card, CardBody } from "@heroui/react";
 import { useCallback, useState } from "react";
 import { HiUpload } from "react-icons/hi";
@@ -95,9 +93,9 @@ export function UploadForm({ contributionType, files, onFilesChange }) {
               >
                 <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
                   {contributionType === "article" ? (
-                    <LuFileText className="h-4 w-4 sm:h-5 sm:w-5 text-[#3b82f6] flex-shrink-0" />
+                    <LuFileText className="h-4 w-4 sm:h-5 sm:w-5 text-[#3b82f6] shrink-0" />
                   ) : (
-                    <LuImage className="h-4 w-4 sm:h-5 sm:w-5 text-[#3b82f6] flex-shrink-0" />
+                    <LuImage className="h-4 w-4 sm:h-5 sm:w-5 text-[#3b82f6] shrink-0" />
                   )}
                   <div className="min-w-0 flex-1">
                     <p className="text-xs sm:text-sm font-medium text-[#1a1a2e] truncate">
@@ -110,7 +108,7 @@ export function UploadForm({ contributionType, files, onFilesChange }) {
                 </div>
                 <button
                   onClick={() => removeFile(index)}
-                  className="ml-2 rounded-full p-1 text-[#94a3b8] transition-colors hover:bg-[#f0f3f8] hover:text-[#ef4444] flex-shrink-0"
+                  className="ml-2 rounded-full p-1 text-[#94a3b8] transition-colors hover:bg-[#f0f3f8] hover:text-[#ef4444] shrink-0"
                   aria-label={`Remove ${file.name}`}
                 >
                   <LuX className="h-4 w-4" />

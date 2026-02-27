@@ -3,7 +3,8 @@ import { useQuery } from "@tanstack/react-query"
 
 export const useComments = (contributionId) => {
     return useQuery({
-        queryKey: ["contribution-comments"],
-        queryFn: () => commentService.getContributionComments(contributionId)
+        queryKey: ["contribution-comments", contributionId],
+        queryFn: () => commentService.getContributionComments(contributionId),
+        enabled: !!contributionId
     })
 }

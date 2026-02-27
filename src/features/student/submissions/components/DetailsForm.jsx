@@ -1,12 +1,7 @@
-"use client";
-
 import { Card, CardBody, Input, Textarea, Select, SelectItem, Spinner } from "@heroui/react";
-import { useAcademicYears } from "../hooks/useAcademicYears";
 import { useCategories } from "../hooks/useCategories";
 import { useState } from "react";
 import { HiPhoto } from "react-icons/hi2";
-
-
 
 export function DetailsForm({
   contributionType,
@@ -15,10 +10,10 @@ export function DetailsForm({
   coverPhoto,
   onCoverPhotoChange,
 }) {
-  const { data: yearsRes, isPending: yearsLoading } = useAcademicYears();
+  // const { data: yearsRes, isPending: yearsLoading } = useAcademicYears();
   const { data: catsRes, isPending: catsLoading } = useCategories();
 
-  const academicYears = yearsRes?.data ?? [];
+  // const academicYears = yearsRes?.data ?? [];
   const allCategories = catsRes?.data ?? [];
   
   // Filter categories based on contribution type
@@ -31,7 +26,7 @@ export function DetailsForm({
     return false;
   });
   
-  const loadingDropdowns = yearsLoading || catsLoading;
+  const loadingDropdowns = catsLoading;
   const [previewUrl, setPreviewUrl] = useState(null);
 
   const handleCoverPhotoChange = (e) => {
@@ -110,40 +105,6 @@ export function DetailsForm({
               }}
             />
           )}
-
-
-          {/* Academic Year */}
-          <Select
-            label="Academic Year"
-            placeholder={loadingDropdowns ? "Loading…" : "Select academic year"}
-            selectedKeys={formData.academic_year_id ? [String(formData.academic_year_id)] : []}
-            onSelectionChange={(keys) => {
-              const selected = Array.from(keys)[0];
-              onFormDataChange({ academic_year_id: selected });
-            }}
-            variant="bordered"
-            isRequired
-            isDisabled={loadingDropdowns}
-            labelPlacement="outside"
-            startContent={loadingDropdowns ? <Spinner size="sm" /> : null}
-            classNames={{
-              label: "text-sm font-medium text-[#1a1a2e]",
-              trigger: "border-[#e2e8f0]",
-            }}
-          >
-            {academicYears.map((year) => (
-              <SelectItem key={String(year.id)} textValue={year.name}>
-                <div className="flex items-center justify-between gap-2">
-                  <span>{year.name}</span>
-                  {year.is_active && (
-                    <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">
-                      Active
-                    </span>
-                  )}
-                </div>
-              </SelectItem>
-            ))}
-          </Select>
 
           {/* Category */}
           <Select

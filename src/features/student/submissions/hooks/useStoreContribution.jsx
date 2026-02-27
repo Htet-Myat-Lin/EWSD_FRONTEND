@@ -11,7 +11,6 @@ export const useStoreContribution = (onSuccess) => {
         title: data.title,
         abstract: data.abstract ?? "",
         description: data.description ?? "",
-        academic_year_id: data.academic_year_id,
         category_id: data.category_id,
         terms_accepted: data.terms_accepted ? "1" : "0",
         file: data.file,

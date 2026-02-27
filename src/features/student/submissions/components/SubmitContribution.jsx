@@ -24,7 +24,6 @@ export function SubmitContribution() {
     title: "",
     abstract: "",
     description: "",
-    academic_year_id: "",
     category_id: "",
   });
   const [files, setFiles] = useState([]);
@@ -52,7 +51,6 @@ export function SubmitContribution() {
       title: "",
       abstract: "",
       description: "",
-      academic_year_id: "",
       category_id: "",
     });
     setFiles([]);
@@ -65,7 +63,6 @@ export function SubmitContribution() {
   const canProceedStep2 =
     formData.title &&
     textBodyFilled &&
-    formData.academic_year_id &&
     formData.category_id;
 
   const handleNext = () => {
@@ -87,7 +84,6 @@ export function SubmitContribution() {
       title: formData.title,
       abstract: formData.abstract,
       description: resolvedDescription,
-      academic_year_id: formData.academic_year_id,
       category_id: formData.category_id,
       terms_accepted: true,
       file: files[0],

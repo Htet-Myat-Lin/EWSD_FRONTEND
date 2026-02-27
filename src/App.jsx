@@ -18,6 +18,8 @@ import { SubmitContribution } from "./features/student/submissions/components/Su
 import { UpdateProfileForm } from "./features/student/profile/components/UpdateProfileForm";
 import { ContributionsList } from "./features/coordinator/contributions/components/ContributionsList";
 import { StudentList } from "./features/coordinator/userlists/components/StudentList";
+import ContributionList from "./features/student/contributions/components/ContributionList";
+import { Contributions } from "./features/admin/components/ContributionList";
 
 const adminMenuItems = [
   { name: "Dashboard", path: "/admin/dashboard", icon: <LuGauge size={20} />},
@@ -25,6 +27,7 @@ const adminMenuItems = [
   { name: "Faculties", path: "/admin/faculties", icon: <LuSchool size={20} /> },
   { name: "Academic Years", path: "/admin/academic-years", icon: <LuCalendarDays size={20} /> },
   { name: "Categories", path: "/admin/categories", icon: <TbCategory size={20} /> },
+  { name: "Contributions", path: "/admin/contributions", icon: <LuFileText size={20} /> },
 ];
 
 const studentMenuItems = [
@@ -62,6 +65,7 @@ function App() {
             <Route path="faculties" element={<Faculties />} />
             <Route path="academic-years" element={<AcademicYears />} />
             <Route path="categories" element={<Categories />} />
+            <Route path="contributions" element={<Contributions />} />
           </Route>
         </Route>
 
@@ -73,7 +77,7 @@ function App() {
           >
             <Route path="dashboard" element={<div>Student Dashboard</div>} />
             <Route path="submit-contribution" element={<SubmitContribution />} />
-            <Route path="my-contributions" element={<div>My Contributions</div>} />
+            <Route path="my-contributions" element={<ContributionList />} />
             <Route path="profile" element={<UpdateProfileForm />} />
           </Route>
         </Route>
