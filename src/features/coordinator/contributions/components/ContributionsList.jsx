@@ -93,6 +93,7 @@ const renderCell = (contribution, columnKey, onDropdownAction, onCommentClick) =
           rel="noopener noreferrer"
           color="primary"
           underline="hover"
+          size="sm"
         >
           Download
         </Link>
@@ -102,7 +103,7 @@ const renderCell = (contribution, columnKey, onDropdownAction, onCommentClick) =
     case "actions": {
       const isDisabled = contribution.status === "selected" || contribution.status === "rejected";
       return (
-        <div className="relative flex justify-center items-center gap-1">
+        <div className="relative flex justify-center items-center">
           <Tooltip content="Add Comment" placement="top" delay={300} closeDelay={0}>
             <Button 
               onPress={() => onCommentClick(contribution)} 
@@ -163,6 +164,7 @@ const statusOptions = [
   { key: "pending", label: "Pending" },
   { key: "selected", label: "Selected" },
   { key: "rejected", label: "Rejected" },
+  { key: "commented", label: "Commented" }
 ];
 
 export const ContributionsList = () => {

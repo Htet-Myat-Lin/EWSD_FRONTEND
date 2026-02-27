@@ -11,6 +11,7 @@ const statusOptions = [
   { key: "pending", label: "Pending" },
   { key: "selected", label: "Selected" },
   { key: "rejected", label: "Rejected" },
+  { key: "commented", label: "Commented" }
 ];
 
 const ContributionList = () => {
