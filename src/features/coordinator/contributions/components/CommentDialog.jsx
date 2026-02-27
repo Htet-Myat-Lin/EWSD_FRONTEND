@@ -18,6 +18,7 @@ import { useComments } from "../hooks/useComments";
 import { useAuth } from "@/context/AuthContext";
 import { formatDate } from "@/utils/date";
 import { LuPencil, LuTrash } from "react-icons/lu";
+import { resolveProfileImageUrl } from "@/utils/profile-image";
 
 export function CommentDialog({ isOpen, onOpenChange, contribution }) {
   const [comment, setComment] = useState("");
@@ -139,9 +140,10 @@ export function CommentDialog({ isOpen, onOpenChange, contribution }) {
                           <div className="flex items-center justify-between mb-2">
                             <div className="flex items-center gap-2">
                               <Avatar
-                                name={commentItem.user?.name || "U"}
                                 size="sm"
                                 className="text-xs"
+                                name={commentItem.user?.name || "U"}
+                                src={resolveProfileImageUrl(commentItem.user?.profile_path)}
                               />
                               <div>
                                 <p className="text-sm font-medium text-gray-900">

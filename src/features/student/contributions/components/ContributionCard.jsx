@@ -5,6 +5,7 @@ import {
   CardFooter,
   Chip,
   Avatar,
+  Badge,
 } from "@heroui/react";
 import {
   LuPencilLine,
@@ -14,6 +15,7 @@ import {
   LuEye,
 } from "react-icons/lu";
 import { formatDate } from "@/utils/date";
+import { useComments } from "@/features/coordinator/contributions/hooks/useComments";
 
 const getStatusColor = (status) => {
   const statusColors = {
@@ -42,6 +44,9 @@ const truncateText = (text, maxLength = 120) => {
 
 export function ContributionCard({ contribution, onOpen, onCommentClick }) {
   const hasCoverPhoto = contribution?.cover_photo_path;
+  const { data: comments } = useComments(contribution?.id)
+
+  const commentCount = comments?.length || 0;
 
   return (
     <Card
@@ -77,13 +82,15 @@ export function ContributionCard({ contribution, onOpen, onCommentClick }) {
               variant="flat"
               className="cursor-pointer bg-primary/10 hover:bg-primary/20 transition-colors"
             />
-            <Avatar
-              icon={<LuMessageCircleMore className="text-primary" />}
-              onClick={onCommentClick}
-              size="sm"
-              variant="flat"
-              className="cursor-pointer bg-primary/10 hover:bg-primary/20 transition-colors"
-            />
+            <Badge color="danger" content={commentCount > 0 ? commentCount : null} size="sm">
+              <Avatar
+                icon={<LuMessageCircleMore className="text-primary" />}
+                onClick={onCommentClick}
+                size="sm"
+                variant="flat"
+                className="cursor-pointer bg-primary/10 hover:bg-primary/20 transition-colors"
+              />
+            </Badge>
             <Avatar
               icon={<LuPencilLine className="text-success" />}
               size="sm"

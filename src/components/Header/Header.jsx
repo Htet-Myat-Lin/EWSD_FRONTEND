@@ -29,8 +29,6 @@ import {
 } from "react-icons/hi";
 import { resolveProfileImageUrl } from "@/utils/profile-image";
 
-
-
 export const AcmeLogo = () => (
   <RouterLink to="/" className="flex items-center hover:opacity-80 transition-opacity">
     <div className="relative">
