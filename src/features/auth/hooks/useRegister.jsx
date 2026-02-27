@@ -13,7 +13,7 @@ export const useRegister = () => {
         onSuccess: (data) => {
             localStorage.setItem("access_token", data.access_token)
             setUser(data?.user)
-            navigate("/")
+            navigate("/", { replace: true })
             toast.success("Registration successful!")
         },
         onError: (error) => console.error("Registration error:", error)

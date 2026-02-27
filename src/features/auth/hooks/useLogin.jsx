@@ -14,7 +14,7 @@ export const useLogin = () => {
       if (data.access_token) {
         localStorage.setItem("access_token", data.access_token);
         setUser(data?.user)
-        navigate("/");
+        navigate("/", { replace: true });
         toast.success("Login successful");
       }
     },

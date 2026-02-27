@@ -20,14 +20,16 @@ import {
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
+  useDisclosure,
+  Tooltip
 } from "@heroui/react";
-import { LuEllipsisVertical, LuCheck, LuX } from "react-icons/lu";
+import { LuEllipsisVertical, LuCheck, LuX, LuMessageCircleMore } from "react-icons/lu";
 import { useContributions } from "../hooks/useContributions";
 import { useCategories } from "../hooks/useCategories";
 import { useSelectContributions } from "../hooks/useSelectContributions";
 import { formatDate } from "@/utils/date";
 import { toast } from "react-toastify";
-
+import { CommentDialog } from "./CommentDialog";
 
 const columns = [
   { key: "title", label: "Title" },
@@ -51,7 +53,7 @@ const getStatusColor = (status) => {
   return statusColors[status] || "default";
 };
 
-const renderCell = (contribution, columnKey, onDropdownAction) => {
+const renderCell = (contribution, columnKey, onDropdownAction, onCommentClick) => {
   switch (columnKey) {
     case "title":
       return contribution.title || "N/A";
@@ -84,7 +86,9 @@ const renderCell = (contribution, columnKey, onDropdownAction) => {
     case "file":
       return contribution.file_url ? (
         <Link
+          as={"a"}
           href={contribution.file_url}
+          download
           target="_blank"
           rel="noopener noreferrer"
           color="primary"
@@ -98,16 +102,35 @@ const renderCell = (contribution, columnKey, onDropdownAction) => {
     case "actions": {
       const isDisabled = contribution.status === "selected" || contribution.status === "rejected";
       return (
-        <div className="relative flex justify-center items-center">
+        <div className="relative flex justify-center items-center gap-1">
+          <Tooltip content="Add Comment" placement="top" delay={300} closeDelay={0}>
+            <Button 
+              onPress={() => onCommentClick(contribution)} 
+              isIconOnly 
+              size="sm" 
+              variant="light" 
+              className={`transition-all duration-200 ${isDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary-100 hover:text-primary'}`}
+              isDisabled={isDisabled}
+            >
+              <LuMessageCircleMore size={18} className={isDisabled ? "text-gray-300" : "text-primary"} />
+            </Button>
+          </Tooltip>
           <Dropdown>
             <DropdownTrigger>
-              <Button isIconOnly size="sm" variant="light" isDisabled={isDisabled}>
-                <LuEllipsisVertical size={18} className="text-default-400" />
+              <Button 
+                isIconOnly 
+                size="sm" 
+                variant="light" 
+                className={`transition-all duration-200 ${isDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-warning-100 hover:text-warning'}`}
+                isDisabled={isDisabled}
+              >
+                <LuEllipsisVertical size={18} className={isDisabled ? "text-gray-300" : "text-warning"} />
               </Button>
             </DropdownTrigger>
             <DropdownMenu
               aria-label="Contribution actions"
               onAction={(key) => onDropdownAction(key, contribution)}
+              disabledKeys={isDisabled ? ["select", "reject"] : []}
             >
               <DropdownItem
                 key="select"
@@ -148,6 +171,8 @@ export const ContributionsList = () => {
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [selectedContribution, setSelectedContribution] = useState(null);
+  const {isOpen, onOpen, onOpenChange} = useDisclosure();
   
   // Debounce search input
   useEffect(() => {
@@ -204,6 +229,11 @@ export const ContributionsList = () => {
         },
       }
     );
+  };
+
+  const handleCommentClick = (contribution) => {
+    setSelectedContribution(contribution);
+    onOpen();
   };
 
   if (isLoading) {
@@ -336,7 +366,7 @@ export const ContributionsList = () => {
                 <TableRow key={contribution.id}>
                   {columns.map((column) => (
                     <TableCell key={column.key}>
-                      {renderCell(contribution, column.key, handleDropdownAction)}
+                      {renderCell(contribution, column.key, handleDropdownAction, handleCommentClick)}
                     </TableCell>
                   ))}
                 </TableRow>
@@ -345,6 +375,13 @@ export const ContributionsList = () => {
           </Table>
         </CardBody>
       </Card>
+
+      {/* Comment Dialog */}
+      <CommentDialog 
+        isOpen={isOpen} 
+        onOpenChange={onOpenChange}
+        contribution={selectedContribution}
+      />
 
       {/* Pagination */}
       {lastPage > 1 && (
