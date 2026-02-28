@@ -1,8 +1,19 @@
 import { Button, Chip } from "@heroui/react";
 import { LuCheck, LuX } from "react-icons/lu";
 
-export const BulkActionsBar = ({ count, onBulkSelect, onBulkReject, onClear }) => {
+export const BulkActionsBar = ({ count, totalSelectable, onBulkSelect, onBulkReject, onClear }) => {
   if (count === 0) return null;
+
+  // Decide action text dynamically
+  const selectText =
+    count === totalSelectable
+      ? "Select All"
+      : `Select (${count}) contributions`;
+
+  const rejectText =
+    count === totalSelectable
+      ? "Reject All"
+      : `Reject (${count}) contributions`;
 
   return (
     <div className="flex items-center gap-3 px-4 py-2.5 bg-primary-50 border border-primary-200 rounded-lg transition-all duration-200">
@@ -19,7 +30,7 @@ export const BulkActionsBar = ({ count, onBulkSelect, onBulkReject, onClear }) =
         startContent={<LuCheck size={14} />}
         onPress={onBulkSelect}
       >
-        Select All
+        {selectText}
       </Button>
 
       <Button
@@ -29,7 +40,7 @@ export const BulkActionsBar = ({ count, onBulkSelect, onBulkReject, onClear }) =
         startContent={<LuX size={14} />}
         onPress={onBulkReject}
       >
-        Reject All
+        {rejectText}
       </Button>
 
       <Button

@@ -1,7 +1,16 @@
 import { useMemo, useState } from "react";
 import {
-  Table, TableHeader, TableColumn, TableBody, TableRow, TableCell,
-  Spinner, Card, CardBody, Chip, Pagination, useDisclosure,
+  Table,
+  TableHeader,
+  TableColumn,
+  TableBody,
+  TableRow,
+  TableCell,
+  Spinner,
+  Card,
+  CardBody,
+  Pagination,
+  useDisclosure,
 } from "@heroui/react";
 import { toast } from "react-toastify";
 
@@ -13,11 +22,13 @@ import { ContributionFilters } from "./ContributionFilters";
 import { BulkActionsBar } from "./BulkActionsBar";
 import { CommentDialog } from "./CommentDialog";
 import { useContributionFilters } from "../hooks/useContributionFilters";
-import { useContributionSelection } from "../hooks/useContributionSelection";
+
+const TERMINAL_STATUSES = ["selected", "rejected"];
 
 export const ContributionsList = () => {
   const filters = useContributionFilters();
   const [selectedContribution, setSelectedContribution] = useState(null);
+  const [selectedKeys, setSelectedKeys] = useState(new Set());
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const { data, isLoading, isError, error } = useContributions(
@@ -26,54 +37,72 @@ export const ContributionsList = () => {
     filters.categoryParam,
     filters.searchParam
   );
-  const { data: categoriesData, isLoading: categoriesLoading } = useCategories();
+
+  const { data: categoriesData, isLoading: categoriesLoading } =
+    useCategories();
+
   const { mutate: selectContributions } = useSelectContributions();
 
-  const contributions = data?.data ?? [];
+  const contributions = useMemo(() => data?.data ?? [], [data?.data]);
   const currentPage = data?.meta?.current_page ?? 1;
   const lastPage = data?.meta?.last_page ?? 1;
-  const total = data?.meta?.total ?? 0;
 
-  // ── Bulk selection ────────────────────────────────────────────────────────
-  const {
-    selectedKeys,
-    selectedCount,
-    isAllSelected,
-    isIndeterminate,
-    toggleAll,
-    toggleOne,
-    clearSelection,
-    isSelectable,
-  } = useContributionSelection(contributions);
-
-  // ── Category options ──────────────────────────────────────────────────────
   const categoryOptions = useMemo(() => {
     const categories = categoriesData?.data ?? [];
     return [
       { key: "all", label: "All Categories" },
-      ...categories.map((cat) => ({ key: String(cat.id), label: cat.name })),
+      ...categories.map((cat) => ({
+        key: String(cat.id),
+        label: cat.name,
+      })),
     ];
   }, [categoriesData]);
 
-  // ── Handlers ──────────────────────────────────────────────────────────────
+  // Only allow selection of non-terminal rows
+  const disabledKeys = useMemo(() => {
+    return contributions
+      .filter((c) => TERMINAL_STATUSES.includes(c.status))
+      .map((c) => String(c.id));
+  }, [contributions]);
+
   const handleSelectContributions = ({ ids, action }) => {
     selectContributions(
       { ids, action },
       {
         onSuccess: (data) => {
-          toast.success(data.message || `Contributions ${action} successfully`);
-          clearSelection();
+          toast.success(
+            data.message || `Contributions ${action} successfully`
+          );
+          setSelectedKeys(new Set());
         },
         onError: (err) => {
-          toast.error(err.response?.data?.message || `Failed to ${action} contributions`);
+          toast.error(
+            err.response?.data?.message ||
+              `Failed to ${action} contributions`
+          );
         },
       }
     );
   };
 
+  const handleBulkSelect = () =>
+    handleSelectContributions({
+      ids: Array.from(selectedKeys),
+      action: "selected",
+    });
+
+  const handleBulkReject = () =>
+    handleSelectContributions({
+      ids: Array.from(selectedKeys),
+      action: "rejected",
+    });
+
   const handleDropdownAction = (key, contribution) => {
     const action = key === "select" ? "selected" : "rejected";
-    handleSelectContributions({ ids: [contribution.id], action });
+    handleSelectContributions({
+      ids: [contribution.id],
+      action,
+    });
   };
 
   const handleCommentClick = (contribution) => {
@@ -81,25 +110,11 @@ export const ContributionsList = () => {
     onOpen();
   };
 
-  const handleBulkSelect = () =>
-    handleSelectContributions({ ids: Array.from(selectedKeys), action: "selected" });
-
-  const handleBulkReject = () =>
-    handleSelectContributions({ ids: Array.from(selectedKeys), action: "rejected" });
-
-  // ── Columns ───────────────────────────────────────────────────────────────
   const columns = useContributionColumns({
     onDropdownAction: handleDropdownAction,
     onCommentClick: handleCommentClick,
-    selectedKeys,
-    isAllSelected,
-    isIndeterminate,
-    toggleAll,
-    toggleOne,
-    isSelectable,
   });
 
-  // ── Loading / Error states ────────────────────────────────────────────────
   if (isLoading) {
     return (
       <div className="flex justify-center p-8">
@@ -113,8 +128,12 @@ export const ContributionsList = () => {
       <Card className="m-6">
         <CardBody>
           <div className="text-center text-danger">
-            <p className="text-lg font-semibold mb-2">Error loading contributions</p>
-            <p className="text-sm">{error?.message || "An unexpected error occurred"}</p>
+            <p className="text-lg font-semibold mb-2">
+              Error loading contributions
+            </p>
+            <p className="text-sm">
+              {error?.message || "An unexpected error occurred"}
+            </p>
           </div>
         </CardBody>
       </Card>
@@ -122,62 +141,58 @@ export const ContributionsList = () => {
   }
 
   return (
-    <div className="p-6 space-y-6">
-      {/* Header */}
-      <div className="flex flex-col gap-4">
-        <div>
-          <h1 className="text-2xl font-bold">Contributions</h1>
-          <p className="text-sm text-gray-500 mt-1">Manage and review student contributions</p>
-        </div>
-        <ContributionFilters
-          {...filters}
-          categoryOptions={categoryOptions}
-          categoriesLoading={categoriesLoading}
-        />
-      </div>
-
-      {/* Stats Bar */}
-      <div className="flex items-center justify-between px-4 py-3 bg-gray-50 rounded-lg border border-gray-200">
-        <p className="text-sm text-gray-600">
-          Showing{" "}
-          <span className="font-semibold text-gray-900">{contributions.length}</span> of{" "}
-          <span className="font-semibold text-gray-900">{total}</span>{" "}
-          contribution{total !== 1 ? "s" : ""}
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold">Contributions</h1>
+        <p className="text-sm text-gray-500">
+          Manage and review student contributions
         </p>
-        {filters.activeFiltersCount > 0 && (
-          <Chip size="sm" variant="flat" color="primary">
-            {filters.activeFiltersCount} filter{filters.activeFiltersCount !== 1 ? "s" : ""} active
-          </Chip>
-        )}
       </div>
 
-      {/* Bulk Actions Bar — only visible when items are selected */}
-      <BulkActionsBar
-        count={selectedCount}
-        onBulkSelect={handleBulkSelect}
-        onBulkReject={handleBulkReject}
-        onClear={clearSelection}
+      <ContributionFilters
+        {...filters}
+        categoryOptions={categoryOptions}
+        categoriesLoading={categoriesLoading}
       />
 
-      {/* Table */}
+      <BulkActionsBar
+        count={selectedKeys.size}
+        onBulkSelect={handleBulkSelect}
+        onBulkReject={handleBulkReject}
+        onClear={() => setSelectedKeys(new Set())}
+      />
+
       <Card>
         <CardBody className="p-0">
-          <Table aria-label="Contributions list" isStriped removeWrapper>
+          <Table
+            aria-label="Contributions list"
+            isStriped
+            removeWrapper
+            selectionMode="multiple"
+            selectedKeys={selectedKeys}
+            onSelectionChange={setSelectedKeys}
+            disabledKeys={disabledKeys}
+          >
             <TableHeader columns={columns}>
-              {(col) => (
-                <TableColumn key={col.key} align={col.align ?? "start"}>
-                  {col.label}
+              {(column) => (
+                <TableColumn key={column.key}>
+                  {column.label}
                 </TableColumn>
               )}
             </TableHeader>
-            <TableBody items={contributions} emptyContent="No contributions found.">
-              {(contribution) => (
-                <TableRow key={contribution.id}>
-                  {columns.map((col) => (
-                    <TableCell key={col.key}>
-                      {col.render ? col.render(contribution) : contribution[col.key]}
+
+            <TableBody items={contributions}>
+              {(item) => (
+                <TableRow key={String(item.id)}>
+                  {(columnKey) => (
+                    <TableCell>
+                      {columns.find((c) => c.key === columnKey)?.render
+                        ? columns
+                            .find((c) => c.key === columnKey)
+                            .render(item)
+                        : item[columnKey]}
                     </TableCell>
-                  ))}
+                  )}
                 </TableRow>
               )}
             </TableBody>
