@@ -16,6 +16,7 @@ import {
 } from "react-icons/lu";
 import { formatDate } from "@/utils/date";
 import { useComments } from "@/features/coordinator/contributions/hooks/useComments";
+import defaultCoverPhoto from "../../../../../public/default-cover-image.jpg";
 
 const getStatusColor = (status) => {
   const statusColors = {
@@ -44,7 +45,10 @@ const truncateText = (text, maxLength = 120) => {
 
 export function ContributionCard({ contribution, onOpen, onCommentClick }) {
   const hasCoverPhoto = contribution?.cover_photo_path;
-  const { data: comments } = useComments(contribution?.id)
+  const { data: comments } = useComments(contribution?.id);
+  const coverPhotoSrc = hasCoverPhoto
+    ? `http://localhost:8000/storage/${contribution.cover_photo_path}`
+    : defaultCoverPhoto;
 
   const commentCount = comments?.length || 0;
 
@@ -53,16 +57,14 @@ export function ContributionCard({ contribution, onOpen, onCommentClick }) {
       className="hover:shadow-lg transition-shadow duration-300 border border-default-100"
     >
       {/* Cover Photo */}
-      {hasCoverPhoto && (
-        <div className="relative h-40 w-full overflow-hidden rounded-t-xl">
-          <img
-            alt={contribution?.title}
-            className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
-            src={`http://localhost:8000/storage/${contribution.cover_photo_path}`}
-          />
-          <div className="absolute inset-0 bg-linear-to-t from-black/40 to-transparent" />
-        </div>
-      )}
+      <div className="relative h-40 w-full overflow-hidden rounded-t-xl">
+        <img
+          alt={contribution?.title || "Default cover photo"}
+          className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+          src={coverPhotoSrc}
+        />
+        <div className="absolute inset-0 bg-linear-to-t from-black/40 to-transparent" />
+      </div>
 
       <CardHeader>
         <div className="flex w-full justify-between items-center gap-3">
