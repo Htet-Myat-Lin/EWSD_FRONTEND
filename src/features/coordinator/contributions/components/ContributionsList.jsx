@@ -6,6 +6,8 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  Chip,
+  Link,
   Spinner,
   Card,
   CardBody,
@@ -13,17 +15,24 @@ import {
   useDisclosure,
 } from "@heroui/react";
 import { toast } from "react-toastify";
+import { formatDate } from "@/utils/date";
+import { ActionsCell } from "./ActionsCell";
+import { ContributionFilters } from "./ContributionFilters";
+import { BulkActionsBar } from "./BulkActionsBar";
+import { CommentDialog } from "./CommentDialog";
 
 import { useContributions } from "../hooks/useContributions";
 import { useCategories } from "../hooks/useCategories";
 import { useSelectContributions } from "../hooks/useSelectContributions";
-import { useContributionColumns } from "./contributionColumns";
-import { ContributionFilters } from "./ContributionFilters";
-import { BulkActionsBar } from "./BulkActionsBar";
-import { CommentDialog } from "./CommentDialog";
 import { useContributionFilters } from "../hooks/useContributionFilters";
 
 const TERMINAL_STATUSES = ["selected", "rejected"];
+const STATUS_COLORS = {
+  pending: "warning",
+  commented: "primary",
+  selected: "success",
+  rejected: "danger",
+};
 
 export const ContributionsList = () => {
   const filters = useContributionFilters();
@@ -110,11 +119,6 @@ export const ContributionsList = () => {
     onOpen();
   };
 
-  const columns = useContributionColumns({
-    onDropdownAction: handleDropdownAction,
-    onCommentClick: handleCommentClick,
-  });
-
   if (isLoading) {
     return (
       <div className="flex justify-center p-8">
@@ -173,26 +177,58 @@ export const ContributionsList = () => {
             onSelectionChange={setSelectedKeys}
             disabledKeys={disabledKeys}
           >
-            <TableHeader columns={columns}>
-              {(column) => (
-                <TableColumn key={column.key}>
-                  {column.label}
-                </TableColumn>
-              )}
+            <TableHeader>
+              <TableColumn>title</TableColumn>
+              <TableColumn>student</TableColumn>
+              <TableColumn>category</TableColumn>
+              <TableColumn>academic_year</TableColumn>
+              <TableColumn>status</TableColumn>
+              <TableColumn>created_at</TableColumn>
+              <TableColumn>file</TableColumn>
+              <TableColumn>actions</TableColumn>
             </TableHeader>
 
             <TableBody items={contributions}>
               {(item) => (
                 <TableRow key={String(item.id)}>
-                  {(columnKey) => (
-                    <TableCell>
-                      {columns.find((c) => c.key === columnKey)?.render
-                        ? columns
-                            .find((c) => c.key === columnKey)
-                            .render(item)
-                        : item[columnKey]}
-                    </TableCell>
-                  )}
+                  <TableCell>{item.title || "N/A"}</TableCell>
+                  <TableCell>{item.user?.name || "N/A"}</TableCell>
+                  <TableCell>{item.category?.name || "N/A"}</TableCell>
+                  <TableCell>{item.academic_year?.name || "N/A"}</TableCell>
+                  <TableCell>
+                    <Chip
+                      color={STATUS_COLORS[item.status] || "default"}
+                      size="sm"
+                      variant="flat"
+                    >
+                      {item.status}
+                    </Chip>
+                  </TableCell>
+                  <TableCell>{formatDate(item.created_at)}</TableCell>
+                  <TableCell>
+                    {item.file_url ? (
+                      <Link
+                        href={item.file_url}
+                        download
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        color="primary"
+                        underline="hover"
+                        size="sm"
+                      >
+                        Download
+                      </Link>
+                    ) : (
+                      <span className="text-gray-400">No file</span>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <ActionsCell
+                      contribution={item}
+                      onDropdownAction={handleDropdownAction}
+                      onCommentClick={handleCommentClick}
+                    />
+                  </TableCell>
                 </TableRow>
               )}
             </TableBody>

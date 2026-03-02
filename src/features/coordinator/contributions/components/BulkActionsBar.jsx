@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { Button, Chip } from "@heroui/react";
 import { LuCheck, LuX } from "react-icons/lu";
 
@@ -16,7 +17,13 @@ export const BulkActionsBar = ({ count, totalSelectable, onBulkSelect, onBulkRej
       : `Reject (${count}) contributions`;
 
   return (
-    <div className="flex items-center gap-3 px-4 py-2.5 bg-primary-50 border border-primary-200 rounded-lg transition-all duration-200">
+    <motion.div
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.3 }}
+      className="flex items-center gap-3 px-4 py-2.5 bg-primary-50 border border-primary-200 rounded-lg transition-all duration-200"
+    >
       <Chip size="sm" color="primary" variant="flat">
         {count} selected
       </Chip>
@@ -52,6 +59,6 @@ export const BulkActionsBar = ({ count, totalSelectable, onBulkSelect, onBulkRej
       >
         Clear Selection
       </Button>
-    </div>
+    </motion.div>
   );
 };
