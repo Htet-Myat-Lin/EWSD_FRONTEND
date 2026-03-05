@@ -1,8 +1,12 @@
 import { axiosInstance } from "../axios-instance";
 
 export const commentService = {
-  addComment: async (contributionId, content) => {
-    return (await axiosInstance.post(`/contributions/${contributionId}/comments`, { content })).data
+  addComment: async (contributionId, content, parentId = null) => {
+    const payload = { content };
+    if (parentId) {
+      payload.parent_id = parentId;
+    }
+    return (await axiosInstance.post(`/contributions/${contributionId}/comments`, payload)).data
   },
 
   getContributionComments: async(contributionId) => {
