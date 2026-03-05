@@ -1,6 +1,6 @@
 import { Card, CardBody, Input, Textarea, Select, SelectItem, Spinner } from "@heroui/react";
 import { useCategories } from "../hooks/useCategories";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HiPhoto } from "react-icons/hi2";
 
 export function DetailsForm({
@@ -9,6 +9,9 @@ export function DetailsForm({
   onFormDataChange,
   coverPhoto,
   onCoverPhotoChange,
+  initialCoverPhotoUrl = null,
+  initialCoverPhotoName = "Current cover photo",
+  allowCoverPhotoRemoval = true,
 }) {
   // const { data: yearsRes, isPending: yearsLoading } = useAcademicYears();
   const { data: catsRes, isPending: catsLoading } = useCategories();
@@ -28,6 +31,14 @@ export function DetailsForm({
   
   const loadingDropdowns = catsLoading;
   const [previewUrl, setPreviewUrl] = useState(null);
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
 
   const handleCoverPhotoChange = (e) => {
     const file = e.target.files?.[0];
@@ -137,13 +148,33 @@ export function DetailsForm({
             <label className="text-sm font-medium text-[#1a1a2e]">
               Cover Photo <span className="text-[#64748b] font-normal">(Optional)</span>
             </label>
-            
+
+            {!coverPhoto && initialCoverPhotoUrl && (
+              <div className="rounded-lg border border-[#e2e8f0] bg-white p-3">
+                <div className="flex items-center gap-3">
+                  <img
+                    src={initialCoverPhotoUrl}
+                    alt="Current cover"
+                    className="h-16 w-16 rounded object-cover"
+                  />
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-medium text-[#1a1a2e]">
+                      {initialCoverPhotoName}
+                    </p>
+                    <p className="text-xs text-[#64748b]">
+                      Upload a new image to replace it.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {!coverPhoto ? (
               <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-[#e2e8f0] bg-[#f8f9fb] px-4 py-6 transition-colors hover:border-[#3b82f6] hover:bg-[#eff6ff]">
                 <HiPhoto className="h-10 w-10 text-[#94a3b8]" />
                 <div className="text-center">
                   <p className="text-sm font-medium text-[#1a1a2e]">
-                    Upload Cover Photo
+                    {initialCoverPhotoUrl ? "Replace Cover Photo" : "Upload Cover Photo"}
                   </p>
                   <p className="mt-1 text-xs text-[#64748b]">
                     JPG, JPEG, PNG up to 2MB
@@ -174,13 +205,15 @@ export function DetailsForm({
                       {(coverPhoto.size / 1024).toFixed(1)} KB
                     </p>
                   </div>
-                  <button
-                    type="button"
-                    onClick={removeCoverPhoto}
-                    className="rounded-lg bg-[#fee2e2] px-3 py-1.5 text-xs font-medium text-[#dc2626] transition-colors hover:bg-[#fecaca]"
-                  >
-                    Remove
-                  </button>
+                  {allowCoverPhotoRemoval && (
+                    <button
+                      type="button"
+                      onClick={removeCoverPhoto}
+                      className="rounded-lg bg-[#fee2e2] px-3 py-1.5 text-xs font-medium text-[#dc2626] transition-colors hover:bg-[#fecaca]"
+                    >
+                      Remove
+                    </button>
+                  )}
                 </div>
               </div>
             )}

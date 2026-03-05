@@ -5,6 +5,10 @@ export const ContributionService = {
         return (await axiosInstance.postForm("/contributions", payload)).data
     },
 
+    getContribution: async (id) => {
+        return (await axiosInstance.get(`/contributions/${id}`)).data
+    },
+
     getContributions: async (page, status, categoryId, search) => {
         const params = {}
         
@@ -54,5 +58,12 @@ export const ContributionService = {
 
     selectContributions: async (ids, action) => {
         return (await axiosInstance.patch("/contributions/select", { ids, action })).data
+    },
+
+    updateContribution: async (id, payload) => {
+        return (await axiosInstance.postForm(`/contributions/${id}`, {
+            ...payload,
+            _method: "PUT",
+        })).data
     },
 }

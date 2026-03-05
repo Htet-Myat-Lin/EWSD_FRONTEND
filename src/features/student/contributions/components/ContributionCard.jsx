@@ -6,6 +6,7 @@ import {
   Chip,
   Avatar,
   Badge,
+  Tooltip,
 } from "@heroui/react";
 import {
   LuPencilLine,
@@ -43,7 +44,14 @@ const truncateText = (text, maxLength = 120) => {
   return text.slice(0, maxLength).trim() + "...";
 };
 
-export function ContributionCard({ contribution, onOpen, onCommentClick }) {
+export function ContributionCard({
+  contribution,
+  onOpen,
+  onCommentClick,
+  onEditClick,
+  canEdit = true,
+  editDisabledMessage = "",
+}) {
   const hasCoverPhoto = contribution?.cover_photo_path;
   const { data: comments } = useComments(contribution?.id);
   const coverPhotoSrc = hasCoverPhoto
@@ -93,12 +101,25 @@ export function ContributionCard({ contribution, onOpen, onCommentClick }) {
                 className="cursor-pointer bg-primary/10 hover:bg-primary/20 transition-colors"
               />
             </Badge>
-            <Avatar
-              icon={<LuPencilLine className="text-success" />}
-              size="sm"
-              variant="flat"
-              className="cursor-pointer bg-primary/10 hover:bg-primary/20 transition-colors"
-            />
+            <Tooltip
+              content={canEdit ? "Edit contribution" : editDisabledMessage || "Editing is not available"}
+            >
+              <Avatar
+                icon={<LuPencilLine className={canEdit ? "text-success" : "text-default-400"} />}
+                size="sm"
+                variant="flat"
+                onClick={() => {
+                  if (canEdit) {
+                    onEditClick?.();
+                  }
+                }}
+                className={`bg-primary/10 transition-colors ${
+                  canEdit
+                    ? "cursor-pointer hover:bg-primary/20"
+                    : "cursor-not-allowed opacity-60"
+                }`}
+              />
+            </Tooltip>
           </div>
         </div>
       </CardHeader>

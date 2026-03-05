@@ -1,10 +1,30 @@
 import { useContributions } from "@/features/coordinator/contributions/hooks/useContributions"
 import { ContributionCard } from "./ContributionCard"
-import { useState, useMemo } from "react"
+import { useState, useMemo, useRef } from "react"
 import { useCategories } from "@/features/coordinator/contributions/hooks/useCategories";
 import { Input, Select, SelectItem, Pagination, Chip, useDisclosure } from "@heroui/react";
 import { useEffect } from "react";
 import { CommentDialog } from "@/features/coordinator/contributions/components/CommentDialog";
+import { useNavigate, useSearchParams } from "react-router-dom";
+
+const buildEditUrl = (contributionId, searchParams) => {
+  const nextParams = searchParams.toString();
+  return `/student/my-contributions/${contributionId}/edit${nextParams ? `?${nextParams}` : ""}`;
+};
+
+const canEditContribution = (contribution) => {
+  const finalClosureDateText = contribution?.academic_year?.final_closure_date;
+  if (!finalClosureDateText) return true;
+  const finalClosureDate = new Date(`${finalClosureDateText}T23:59:59`);
+  if (Number.isNaN(finalClosureDate.getTime())) return true;
+  return new Date() <= finalClosureDate;
+};
+
+const getEditDisabledMessage = (contribution) => {
+  const finalClosureDateText = contribution?.academic_year?.final_closure_date;
+  if (!finalClosureDateText) return "Editing is currently unavailable";
+  return `Editing closed on ${finalClosureDateText}`;
+};
 
 const statusOptions = [
   { key: "all", label: "All" },
@@ -15,21 +35,44 @@ const statusOptions = [
 ];
 
 const ContributionList = () => {
-  const [page, setPage] = useState(1);
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [categoryFilter, setCategoryFilter] = useState("all");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  const initialPage = Number(searchParams.get("page") || 1);
+  const initialStatus = searchParams.get("status") || "all";
+  const initialCategory = searchParams.get("category") || "all";
+  const initialSearch = searchParams.get("search") || "";
+
+  const [page, setPage] = useState(Number.isNaN(initialPage) ? 1 : initialPage);
+  const [statusFilter, setStatusFilter] = useState(initialStatus);
+  const [categoryFilter, setCategoryFilter] = useState(initialCategory);
+  const [searchQuery, setSearchQuery] = useState(initialSearch);
+  const [debouncedSearch, setDebouncedSearch] = useState(initialSearch);
+  const isFirstSearchSync = useRef(true);
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const [selectedContribution, setSelectedContribution] = useState(null);
 
   useEffect(() => {
       const timer = setTimeout(() => {
         setDebouncedSearch(searchQuery);
-        setPage(1);
+        if (isFirstSearchSync.current) {
+          isFirstSearchSync.current = false;
+        } else {
+          setPage(1);
+        }
       }, 500);
       return () => clearTimeout(timer);
     }, [searchQuery]);
+
+  useEffect(() => {
+    const nextParams = new URLSearchParams();
+    if (page > 1) nextParams.set("page", String(page));
+    if (statusFilter !== "all") nextParams.set("status", statusFilter);
+    if (categoryFilter !== "all") nextParams.set("category", categoryFilter);
+    if (searchQuery.trim()) nextParams.set("search", searchQuery.trim());
+
+    setSearchParams(nextParams, { replace: true });
+  }, [page, statusFilter, categoryFilter, searchQuery, setSearchParams]);
 
   const statusParam = statusFilter === "all" ? null : statusFilter;
   const categoryParam = categoryFilter === "all" ? null : categoryFilter;
@@ -170,14 +213,17 @@ const ContributionList = () => {
           </div>
         )}
         {!isPending && contributions.length > 0 && contributions.map((contribution) => (
-          <ContributionCard 
-            key={contribution.id} 
-            contribution={contribution} 
+          <ContributionCard
+            key={contribution.id}
+            contribution={contribution}
             onOpen={onOpen}
             onCommentClick={() => {
               setSelectedContribution(contribution);
               onOpen();
             }}
+            onEditClick={() => navigate(buildEditUrl(contribution.id, searchParams))}
+            canEdit={canEditContribution(contribution)}
+            editDisabledMessage={getEditDisabledMessage(contribution)}
           />
         ))}
         {selectedContribution && (

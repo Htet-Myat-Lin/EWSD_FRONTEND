@@ -3,7 +3,13 @@ import { useCallback, useState } from "react";
 import { HiUpload } from "react-icons/hi";
 import { LuFileText, LuImage, LuX } from "react-icons/lu";
 
-export function UploadForm({ contributionType, files, onFilesChange }) {
+export function UploadForm({
+  contributionType,
+  files,
+  onFilesChange,
+  existingFileName = null,
+  requireFile = true,
+}) {
   const [isDragOver, setIsDragOver] = useState(false);
 
   const accept =
@@ -45,6 +51,18 @@ export function UploadForm({ contributionType, files, onFilesChange }) {
           Upload {contributionType === "article" ? "Document" : "Images"}
         </h2>
 
+        {existingFileName && files.length === 0 && (
+          <div className="mb-4 rounded-lg border border-[#e2e8f0] bg-white p-3">
+            <p className="text-xs text-[#64748b]">Current file</p>
+            <p className="mt-1 truncate text-sm font-medium text-[#1a1a2e]">
+              {existingFileName}
+            </p>
+            <p className="mt-1 text-xs text-[#64748b]">
+              Upload a new file only if you want to replace this file.
+            </p>
+          </div>
+        )}
+
         <div
           onDragOver={(e) => {
             e.preventDefault();
@@ -79,6 +97,11 @@ export function UploadForm({ contributionType, files, onFilesChange }) {
               ? "Accepted formats: .doc, .docx (Max 5MB)"
               : "Accepted formats: .jpg, , .jpeg, .png (Max 5MB each)"}
           </p>
+          {!requireFile && (
+            <p className="mt-1 text-xs text-[#94a3b8] text-center">
+              File replacement is optional during edit.
+            </p>
+          )}
         </div>
 
         {files.length > 0 && (

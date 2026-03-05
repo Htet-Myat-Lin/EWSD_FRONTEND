@@ -19,6 +19,7 @@ import { UpdateProfileForm } from "./features/student/profile/components/UpdateP
 import { ContributionsList } from "./features/coordinator/contributions/components/ContributionsList";
 import { StudentList } from "./features/coordinator/userlists/components/StudentList";
 import ContributionList from "./features/student/contributions/components/ContributionList";
+import { EditContribution } from "./features/student/contributions/components/EditContribution";
 import { Contributions } from "./features/admin/components/ContributionList";
 
 const adminMenuItems = [
@@ -33,7 +34,7 @@ const adminMenuItems = [
 const studentMenuItems = [
   { name: "Dashboard", path: "/student/dashboard", icon: <LuGauge size={20} />},
   { name: "Submit Contribution", path: "/student/submit-contribution", icon: <LuBookPlus size={20} /> },
-  { name: "My Contributions", path: "/student/my-contributions", icon: <LuHeartHandshake size={20} /> },
+  { name: "My Contributions", path: "/student/my-contributions", icon: <LuFileText size={20} /> },
   { name: "Profile", path: "/student/profile", icon: <CgProfile size={20} /> },
 ];
 
@@ -78,6 +79,7 @@ function App() {
             <Route path="dashboard" element={<div>Student Dashboard</div>} />
             <Route path="submit-contribution" element={<SubmitContribution />} />
             <Route path="my-contributions" element={<ContributionList />} />
+            <Route path="my-contributions/:id/edit" element={<EditContribution />} />
             <Route path="profile" element={<UpdateProfileForm />} />
           </Route>
         </Route>
