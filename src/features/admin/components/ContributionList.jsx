@@ -16,11 +16,13 @@ import {
   Pagination,
   Input,
   useDisclosure,
+  Button,
 } from "@heroui/react";
 import { useContributions } from "@/features/coordinator/contributions/hooks/useContributions";
 import { useCategories } from "@/features/coordinator/contributions/hooks/useCategories";
 import { formatDate } from "@/utils/date";
 import { CommentDialog } from "@/features/coordinator/contributions/components/CommentDialog";
+import { LuMessageCircle } from "react-icons/lu";
 
 const columns = [
   { key: "id", label: "ID" },
@@ -31,7 +33,8 @@ const columns = [
   { key: "academic_year", label: "Academic Year" },
   { key: "status", label: "Status" },
   { key: "created_at", label: "Submission Date" },
-  { key: "file", label: "File" }
+  { key: "file", label: "File" },
+  { key: "comments", label: "" }
 ];
 
 const getStatusColor = (status) => {
@@ -44,7 +47,7 @@ const getStatusColor = (status) => {
   return statusColors[status] || "default";
 };
 
-const renderCell = (contribution, columnKey) => {
+const renderCell = (contribution, columnKey, onCommentClick) => {
   switch (columnKey) {
     case "id":
       return contribution.id;
@@ -92,6 +95,19 @@ const renderCell = (contribution, columnKey) => {
         </Link>
       ) : (
         <span className="text-gray-400">No file</span>
+      );
+    case "comments":
+      return (
+        <Button
+          size="sm"
+          variant="light"
+          color="primary"
+          isIconOnly
+          aria-label="View comments"
+          onPress={() => onCommentClick(contribution)}
+        >
+          <LuMessageCircle size={18} />
+        </Button>
       );
     default:
       return contribution[columnKey];
