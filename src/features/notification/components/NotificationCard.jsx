@@ -54,7 +54,7 @@ export const NotificationCard = ({
       <div className="flex items-start gap-4">
         {/* Checkbox for bulk selection */}
         {showCheckbox && (
-          <div className="flex-shrink-0 pt-1" onClick={(e) => e.stopPropagation()}>
+          <div className="shrink-0 pt-1" onClick={(e) => e.stopPropagation()}>
             <input
               type="checkbox"
               checked={isSelected}
@@ -65,7 +65,7 @@ export const NotificationCard = ({
         )}
 
         {/* Notification icon */}
-        <div className="flex-shrink-0">
+        <div className="shrink-0">
           <div className={`
             w-12 h-12 rounded-full flex items-center justify-center
             ${isReminder 
