@@ -223,7 +223,7 @@ export function ContributionDetailDialog({
 
           {/* File Download Section */}
           {contribution.file_url && (
-            <div className="mt-6 p-5 bg-gradient-to-br from-primary/5 to-primary/10 rounded-xl border border-primary/20">
+            <div className="mt-6 p-5 bg-linear-to-br from-primary/5 to-primary/10 rounded-xl border border-primary/20">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div className="p-3 bg-primary/20 rounded-xl">
