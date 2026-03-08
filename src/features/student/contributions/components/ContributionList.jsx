@@ -1,5 +1,6 @@
 import { useContributions } from "@/features/coordinator/contributions/hooks/useContributions"
 import { ContributionCard } from "./ContributionCard"
+import { ContributionDetailDialog } from "./ContributionDetailDialog"
 import { useState, useMemo, useRef } from "react"
 import { useCategories } from "@/features/coordinator/contributions/hooks/useCategories";
 import { Input, Select, SelectItem, Pagination, Chip, useDisclosure } from "@heroui/react";
@@ -51,6 +52,7 @@ const ContributionList = () => {
   const isFirstSearchSync = useRef(true);
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const [selectedContribution, setSelectedContribution] = useState(null);
+  const {isOpen: isDetailOpen, onOpen: onDetailOpen, onOpenChange: onDetailOpenChange} = useDisclosure();
 
   useEffect(() => {
       const timer = setTimeout(() => {
@@ -216,7 +218,10 @@ const ContributionList = () => {
           <ContributionCard
             key={contribution.id}
             contribution={contribution}
-            onOpen={onOpen}
+            onDetailClick={() => {
+              setSelectedContribution(contribution);
+              onDetailOpen();
+            }}
             onCommentClick={() => {
               setSelectedContribution(contribution);
               onOpen();
@@ -238,6 +243,16 @@ const ContributionList = () => {
             isOpen={isOpen} 
           />
         )}
+        <ContributionDetailDialog
+          contribution={selectedContribution}
+          isOpen={isDetailOpen}
+          onOpenChange={(open) => {
+            if (!open) {
+              setSelectedContribution(null);
+            }
+            onDetailOpenChange(open);
+          }}
+        />
       </div>
 
       {/* Pagination */}

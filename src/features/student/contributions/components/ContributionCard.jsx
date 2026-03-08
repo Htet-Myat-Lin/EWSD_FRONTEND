@@ -46,7 +46,7 @@ const truncateText = (text, maxLength = 120) => {
 
 export function ContributionCard({
   contribution,
-  onOpen,
+  onDetailClick,
   onCommentClick,
   onEditClick,
   canEdit = true,
@@ -87,7 +87,7 @@ export function ContributionCard({
           <div className="flex gap-1 items-center">
             <Avatar
               icon={<LuEye className="text-default-500" />}
-              onClick={onOpen}
+              onClick={onDetailClick}
               size="sm"
               variant="flat"
               className="cursor-pointer bg-primary/10 hover:bg-primary/20 transition-colors"
