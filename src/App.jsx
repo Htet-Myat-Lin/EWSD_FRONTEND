@@ -7,9 +7,10 @@ import UnauthorizedPage from "./pages/UnauthorizedPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import { ProtectedRoute } from "./components/protect-route/ProtectedRoute";
 import { DashboardLayout } from "./components/layout/DashboardLayout";
-import { 	LuGauge, LuUsers, LuSchool, LuCalendarDays, LuHeartHandshake, LuBookPlus, LuFileText } from "react-icons/lu";
+import { 	LuGauge, LuUsers, LuSchool, LuCalendarDays, LuBookPlus, LuFileText } from "react-icons/lu";
 import { CgProfile } from "react-icons/cg";
 import { TbCategory } from "react-icons/tb";
+import { IoNotificationsOutline } from "react-icons/io5";
 import { Users } from "./features/admin/components/Users";
 import { Faculties } from "./features/admin/components/Faculties";
 import { AcademicYears } from "./features/admin/components/AcademicYears";
@@ -21,6 +22,7 @@ import { StudentList } from "./features/coordinator/userlists/components/Student
 import ContributionList from "./features/student/contributions/components/ContributionList";
 import { EditContribution } from "./features/student/contributions/components/EditContribution";
 import { Contributions } from "./features/admin/components/ContributionList";
+import { NotificationList } from "./features/notification/components/NotificationList";
 
 const adminMenuItems = [
   { name: "Dashboard", path: "/admin/dashboard", icon: <LuGauge size={20} />},
@@ -36,6 +38,7 @@ const studentMenuItems = [
   { name: "Submit Contribution", path: "/student/submit-contribution", icon: <LuBookPlus size={20} /> },
   { name: "My Contributions", path: "/student/my-contributions", icon: <LuFileText size={20} /> },
   { name: "Profile", path: "/student/profile", icon: <CgProfile size={20} /> },
+  { name: "Notifications", path: "/student/notifications", icon: <IoNotificationsOutline size={20} /> }
 ];
 
 const marketingCoordinatorMenuItems = [
@@ -43,6 +46,7 @@ const marketingCoordinatorMenuItems = [
   { name: "Students", path: "/marketing-coordinator/students", icon: <LuUsers size={20} /> },
   { name: "Contributions", path: "/marketing-coordinator/contributions", icon: <LuFileText size={20} /> },
   { name: "Profile", path: "/marketing-coordinator/profile", icon: <CgProfile size={20} /> },
+  { name: "Notifications", path: "/marketing-coordinator/notifications", icon: <IoNotificationsOutline size={20} /> }
 ];
 
 function App() {
@@ -81,6 +85,7 @@ function App() {
             <Route path="my-contributions" element={<ContributionList />} />
             <Route path="my-contributions/:id/edit" element={<EditContribution />} />
             <Route path="profile" element={<UpdateProfileForm />} />
+            <Route path="notifications" element={<NotificationList/>} />
           </Route>
         </Route>
 
@@ -94,6 +99,7 @@ function App() {
             <Route path="students" element={<StudentList />} />
             <Route path="contributions" element={<ContributionsList />} />
             <Route path="profile" element={<UpdateProfileForm />} />
+            <Route path="notifications" element={<NotificationList/>} />
           </Route>
         </Route>
 
