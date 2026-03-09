@@ -14,12 +14,14 @@ import {
   DrawerContent,
   DrawerBody,
   useDisclosure,
+  Badge,
 } from "@heroui/react";
 
 // Icons (using react-icons/lu for Lucide, you can use any)
-import { LuLogOut, LuMenu, LuArrowLeft } from "react-icons/lu";
+import { LuLogOut, LuMenu, LuArrowLeft, LuBell } from "react-icons/lu";
 import { useAuth } from "@/context/AuthContext";
 import { useLogout } from "@/features/auth/hooks/useLogout";
+import { useGetUnreadCount } from "@/features/notification/hooks/useGetUnreadCount";
 import { Link as RouterLink } from "react-router-dom";
 import { resolveProfileImageUrl } from "@/utils/profile-image";
 // ----------------------------------------------------------------------
@@ -117,6 +119,18 @@ export function DashboardLayout({ menuItems }) {
   const { user } = useAuth()
   const profileImage = resolveProfileImageUrl(user?.profile_path);
 
+  // Get unread notification count - only for student and coordinator
+  const shouldShowNotification = user?.role?.name === "student" || user?.role?.name === "marketing_coordinator";
+  const { data: unreadData } = useGetUnreadCount();
+  const unreadCount = unreadData?.unread_count || 0;
+
+  // Get notifications path based on user role
+  const getNotificationsPath = () => {
+    if (user?.role?.name === "student") return "/student/notifications";
+    if (user?.role?.name === "marketing_coordinator") return "/marketing-coordinator/notifications";
+    return "/notifications";
+  };
+
   return (
     <div className="flex h-screen w-full bg-default-50">
       {/* --- Desktop Sidebar (Hidden on mobile) --- */}
@@ -148,6 +162,19 @@ export function DashboardLayout({ menuItems }) {
 
           {/* Right Side: User Menu */}
           <NavbarContent justify="end">
+            {/* Notification Bell - Only for student and coordinator */}
+            {shouldShowNotification && (
+              <Link to={getNotificationsPath()} className="mr-3 flex items-center">
+                <Badge
+                  content={unreadCount > 0 ? unreadCount : null}
+                  color="danger"
+                  size="sm"
+                  isInvisible={unreadCount === 0}
+                >
+                  <LuBell size={22} className="text-default-600 hover:text-primary transition-colors" />
+                </Badge>
+              </Link>
+            )}
             <Dropdown placement="bottom-end">
               <DropdownTrigger>
                 <Avatar
