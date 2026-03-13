@@ -1,5 +1,5 @@
 import React from 'react'
-import { useGetDashboardData } from '../hooks/useGetDashboardData'
+import { useGetDashboardData } from '../hooks/useGetDashboardReports'
 import { Spinner, Card, CardBody, CardHeader, Table, TableHeader, TableBody, TableColumn, TableRow, TableCell } from '@heroui/react'
 import { LuUsers, LuFileText, LuBuilding2, LuCalendarClock, LuEye } from 'react-icons/lu'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, PieChart, Pie, Legend } from 'recharts'
@@ -35,15 +35,14 @@ const ExceptionAlertTooltip = ({ active, payload, label }) => {
     return (
       <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-3">
         <p className="font-bold text-gray-700">{label}</p>
-        <p className="text-gray-600">Uncommented Contributioins: {payload[0].value}</p>
+        <p className="text-gray-600">Uncommented Contributions: {payload[0].value}</p>
       </div>
     )
   }
   return null
 }
 
-const Dashboard = () => {
-
+export const ManagerDashboard = () => {
   const { data: dashboardData, isPending } = useGetDashboardData()
 
   if (isPending) {
@@ -54,7 +53,8 @@ const Dashboard = () => {
     )
   }
 
-  const { total_users, active_users, total_contributions, days_to_closure, contributions_by_faculty } = dashboardData
+  console.log(dashboardData)
+  const { total_users, active_users, total_contributions,  contributions_by_faculty = [] } = dashboardData || {}
   const total_faculties = contributions_by_faculty.length
 
   // Prepare data for bar chart (contribution count)
@@ -76,15 +76,15 @@ const Dashboard = () => {
   }))
 
   // Get recent contributions
-  const { recent_contributions } = dashboardData
+  const { recent_contributions = [] } = dashboardData || {}
 
   // Calculate totals for percentage calculation
   const totalContributions = contributions_by_faculty.reduce((sum, f) => sum + f.contributions_count, 0)
 
   return (
-    <div>
+    <div className='max-w-7xl mx-auto py-14 px-4 sm:px-8'>
       {/* Overall Stats */}
-      <div className='grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8'>
+      <div className='grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8'>
         {/* Total Users */}
         <Card className="bg-linear-to-br from-cyan-500 to-cyan-600 text-white">
           <CardBody className="p-4">
@@ -132,19 +132,6 @@ const Dashboard = () => {
                 <p className="text-3xl font-bold">{total_faculties || 0}</p>
               </div>
               <LuBuilding2 className="text-4xl text-purple-200 opacity-80" />
-            </div>
-          </CardBody>
-        </Card>
-
-        {/* Days to Closure */}
-        <Card className="bg-linear-to-br from-orange-500 to-orange-600 text-white">
-          <CardBody className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-orange-100 text-sm">Days to Closure</p>
-                <p className="text-3xl font-bold">{days_to_closure || 0}</p>
-              </div>
-              <LuCalendarClock className="text-4xl text-orange-200 opacity-80" />
             </div>
           </CardBody>
         </Card>
@@ -319,5 +306,3 @@ const Dashboard = () => {
     </div>
   )
 }
-
-export default Dashboard

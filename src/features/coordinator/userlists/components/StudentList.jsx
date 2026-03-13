@@ -21,7 +21,7 @@ export const StudentList = () => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-[400px]">
+      <div className="flex justify-center items-center min-h-100">
         <Spinner size="lg" label="Loading students..." />
       </div>
     );
@@ -29,7 +29,7 @@ export const StudentList = () => {
 
   if (isError) {
     return (
-      <div className="flex justify-center items-center min-h-[400px]">
+      <div className="flex justify-center items-center min-h-100">
         <div className="text-danger text-center">
           <p className="text-lg font-semibold">Error loading students</p>
           <p className="text-sm">{error?.message || "Failed to load students"}</p>
@@ -53,7 +53,7 @@ export const StudentList = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-6">
+    <div className="container">
       <h2 className="text-2xl font-bold mb-6">Student List</h2>
 
       <Table aria-label="Student list table">
