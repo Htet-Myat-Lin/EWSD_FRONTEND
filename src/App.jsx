@@ -20,6 +20,7 @@ import { UpdateProfileForm } from "./features/student/profile/components/UpdateP
 import { ContributionsList } from "./features/coordinator/contributions/components/ContributionsList";
 import { StudentList } from "./features/coordinator/userlists/components/StudentList";
 import ContributionList from "./features/student/contributions/components/ContributionList";
+import CoordinatorDashboard from "./features/coordinator/dashboard/components/CoordinatorDashboard";
 import { EditContribution } from "./features/student/contributions/components/EditContribution";
 import { Contributions } from "./features/admin/components/ContributionList";
 import { NotificationList } from "./features/notification/components/NotificationList";
@@ -95,7 +96,7 @@ function App() {
             path="/marketing-coordinator"
             element={<DashboardLayout menuItems={marketingCoordinatorMenuItems} />} 
           >
-            <Route path="dashboard" element={<div>Marketing Coordinator Dashboard</div>} />
+            <Route path="dashboard" element={<CoordinatorDashboard />} />
             <Route path="students" element={<StudentList />} />
             <Route path="contributions" element={<ContributionsList />} />
             <Route path="profile" element={<UpdateProfileForm />} />
