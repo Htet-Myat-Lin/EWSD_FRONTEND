@@ -23,6 +23,8 @@ import ContributionList from "./features/student/contributions/components/Contri
 import { EditContribution } from "./features/student/contributions/components/EditContribution";
 import { Contributions } from "./features/admin/components/ContributionList";
 import { NotificationList } from "./features/notification/components/NotificationList";
+import Dashboard from "./features/admin/components/Dashboard";
+import { ManagerDashboard } from "./features/manager/components/Dashboard";
 
 const adminMenuItems = [
   { name: "Dashboard", path: "/admin/dashboard", icon: <LuGauge size={20} />},
@@ -59,13 +61,15 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
 
+        <Route path="/dashboard" element={<ManagerDashboard />} />
+
         // Admin Routes
         <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
           <Route
             path="/admin"
             element={<DashboardLayout menuItems={adminMenuItems} />}
           >
-            <Route path="dashboard" element={<div>Admin Dashboard</div>} />
+            <Route path="dashboard" element={<Dashboard />} />
             <Route path="users" element={<Users />} />
             <Route path="faculties" element={<Faculties />} />
             <Route path="academic-years" element={<AcademicYears />} />
