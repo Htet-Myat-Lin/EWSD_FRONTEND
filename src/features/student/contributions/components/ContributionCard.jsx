@@ -53,17 +53,12 @@ export function ContributionCard({
   editDisabledMessage = "",
 }) {
   const hasCoverPhoto = contribution?.cover_photo_path;
-  const { data: comments } = useComments(contribution?.id);
   const coverPhotoSrc = hasCoverPhoto
     ? `http://localhost:8000/storage/${contribution.cover_photo_path}`
     : defaultCoverPhoto;
 
-  const commentCount = comments?.length || 0;
-
   return (
-    <Card
-      className="hover:shadow-lg transition-shadow duration-300 border border-default-100"
-    >
+    <Card className="hover:shadow-lg transition-shadow duration-300 border border-default-100">
       {/* Cover Photo */}
       <div className="relative h-40 w-full overflow-hidden rounded-t-xl">
         <img
@@ -92,20 +87,26 @@ export function ContributionCard({
               variant="flat"
               className="cursor-pointer bg-primary/10 hover:bg-primary/20 transition-colors"
             />
-            <Badge color="danger" content={commentCount > 0 ? commentCount : null} size="sm">
-              <Avatar
-                icon={<LuMessageCircleMore className="text-primary" />}
-                onClick={onCommentClick}
-                size="sm"
-                variant="flat"
-                className="cursor-pointer bg-primary/10 hover:bg-primary/20 transition-colors"
-              />
-            </Badge>
+            <Avatar
+              icon={<LuMessageCircleMore className="text-primary" />}
+              onClick={onCommentClick}
+              size="sm"
+              variant="flat"
+              className="cursor-pointer bg-primary/10 hover:bg-primary/20 transition-colors"
+            />
             <Tooltip
-              content={canEdit ? "Edit contribution" : editDisabledMessage || "Editing is not available"}
+              content={
+                canEdit
+                  ? "Edit contribution"
+                  : editDisabledMessage || "Editing is not available"
+              }
             >
               <Avatar
-                icon={<LuPencilLine className={canEdit ? "text-success" : "text-default-400"} />}
+                icon={
+                  <LuPencilLine
+                    className={canEdit ? "text-success" : "text-default-400"}
+                  />
+                }
                 size="sm"
                 variant="flat"
                 onClick={() => {
