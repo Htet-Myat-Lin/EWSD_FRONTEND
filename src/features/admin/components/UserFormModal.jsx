@@ -321,7 +321,7 @@ export const UserFormModal = ({ isOpen, onClose, user = null }) => {
               Cancel
             </Button>
             <Button
-              color="primary"
+              className="bg-linear-to-r from-[#1e3a8a] to-[#1e3a8a] text-white"
               type="submit"
               isLoading={isPending}
               disabled={isPending}

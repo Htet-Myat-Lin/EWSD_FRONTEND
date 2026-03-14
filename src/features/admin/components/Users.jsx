@@ -194,7 +194,7 @@ export const Users = () => {
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-bold">User Management</h1>
         <Button
-          color="primary"
+          className="bg-linear-to-r from-[#1e3a8a] to-[#1e3a8a] text-white"
           startContent={<LuPlus size={18} />}
           onPress={handleCreate}
         >

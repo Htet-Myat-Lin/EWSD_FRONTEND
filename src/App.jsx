@@ -32,6 +32,9 @@ import { Contributions } from "./features/admin/components/ContributionList";
 import { NotificationList } from "./features/notification/components/NotificationList";
 import Dashboard from "./features/admin/components/Dashboard";
 import { ManagerDashboard } from "./features/manager/components/Dashboard";
+import { AboutPage } from "./pages/AboutPage";
+import { TermsPage } from "./pages/TermsPage";
+import { ContactPage } from "./pages/ContactPage";
 
 const adminMenuItems = [
   { name: "Dashboard", path: "/admin/dashboard", icon: <LuGauge size={20} /> },
@@ -114,6 +117,10 @@ function App() {
         <Route index element={<HomePage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/terms" element={<TermsPage />} />
+
         // Admin Routes
         <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
           <Route
@@ -182,6 +189,7 @@ function App() {
             <Route path="notifications" element={<NotificationList />} />
           </Route>
         </Route>
+        
         <Route path="/unauthorized" element={<UnauthorizedPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

@@ -2,6 +2,22 @@
 @plugin "./hero.js";
 @source "../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}";
 
+:root {
+  --herooui-primary-50: #e6f0ff;
+  --herooui-primary-100: #b3d1ff;
+  --herooui-primary-200: #80b3ff;
+  --herooui-primary-300: #4d94ff;
+  --herooui-primary-400: #1a75ff;
+  --herooui-primary-500: #1e3a8a;
+  --herooui-primary-600: #1a315e;
+  --herooui-primary-700: #162848;
+  --herooui-primary-800: #121f32;
+  --herooui-primary-900: #0e151c;
+  --herooui-primary-foreground: #ffffff;
+  --primary: #1e3a8a;
+  --primary-foreground: #ffffff;
+}
+
 body {
   font-family: "Inter Variable", sans-serif;
 }
