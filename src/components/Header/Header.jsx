@@ -20,41 +20,45 @@ import { useLogout } from "@/features/auth/hooks/useLogout";
 import { HiMenu, HiX } from "react-icons/hi";
 import { resolveProfileImageUrl } from "@/utils/profile-image";
 
-// ─── Inline styles ────────────────────────────────────────────────────────────
+// ─── Styles ───────────────────────────────────────────────────────────────────
 const styles = `
+  @import url('https://fonts.googleapis.com/css2?family=Lora:wght@700&family=DM+Sans:wght@300;400;500&display=swap');
+
   .kmd-navbar {
-    background: #ffffff !important;
-    border-bottom: 1px solid #f0f0f0 !important;
+    background: #0f172a !important;
+    border-bottom: 1px solid rgba(255,255,255,0.06) !important;
     box-shadow: none !important;
   }
 
   .kmd-brand {
-    font-size: 1.25rem;
+    font-family: 'Lora', serif;
+    font-size: 1.15rem;
     font-weight: 700;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.01em;
     text-decoration: none;
     line-height: 1;
   }
 
-  .kmd-brand-uni  { color: #1a237e; }
+  .kmd-brand-uni  { color: #fff; }
   .kmd-brand-mag  { color: #f57c00; }
 
   .kmd-nav-link {
-    font-size: 0.875rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
     font-weight: 400;
-    color: #374151;
+    color: rgba(255,255,255,0.55);
     padding: 4px 2px;
     text-decoration: none !important;
     position: relative;
     transition: color 0.2s;
+    letter-spacing: 0.01em;
   }
 
   .kmd-nav-link::after {
     content: '';
     position: absolute;
     bottom: -2px;
-    left: 0;
-    right: 0;
+    left: 0; right: 0;
     height: 2px;
     background: #f57c00;
     border-radius: 1px;
@@ -63,20 +67,31 @@ const styles = `
     transition: transform 0.2s ease;
   }
 
-  .kmd-nav-link:hover { color: #111827; }
+  .kmd-nav-link:hover {
+    color: rgba(255,255,255,0.9);
+  }
 
   .kmd-nav-link:hover::after,
-  .kmd-nav-link.active::after { transform: scaleX(1); }
+  .kmd-nav-link.active::after {
+    transform: scaleX(1);
+  }
 
   .kmd-nav-link.active {
-    color: #f57c00;
+    color: #fbbf24;
     font-weight: 500;
   }
 
+  .kmd-divider-v {
+    width: 1px;
+    height: 16px;
+    background: rgba(255,255,255,0.12);
+  }
+
   .kmd-login-btn {
-    font-size: 0.875rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
     font-weight: 400;
-    color: #374151;
+    color: rgba(255,255,255,0.55) !important;
     background: none !important;
     border: none !important;
     box-shadow: none !important;
@@ -85,34 +100,40 @@ const styles = `
     transition: color 0.2s;
     text-decoration: none;
   }
-
-  .kmd-login-btn:hover { color: #111827 !important; }
+  .kmd-login-btn:hover { color: rgba(255,255,255,0.9) !important; }
 
   .kmd-signup-btn {
-    font-size: 0.875rem !important;
-    font-weight: 600 !important;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem !important;
+    font-weight: 500 !important;
     background: #f57c00 !important;
-    color: #ffffff !important;
+    color: #fff !important;
     border: none !important;
     border-radius: 6px !important;
-    padding: 0 20px !important;
-    height: 36px !important;
+    padding: 0 18px !important;
+    height: 34px !important;
     box-shadow: none !important;
     transition: background 0.2s !important;
   }
+  .kmd-signup-btn:hover { background: #e65100 !important; }
 
-  .kmd-signup-btn:hover {
-    background: #e65100 !important;
+  /* Mobile menu */
+  .kmd-mobile-menu {
+    background: #0f172a !important;
+    border-top: 1px solid rgba(255,255,255,0.06) !important;
+    padding-top: 16px !important;
+    padding-bottom: 24px !important;
   }
 
   .kmd-mobile-link {
-    font-size: 0.95rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
     font-weight: 400;
-    color: #374151;
+    color: rgba(255,255,255,0.6);
     padding: 12px 4px;
     display: block;
     text-decoration: none !important;
-    border-bottom: 1px solid #f3f4f6;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
     transition: color 0.2s;
   }
 
@@ -120,12 +141,66 @@ const styles = `
   .kmd-mobile-link.active {
     color: #f57c00;
   }
+
+  .kmd-mobile-signup {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem !important;
+    font-weight: 500 !important;
+    background: #f57c00 !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 6px !important;
+    transition: background 0.2s !important;
+  }
+  .kmd-mobile-signup:hover { background: #e65100 !important; }
+
+  .kmd-mobile-login {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem !important;
+    background: rgba(255,255,255,0.06) !important;
+    color: rgba(255,255,255,0.7) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    border-radius: 6px !important;
+  }
+
+  .kmd-user-email {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.02em;
+    margin-bottom: 6px;
+    font-family: 'DM Sans', sans-serif;
+  }
 `;
 
 // ─── Logo ─────────────────────────────────────────────────────────────────────
 export const AcmeLogo = () => (
-  <RouterLink to="/" className="kmd-brand">
-    <span className="kmd-brand-uni">Uni</span><span className="kmd-brand-mag">Magazine</span>
+  <RouterLink to="/" className="kmd-brand flex items-center gap-2.5 hover:opacity-90 transition-opacity">
+    <div
+      style={{
+        width: "28px",
+        height: "28px",
+        background: "rgba(255,255,255,0.12)",
+        borderRadius: "6px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexShrink: 0,
+        border: "1px solid rgba(255,255,255,0.15)",
+      }}
+    >
+      <svg fill="none" height="14" viewBox="0 0 32 32" width="14">
+        <path
+          clipRule="evenodd"
+          d="M17.6482 10.1305L15.8785 7.02583L7.02979 22.5499H10.5278L17.6482 10.1305ZM19.8798 14.0457L18.11 17.1983L19.394 19.4511H16.8453L15.1056 22.5499H24.7272L19.8798 14.0457Z"
+          fill="white"
+          fillRule="evenodd"
+        />
+      </svg>
+    </div>
+    <span className="kmd-brand">
+      <span className="kmd-brand-uni">Uni</span>
+      <span className="kmd-brand-mag">Magazine</span>
+    </span>
   </RouterLink>
 );
 
@@ -141,19 +216,19 @@ export function Header() {
 
   const redirectToDashboard = () => {
     const routes = {
-      admin: "/admin/dashboard",
-      student: "/student/dashboard",
-      marketing_coordinator: "/marketing-coordinator/dashboard",
-      marketing_manager: "/marketing-manager/dashboard",
+      admin:                  "/admin/dashboard",
+      student:                "/student/dashboard",
+      marketing_coordinator:  "/marketing-coordinator/dashboard",
+      marketing_manager:      "/marketing-manager/dashboard",
     };
     const route = routes[user?.role?.name];
     if (route) navigate(route);
   };
 
   const menuItems = [
-    { name: "Home", route: "/" },
-    { name: "About", route: "/about" },
-    { name: "Contact", route: "/contact" },
+    { name: "Home",     route: "/" },
+    { name: "About",    route: "/about" },
+    { name: "Contact",  route: "/contact" },
     { name: "Terms", route: "/terms" },
   ];
 
@@ -172,8 +247,8 @@ export function Header() {
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
             icon={
               isMenuOpen
-                ? <HiX size={20} style={{ color: "#374151" }} />
-                : <HiMenu size={20} style={{ color: "#374151" }} />
+                ? <HiX size={20} style={{ color: "rgba(255,255,255,0.7)" }} />
+                : <HiMenu size={20} style={{ color: "rgba(255,255,255,0.7)" }} />
             }
           />
           <NavbarBrand>
@@ -188,7 +263,7 @@ export function Header() {
           </NavbarBrand>
         </NavbarContent>
 
-        {/* ── Desktop: Nav links + Auth ── */}
+        {/* ── Desktop: Nav + Auth ── */}
         <NavbarContent className="hidden sm:flex items-center gap-6" justify="end">
 
           {menuItems.map((item) => (
@@ -204,8 +279,7 @@ export function Header() {
             </NavbarItem>
           ))}
 
-          {/* Divider */}
-          <div style={{ width: "1px", height: "18px", background: "#e5e7eb" }} />
+          <div className="kmd-divider-v" />
 
           {user ? (
             <NavbarItem>
@@ -259,14 +333,7 @@ export function Header() {
         </NavbarContent>
 
         {/* ── Mobile Menu ── */}
-        <NavbarMenu
-          style={{
-            background: "#ffffff",
-            borderTop: "1px solid #f3f4f6",
-            paddingTop: "16px",
-            paddingBottom: "24px",
-          }}
-        >
+        <NavbarMenu className="kmd-mobile-menu">
           <div className="flex flex-col">
             {menuItems.map((item) => (
               <NavbarMenuItem key={item.route}>
@@ -286,12 +353,11 @@ export function Header() {
           <div className="mt-6 flex flex-col gap-3">
             {user ? (
               <>
-                <p className="text-xs text-default-400 mb-1">{user?.email}</p>
+                <p className="kmd-user-email">{user?.email}</p>
                 <Button
                   fullWidth
-                  variant="flat"
                   onPress={() => { redirectToDashboard(); setIsMenuOpen(false); }}
-                  className="text-sm font-medium"
+                  className="kmd-mobile-login text-sm"
                 >
                   Dashboard
                 </Button>
@@ -300,7 +366,7 @@ export function Header() {
                   color="danger"
                   variant="flat"
                   onPress={handleLogout}
-                  className="text-sm font-medium"
+                  className="text-sm"
                 >
                   Sign out
                 </Button>
@@ -311,8 +377,7 @@ export function Header() {
                   as={NavLink}
                   to="/login"
                   fullWidth
-                  variant="flat"
-                  className="text-sm font-medium"
+                  className="kmd-mobile-login text-sm"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Login
@@ -321,7 +386,7 @@ export function Header() {
                   as={NavLink}
                   to="/register"
                   fullWidth
-                  className="kmd-signup-btn"
+                  className="kmd-mobile-signup"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Sign Up
