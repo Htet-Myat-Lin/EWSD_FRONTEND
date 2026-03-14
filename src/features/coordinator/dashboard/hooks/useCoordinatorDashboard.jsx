@@ -5,6 +5,6 @@ export const useCoordinatorDashboard = () => {
   return useQuery({
     queryKey: ["coordinator-dashboard"],
     queryFn: ContributionService.getCoordinatorDashboard,
-    staleTime: 1000 * 60, // 1 minute caching is fine; data can refresh often
+    staleTime: 0, 
   });
 };

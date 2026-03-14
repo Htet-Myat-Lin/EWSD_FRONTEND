@@ -15,7 +15,7 @@ import {
   LuFolder,
   LuEye,
 } from "react-icons/lu";
-import { formatDate } from "@/utils/date";
+import { formatDate } from "@/utils/helpers";
 import { useComments } from "@/features/coordinator/contributions/hooks/useComments";
 import defaultCoverPhoto from "../../../../../public/default-cover-image.jpg";
 

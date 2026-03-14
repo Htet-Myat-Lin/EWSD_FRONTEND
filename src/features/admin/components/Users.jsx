@@ -31,7 +31,7 @@ import {
 import { useUsers } from "../hooks/useUsers";
 import { useUpdateUserStatus } from "../hooks/useSuspendUser";
 import { UserFormModal } from "./UserFormModal";
-import { formatDate } from "@/utils/date";
+import  {formatDate}  from "@/utils/helpers";
 
 const columns = [
   { key: "id", label: "ID" },

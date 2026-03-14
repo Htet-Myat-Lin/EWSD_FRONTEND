@@ -20,7 +20,7 @@ import {
 } from "@heroui/react";
 import { useContributions } from "@/features/coordinator/contributions/hooks/useContributions";
 import { useCategories } from "@/features/coordinator/contributions/hooks/useCategories";
-import { formatDate } from "@/utils/date";
+import { formatDate } from "@/utils/helpers";
 import { CommentDialog } from "@/features/coordinator/contributions/components/CommentDialog";
 import { LuMessageCircle } from "react-icons/lu";
 

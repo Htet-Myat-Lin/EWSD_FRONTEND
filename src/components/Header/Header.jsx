@@ -18,7 +18,7 @@ import { NavLink, Link as RouterLink, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { useLogout } from "@/features/auth/hooks/useLogout";
 import { HiMenu, HiX } from "react-icons/hi";
-import { resolveProfileImageUrl } from "@/utils/profile-image";
+import { resolveProfileImageUrl } from "@/utils/helpers";
 
 // ─── Inline styles ────────────────────────────────────────────────────────────
 const styles = `

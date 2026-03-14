@@ -21,7 +21,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useLogout } from "@/features/auth/hooks/useLogout";
 import { useGetUnreadCount } from "@/features/notification/hooks/useGetUnreadCount";
 import { Link as RouterLink } from "react-router-dom";
-import { resolveProfileImageUrl } from "@/utils/profile-image";
+import { resolveProfileImageUrl } from "@/utils/helpers";
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
 const styles = `

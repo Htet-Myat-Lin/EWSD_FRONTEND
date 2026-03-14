@@ -17,9 +17,8 @@ import { useEditComment } from "../hooks/useEditComment";
 import { useDeleteComment } from "../hooks/useDeleteComment";
 import { useComments } from "../hooks/useComments";
 import { useAuth } from "@/context/AuthContext";
-import { formatDate } from "@/utils/date";
+import { formatDate, resolveProfileImageUrl } from "@/utils/helpers";
 import { LuPencil, LuTrash, LuReply } from "react-icons/lu";
-import { resolveProfileImageUrl } from "@/utils/profile-image";
 
 export function CommentDialog({ isOpen, onOpenChange, contribution }) {
   const [comment, setComment] = useState("");

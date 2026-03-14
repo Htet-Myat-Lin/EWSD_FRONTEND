@@ -1,5 +1,5 @@
 import { axiosInstance } from "../axios-instance"
-import { toFormData } from "../../utils/to-form-data"
+import { toFormData } from "../../utils/helpers"
 
 export const UserService = {
     getUsers: async (page = 1) => {

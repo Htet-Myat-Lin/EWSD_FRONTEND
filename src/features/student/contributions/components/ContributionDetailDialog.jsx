@@ -17,8 +17,7 @@ import {
   LuGraduationCap,
   LuX,
 } from "react-icons/lu";
-import { formatDate } from "@/utils/date";
-import { resolveProfileImageUrl } from "@/utils/profile-image";
+import { formatDate, resolveProfileImageUrl } from "@/utils/helpers";
 
 const getStatusColor = (status) => {
   const statusColors = {

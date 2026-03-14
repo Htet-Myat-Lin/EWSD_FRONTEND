@@ -1,6 +1,6 @@
 import { useDeleteNotification } from "../hooks/useDeleteNotification";
 import { useMarkAsRead } from "../hooks/useMarkAsRead";
-import { formatDate } from "@/utils/date";
+import { formatDate } from "@/utils/helpers";
 import { toast } from "react-toastify";
 
 export const NotificationCard = ({ 

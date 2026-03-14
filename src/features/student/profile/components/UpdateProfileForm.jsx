@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 import { useAuth } from "@/context/AuthContext";
 import { useUpdatePassword } from "@/features/student/profile/hooks/useUpdatePassword";
 import { useUpdateProfile } from "@/features/student/profile/hooks/useUpdateProfile";
-import { resolveProfileImageUrl } from "@/utils/profile-image";
+import { resolveProfileImageUrl } from "@/utils/helpers";
 
 const MAX_PROFILE_SIZE = 2 * 1024 * 1024;
 const ALLOWED_PROFILE_TYPES = ["image/jpeg", "image/png", "image/jpg"];

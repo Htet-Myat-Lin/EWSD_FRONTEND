@@ -15,7 +15,7 @@ import {
   useDisclosure,
 } from "@heroui/react";
 import { toast } from "react-toastify";
-import { formatDate } from "@/utils/date";
+import { formatDate, STATUS_COLORS } from "@/utils/helpers";
 import { ActionsCell } from "./ActionsCell";
 import { ContributionFilters } from "./ContributionFilters";
 import { BulkActionsBar } from "./BulkActionsBar";
@@ -27,12 +27,6 @@ import { useSelectContributions } from "../hooks/useSelectContributions";
 import { useContributionFilters } from "../hooks/useContributionFilters";
 
 const TERMINAL_STATUSES = ["selected", "rejected"];
-const STATUS_COLORS = {
-  pending: "warning",
-  commented: "primary",
-  selected: "success",
-  rejected: "danger",
-};
 
 export const ContributionsList = () => {
   const filters = useContributionFilters();

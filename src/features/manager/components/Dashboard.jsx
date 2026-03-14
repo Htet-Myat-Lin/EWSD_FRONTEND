@@ -33,7 +33,7 @@ import {
   AreaChart,
   Area,
 } from "recharts";
-import { resolveProfileImageUrl } from "@/utils/profile-image";
+import { resolveProfileImageUrl } from "@/utils/helpers";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
