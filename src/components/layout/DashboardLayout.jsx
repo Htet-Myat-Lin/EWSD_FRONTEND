@@ -29,48 +29,39 @@ import { resolveProfileImageUrl } from "@/utils/profile-image";
 // ----------------------------------------------------------------------
 const SidebarContent = ({ menuItems }) => {
   const location = useLocation();
-  const { mutate: logout } = useLogout()
+  const { user } = useAuth();
+  const { mutate: logout } = useLogout();
+  const profileImage = resolveProfileImageUrl(user?.profile_path);
 
   return (
-    <div className="flex flex-col h-full">
-      {/* Sidebar Header / Logo */}
-      <div className="flex items-center justify-center h-16">
-        <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
-          <div className="relative">
-            <svg
-              fill="none"
-              height="40"
-              viewBox="0 0 32 32"
-              width="40"
-              className="text-primary drop-shadow-sm"
-            >
-              <path
-                clipRule="evenodd"
-                d="M17.6482 10.1305L15.8785 7.02583L7.02979 22.5499H10.5278L17.6482 10.1305ZM19.8798 14.0457L18.11 17.1983L19.394 19.4511H16.8453L15.1056 22.5499H24.7272L19.8798 14.0457Z"
-                fill="currentColor"
-                fillRule="evenodd"
-              />
+    <div className="flex flex-col h-full bg-[#0a0a0a]">
+      {/* Logo */}
+      <div className="flex items-center gap-3 px-4 py-5 border-b border-white/6">
+        <Link to="/" className="flex items-center gap-2.5 hover:opacity-80 transition-opacity">
+          <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shrink-0">
+            <svg fill="none" height="18" viewBox="0 0 32 32" width="18" className="text-[#0a0a0a]">
+              <path clipRule="evenodd" d="M17.6482 10.1305L15.8785 7.02583L7.02979 22.5499H10.5278L17.6482 10.1305ZM19.8798 14.0457L18.11 17.1983L19.394 19.4511H16.8453L15.1056 22.5499H24.7272L19.8798 14.0457Z" fill="currentColor" fillRule="evenodd"/>
             </svg>
           </div>
           <div className="flex flex-col">
-            <p className="font-bold text-inherit text-lg tracking-tight">KMD</p>
-            <p className="text-xs text-default-500">University Magazine</p>
+            <p className="text-sm font-medium text-white tracking-tight leading-none">KMD</p>
+            <p className="text-[10px] text-white/30 mt-0.5">University Magazine</p>
           </div>
         </Link>
       </div>
 
-      {/* Navigation Links */}
-      <nav className="flex-1 p-4 space-y-1">
+      {/* Nav */}
+      <nav className="flex-1 px-2.5 py-3 space-y-0.5 overflow-y-auto">
         {menuItems?.map((item) => {
           const isActive = location.pathname === item.path;
           return (
             <Link
               key={item.path}
               to={item.path}
-              className={`flex items-center gap-3 px-3 py-2 rounded-xl transition-colors ${
+              className={`flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-[13px] transition-colors ${
                 isActive
-                  ? "bg-primary text-primary-foreground font-medium"
-                  : "text-default-500 hover:bg-default-100 hover:text-default-900"
+                  ? "bg-white/10 text-white"
+                  : "text-white/40 hover:bg-white/5 hover:text-white/75"
               }`}
             >
               {item.icon}
@@ -80,32 +71,31 @@ const SidebarContent = ({ menuItems }) => {
         })}
       </nav>
 
-      {/* Sidebar Footer */}
-      <div className="p-3 mt-auto border-t border-divider bg-default-50/50">
-        <div className="flex flex-col">
-          <Button
-            as={RouterLink}
-            to="/"
-            variant="light"
-            color="default"
-            startContent={<LuArrowLeft size={18} />}
-            fullWidth
-            className="justify-start text-default-600 hover:text-primary transition-colors"
-          >
-            Back to Home
-          </Button>
-          
-          <Button
-            variant="light"
-            color="danger"
-            startContent={<LuLogOut size={18} />}
-            fullWidth
-            className="justify-start opacity-80 hover:opacity-100"
-            onClick={() => logout()}
-          >
-            Logout
-          </Button>
+      {/* Footer */}
+      <div className="p-2.5 border-t border-white/6">
+        {/* User card */}
+        <div className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg bg-white/5 mb-1.5">
+          <Avatar
+            src={profileImage}
+            name={user?.name}
+            size="sm"
+            color="primary"
+            className="shrink-0 w-7 h-7 text-[11px]"
+          />
+          <div className="flex-1 min-w-0">
+            <p className="text-[12px] font-medium text-white/85 truncate">{user?.name}</p>
+            <p className="text-[10px] text-white/30 capitalize">{user?.role?.name?.replace('_', ' ')}</p>
+          </div>
         </div>
+
+        {/* Logout */}
+        <button
+          onClick={() => logout()}
+          className="flex items-center gap-2 w-full px-2.5 py-2 rounded-lg text-[12px] text-red-400/70 hover:bg-red-500/8 hover:text-red-400 transition-colors"
+        >
+          <LuLogOut size={14} />
+          <span>Logout</span>
+        </button>
       </div>
     </div>
   );

@@ -1,156 +1,268 @@
-import React from 'react'
-import { useGetDashboardData } from '../hooks/useGetDashboardReports'
-import { Spinner, Card, CardBody, CardHeader, Table, TableHeader, TableBody, TableColumn, TableRow, TableCell } from '@heroui/react'
-import { LuUsers, LuFileText, LuBuilding2, LuCalendarClock, LuEye } from 'react-icons/lu'
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, PieChart, Pie, Legend } from 'recharts'
+import React from "react";
+import { useGetDashboardData } from "../hooks/useGetDashboardReports";
+import {
+  Spinner,
+  Card,
+  CardBody,
+  CardHeader,
+  Button,
+  Avatar,
+} from "@heroui/react";
+import {
+  LuUsers,
+  LuFileText,
+  LuBuilding2,
+  LuSchool,
+  LuTrophy,
+  LuTrendingUp,
+  LuCheck,
+  LuClock,
+  LuDownload,
+} from "react-icons/lu";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip as ReTooltip,
+  ResponsiveContainer,
+  Cell,
+  PieChart,
+  Pie,
+  Legend,
+  AreaChart,
+  Area,
+} from "recharts";
+import { resolveProfileImageUrl } from "@/utils/profile-image";
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D']
+// ─── Constants ────────────────────────────────────────────────────────────────
 
-const CustomTooltip = ({ active, payload, label }) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-3">
-        <p className="font-bold text-gray-700">{label}</p>
-        <p className="text-gray-600">Contributions: {payload[0].value}</p>
+const COLORS = [
+  "#378ADD",
+  "#1D9E75",
+  "#7F77DD",
+  "#639922",
+  "#D85A30",
+  "#BA7517",
+];
+
+const CARD_COLORS = [
+  { bg: "bg-[#185FA5]", text: "text-[#E6F1FB]" },
+  { bg: "bg-[#0F6E56]", text: "text-[#E1F5EE]" },
+  { bg: "bg-[#853450]", text: "text-[#FBEAF0]" },
+  { bg: "bg-[#6B4AB7]", text: "text-[#EEEDFE]" },
+  { bg: "bg-[#BA7517]", text: "text-[#FAEEDA]" },
+  { bg: "bg-[#3B6D11]", text: "text-[#EAF3DE]" },
+];
+
+const STAT_THEMES = {
+  blue: {
+    card: "bg-[#E6F1FB]",
+    label: "text-[#185FA5]",
+    val: "text-[#0C447C]",
+    icon: "bg-[#B5D4F4] text-[#185FA5]",
+  },
+  teal: {
+    card: "bg-[#E1F5EE]",
+    label: "text-[#0F6E56]",
+    val: "text-[#085041]",
+    icon: "bg-[#9FE1CB] text-[#0F6E56]",
+  },
+  green: {
+    card: "bg-[#EAF3DE]",
+    label: "text-[#3B6D11]",
+    val: "text-[#27500A]",
+    icon: "bg-[#C0DD97] text-[#3B6D11]",
+  },
+  amber: {
+    card: "bg-[#FAEEDA]",
+    label: "text-[#854F0B]",
+    val: "text-[#633806]",
+    icon: "bg-[#FAC775] text-[#854F0B]",
+  },
+  purple: {
+    card: "bg-[#EEEDFE]",
+    label: "text-[#534AB7]",
+    val: "text-[#3C3489]",
+    icon: "bg-[#CECBF6] text-[#534AB7]",
+  },
+};
+
+// ─── Sub-components ───────────────────────────────────────────────────────────
+
+const StatCard = ({ label, value, color, icon }) => {
+  const t = STAT_THEMES[color];
+  return (
+    <div className={`${t.card} rounded-xl p-4 flex flex-col gap-2.5`}>
+      <div
+        className={`${t.icon} w-8 h-8 rounded-lg flex items-center justify-center shrink-0`}
+      >
+        {icon}
       </div>
-    )
-  }
-  return null
-}
-
-const PieTooltip = ({ active, payload }) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-3">
-        <p className="font-bold text-gray-700">{payload[0].name}</p>
-        <p className="text-gray-600">Contributors: {payload[0].value}</p>
+      <div>
+        <p className={`text-[11px] font-medium ${t.label}`}>{label}</p>
+        <p className={`text-[22px] font-medium leading-tight ${t.val}`}>
+          {value?.toLocaleString() ?? 0}
+        </p>
       </div>
-    )
-  }
-  return null
-}
+    </div>
+  );
+};
 
-const ExceptionAlertTooltip = ({ active, payload, label }) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-3">
-        <p className="font-bold text-gray-700">{label}</p>
-        <p className="text-gray-600">Uncommented Contributions: {payload[0].value}</p>
-      </div>
-    )
-  }
-  return null
-}
+const ChartTooltip = ({ active, payload, label, suffix = "" }) => {
+  if (!active || !payload?.length) return null;
+  return (
+    <div className="bg-white border border-default-100 rounded-lg shadow-sm p-2.5 text-xs">
+      <p className="font-medium text-default-700 mb-0.5">
+        {label || payload[0].name}
+      </p>
+      <p className="text-default-500">
+        {payload[0].value} {suffix}
+      </p>
+    </div>
+  );
+};
+
+const ContributorRankBadge = ({ index }) => {
+  const styles = [
+    "bg-[#FAC775] text-[#633806]",
+    "bg-[#D3D1C7] text-[#2C2C2A]",
+    "bg-[#F5C4B3] text-[#712B13]",
+  ];
+  return (
+    <span
+      className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-medium shrink-0 ${
+        styles[index] ?? "bg-default-100 text-default-400"
+      }`}
+    >
+      {index + 1}
+    </span>
+  );
+};
+
+const trophyColor = (i) =>
+  i === 0 ? "#BA7517" : i === 1 ? "#888780" : "#993C1D";
+
+// ─── Main Component ───────────────────────────────────────────────────────────
 
 export const ManagerDashboard = () => {
-  const { data: dashboardData, isPending } = useGetDashboardData()
+  const { data: dashboardData, isPending } = useGetDashboardData();
 
   if (isPending) {
     return (
-        <div className="flex justify-center items-center min-h-100">
-            <Spinner size="lg" label="Loading dashboard..." />
-        </div>
-    )
+      <div className="flex justify-center items-center min-h-96">
+        <Spinner size="lg" label="Loading dashboard..." />
+      </div>
+    );
   }
 
-  console.log(dashboardData)
-  const { total_users, active_users, total_contributions,  contributions_by_faculty = [] } = dashboardData || {}
-  const total_faculties = contributions_by_faculty.length
+  const {
+    summary: { total_contributions, total_students },
+    academic_year,
+    faculty_performance,
+    top_contributors,
+    monthly_trend,
+    status_distribution,
+  } = dashboardData;
 
-  // Prepare data for bar chart (contribution count)
-  const barChartData = contributions_by_faculty.map((faculty) => ({
-    name: faculty.name,
-    contributions: faculty.contributions_count,
-  }))
+  const selectedCount =
+    status_distribution.find((s) => s.status === "selected")?.count ?? 0;
+  const pendingCount =
+    status_distribution.find((s) => s.status === "pending")?.count ?? 0;
 
-  // Prepare data for pie chart (contributor count)
-  const pieChartData = contributions_by_faculty.map((faculty) => ({
-    name: faculty.name,
-    value: faculty.contributors_count,
-  }))
+  const barChartData = faculty_performance.map((f) => ({
+    name: f.name,
+    contributions: f.total_contributions,
+  }));
 
-  // Prepare data for horizontal bar chart (exception alerts - show all faculties)
-  const exceptionAlertData = contributions_by_faculty.map((faculty) => ({
-    name: faculty.name,
-    alerts: faculty.exception_alerts,
-  }))
-
-  // Get recent contributions
-  const { recent_contributions = [] } = dashboardData || {}
-
-  // Calculate totals for percentage calculation
-  const totalContributions = contributions_by_faculty.reduce((sum, f) => sum + f.contributions_count, 0)
+  const pieChartData = faculty_performance.map((f) => ({
+    name: f.name,
+    value: f.contributor_count,
+  }));
 
   return (
-    <div className='max-w-7xl mx-auto py-14 px-4 sm:px-8'>
-      {/* Overall Stats */}
-      <div className='grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8'>
-        {/* Total Users */}
-        <Card className="bg-linear-to-br from-cyan-500 to-cyan-600 text-white">
-          <CardBody className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-cyan-100 text-sm">Total Users</p>
-                <p className="text-3xl font-bold">{total_users || 0}</p>
-              </div>
-              <LuUsers className="text-4xl text-cyan-200 opacity-80" />
-            </div>
-          </CardBody>
-        </Card>
-        {/* Total Contributions */}
-        <Card className="bg-linear-to-br from-blue-500 to-blue-600 text-white">
-          <CardBody className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-blue-100 text-sm">Total Contributions</p>
-                <p className="text-3xl font-bold">{total_contributions || 0}</p>
-              </div>
-              <LuFileText className="text-4xl text-blue-200 opacity-80" />
-            </div>
-          </CardBody>
-        </Card>
-
-        {/* Active Contributors */}
-        <Card className="bg-linear-to-br from-green-500 to-green-600 text-white">
-          <CardBody className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-green-100 text-sm">Active Contributors</p>
-                <p className="text-3xl font-bold">{active_users || 0}</p>
-              </div>
-              <LuUsers className="text-4xl text-green-200 opacity-80" />
-            </div>
-          </CardBody>
-        </Card>
-
-        {/* Faculties */}
-        <Card className="bg-linear-to-br from-purple-500 to-purple-600 text-white">
-          <CardBody className="p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-purple-100 text-sm">Faculties</p>
-                <p className="text-3xl font-bold">{total_faculties || 0}</p>
-              </div>
-              <LuBuilding2 className="text-4xl text-purple-200 opacity-80" />
-            </div>
-          </CardBody>
-        </Card>
+    <div className="space-y-4">
+      {/* ── Header ── */}
+      <div className="flex justify-between items-start">
+        <div>
+          <h1 className="text-xl font-medium text-foreground">
+            University overview
+          </h1>
+          <p className="text-xs text-default-400 mt-0.5">
+            Academic Year: {academic_year.name}
+          </p>
+        </div>
+        <Button
+          size="sm"
+          color="primary"
+          startContent={<LuDownload size={13} />}
+          className="text-xs"
+        >
+          Download report
+        </Button>
       </div>
 
-      {/* Faculty Distribution - Bar Chart & Pie Chart */}
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-        {/* Left Side - Bar Chart (Contributions) */}
-        <Card>
-          <CardHeader className="font-bold text-lg">Contributions by Faculty</CardHeader>
-          <CardBody>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={barChartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip content={<CustomTooltip />} />
-                <Bar dataKey="contributions">
-                  {barChartData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+      {/* ── Stat cards ── */}
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
+        <StatCard
+          label="Total students"
+          value={total_students}
+          color="blue"
+          icon={<LuUsers size={14} />}
+        />
+        <StatCard
+          label="Total contributions"
+          value={total_contributions}
+          color="teal"
+          icon={<LuFileText size={14} />}
+        />
+        <StatCard
+          label="Selected"
+          value={selectedCount}
+          color="green"
+          icon={<LuCheck size={14} />}
+        />
+        <StatCard
+          label="Pending"
+          value={pendingCount}
+          color="amber"
+          icon={<LuClock size={14} />}
+        />
+        <StatCard
+          label="Faculties"
+          value={faculty_performance.length}
+          color="purple"
+          icon={<LuBuilding2 size={14} />}
+        />
+      </div>
+
+      {/* ── Charts row 1: Bar + Donut ── */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <Card className="border border-default-100 shadow-none">
+          <CardHeader className="text-[13px] font-medium pb-1">
+            Contributions by faculty
+          </CardHeader>
+          <CardBody className="pt-0">
+            <ResponsiveContainer width="100%" height={220}>
+              <BarChart
+                data={barChartData}
+                margin={{ top: 8, right: 8, left: -16, bottom: 0 }}
+              >
+                <XAxis
+                  dataKey="name"
+                  tick={{ fontSize: 11 }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <YAxis
+                  tick={{ fontSize: 11 }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <ReTooltip content={<ChartTooltip suffix="contributions" />} />
+                <Bar dataKey="contributions" radius={[4, 4, 0, 0]}>
+                  {barChartData.map((_, i) => (
+                    <Cell key={i} fill={COLORS[i % COLORS.length]} />
                   ))}
                 </Bar>
               </BarChart>
@@ -158,151 +270,203 @@ export const ManagerDashboard = () => {
           </CardBody>
         </Card>
 
-        {/* Right Side - Pie Chart (Contributors) */}
-        <Card>
-          <CardHeader className="font-bold text-lg">Contributors by Faculty</CardHeader>
-          <CardBody>
-            <ResponsiveContainer width="100%" height={300}>
+        <Card className="border border-default-100 shadow-none">
+          <CardHeader className="text-[13px] font-medium pb-1">
+            Contributors by faculty
+          </CardHeader>
+          <CardBody className="pt-0">
+            <ResponsiveContainer width="100%" height={220}>
               <PieChart>
                 <Pie
                   data={pieChartData}
                   cx="50%"
                   cy="50%"
-                  labelLine={false}
-                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
                   outerRadius={80}
-                  fill="#8884d8"
+                  innerRadius={50}
                   dataKey="value"
+                  labelLine={false}
                 >
-                  {pieChartData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  {pieChartData.map((_, i) => (
+                    <Cell key={i} fill={COLORS[i % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip content={<PieTooltip />} />
-                <Legend />
+                <ReTooltip content={<ChartTooltip suffix="contributors" />} />
+                <Legend
+                  iconType="square"
+                  iconSize={8}
+                  wrapperStyle={{ fontSize: 11 }}
+                />
               </PieChart>
             </ResponsiveContainer>
           </CardBody>
         </Card>
       </div>
 
-      {/* Recent Contributions & Exception Alerts */}
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-6 mt-6'>
-        {/* Left Side - Recent Contributions Table */}
-        <Card>
-          <CardHeader className="font-bold text-lg flex items-center gap-2">
-            <LuFileText className="text-lg" />
-            Recent Contributions
+      {/* ── Charts row 2: Area + Top Contributors ── */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <Card className="border border-default-100 shadow-none">
+          <CardHeader className="text-[13px] font-medium flex items-center gap-1.5 pb-1">
+            <LuTrendingUp size={14} className="text-[#378ADD]" />
+            Monthly trend
           </CardHeader>
-          <CardBody className="max-h-96 overflow-auto">
-            <Table aria-label="Recent contributions table" removeWrapper>
-              <TableHeader>
-                <TableColumn>Student</TableColumn>
-                <TableColumn>Faculty</TableColumn>
-                <TableColumn>Title</TableColumn>
-                <TableColumn>Status</TableColumn>
-                <TableColumn>Action</TableColumn>
-              </TableHeader>
-              <TableBody>
-                {recent_contributions.slice(0, 5).map((contribution) => (
-                  <TableRow key={contribution.id}>
-                    <TableCell>{contribution.user?.name || '-'}</TableCell>
-                    <TableCell>{contribution.faculty?.name || '-'}</TableCell>
-                    <TableCell>
-                      <span className="truncate max-w-37.5 block" title={contribution.title}>
-                        {contribution.title}
-                      </span>
-                    </TableCell>
-                    <TableCell>
-                      <span className={`px-2 py-1 rounded-full text-xs ${
-                        contribution.status === 'selected' 
-                          ? 'bg-green-100 text-green-800' 
-                          : contribution.status === 'pending'
-                          ? 'bg-yellow-100 text-yellow-800'
-                          : 'bg-gray-100 text-gray-800'
-                      }`}>
-                        {contribution.status}
-                      </span>
-                    </TableCell>
-                    <TableCell>
-                      <button className="p-1 hover:bg-default-100 rounded" title="View details">
-                        <LuEye className="text-lg text-default-500" />
-                      </button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardBody>
-        </Card>
-
-        {/* Right Side - Exception Alerts Horizontal Bar Chart */}
-        <Card>
-          <CardHeader className="font-bold text-lg flex items-center gap-2">
-            Uncommented Contributions by Faculty
-          </CardHeader>
-          <CardBody>
-            <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={exceptionAlertData} layout="vertical" margin={{ top: 5, right: 30, left: 80, bottom: 5 }}>
-                <XAxis type="number" />
-                <YAxis type="category" dataKey="name" width={70} />
-                <Tooltip content={<ExceptionAlertTooltip />} />
-                <Bar dataKey="alerts" fill="#FF6B6B">
-                  {exceptionAlertData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={index % 2 === 0 ? '#FF6B6B' : '#FF8E8E'} />
-                  ))}
-                </Bar>
-              </BarChart>
+          <CardBody className="pt-0">
+            <ResponsiveContainer width="100%" height={220}>
+              <AreaChart
+                data={monthly_trend}
+                margin={{ top: 8, right: 8, left: -16, bottom: 0 }}
+              >
+                <defs>
+                  <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#378ADD" stopOpacity={0.18} />
+                    <stop offset="95%" stopColor="#378ADD" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <XAxis
+                  dataKey="month"
+                  tick={{ fontSize: 11 }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <YAxis
+                  tick={{ fontSize: 11 }}
+                  axisLine={false}
+                  tickLine={false}
+                />
+                <ReTooltip content={<ChartTooltip suffix="contributions" />} />
+                <Area
+                  type="monotone"
+                  dataKey="count"
+                  stroke="#378ADD"
+                  strokeWidth={2}
+                  fill="url(#areaGrad)"
+                  dot={{ r: 3, fill: "#378ADD", strokeWidth: 0 }}
+                  activeDot={{ r: 4 }}
+                />
+              </AreaChart>
             </ResponsiveContainer>
           </CardBody>
         </Card>
-      </div>
 
-      {/* Detailed Breakdown Table */}
-      <div className='mt-6'>
-        <Card>
-          <CardHeader className="font-bold text-lg">Detailed Breakdown</CardHeader>
-          <CardBody>
-            <Table aria-label="Detailed breakdown table" removeWrapper>
-              <TableHeader>
-                <TableColumn>No</TableColumn>
-                <TableColumn>Faculty</TableColumn>
-                <TableColumn>Contributions</TableColumn>
-                <TableColumn>Contributors</TableColumn>
-                <TableColumn>No Comments</TableColumn>
-                <TableColumn>% of Total</TableColumn>
-              </TableHeader>
-              <TableBody>
-                {contributions_by_faculty.map((faculty) => {
-                  const contributionPercent = totalContributions > 0 
-                    ? ((faculty.contributions_count / totalContributions) * 100).toFixed(1) 
-                    : 0
-                  return (
-                    <TableRow key={faculty.id}>
-                      <TableCell>{faculty.id}</TableCell>
-                      <TableCell className="font-medium">{faculty.name}</TableCell>
-                      <TableCell>{faculty.contributions_count}</TableCell>
-                      <TableCell>{faculty.contributors_count}</TableCell>
-                      <TableCell>{faculty.exception_alerts}</TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <div className="w-24 bg-default-100 rounded-full h-2">
-                            <div 
-                              className="bg-primary rounded-full h-2" 
-                              style={{ width: `${contributionPercent}%` }}
-                            />
-                          </div>
-                          <span className="text-sm">{contributionPercent}%</span>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  )
-                })}
-              </TableBody>
-            </Table>
+        <Card className="border border-default-100 shadow-none">
+          <CardHeader className="text-[13px] font-medium flex items-center gap-1.5 pb-1">
+            <LuTrophy size={14} className="text-[#BA7517]" />
+            Top contributors
+          </CardHeader>
+          <CardBody className="pt-0 flex flex-col gap-2">
+            {top_contributors.length === 0 ? (
+              <p className="text-xs text-default-400 text-center py-6">
+                No contributors yet
+              </p>
+            ) : (
+              top_contributors.map((contributor, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-default-50 hover:bg-default-100 transition-colors"
+                >
+                  <ContributorRankBadge index={i} />
+                  <Avatar
+                    src={resolveProfileImageUrl(contributor.profile_path)}
+                    name={contributor.name}
+                    size="sm"
+                    color="primary"
+                    isBordered
+                  />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[13px] font-medium text-foreground truncate">
+                      {contributor.name}
+                    </p>
+                    <p className="text-[11px] text-default-400">
+                      {contributor.count} contribution
+                      {contributor.count !== 1 ? "s" : ""}
+                    </p>
+                  </div>
+                  {i < 3 && (
+                    <LuTrophy size={14} style={{ color: trophyColor(i) }} />
+                  )}
+                </div>
+              ))
+            )}
           </CardBody>
         </Card>
       </div>
+
+      {/* ── Faculty Statistics ── */}
+      <div>
+        <h2 className="text-[15px] font-medium text-foreground mb-3">
+          Faculty statistics
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {faculty_performance.map((faculty, i) => {
+            const pct =
+              faculty.total_contributions > 0
+                ? Math.round(
+                    (faculty.selected_count / faculty.total_contributions) *
+                      100,
+                  )
+                : 0;
+            const { bg, text } = CARD_COLORS[i % CARD_COLORS.length];
+
+            return (
+              <Card
+                key={faculty.id}
+                className={`${bg} ${text} border-0 overflow-hidden relative`}
+              >
+                {/* Decorative blobs */}
+                <div className="absolute -top-5 -right-5 w-20 h-20 rounded-full bg-white/10 pointer-events-none" />
+                <div className="absolute -bottom-4 right-6 w-14 h-14 rounded-full bg-white/10 pointer-events-none" />
+
+                <CardHeader className="flex items-center gap-2 pb-2 relative z-10">
+                  <div className="w-6 h-6 rounded-md bg-white/20 flex items-center justify-center shrink-0">
+                    <LuSchool size={13} />
+                  </div>
+                  <p className="text-[12px] font-medium leading-tight">
+                    {faculty.name}
+                  </p>
+                </CardHeader>
+
+                <CardBody className="pt-0 flex flex-col gap-3 relative z-10">
+                  {/* Progress bar */}
+                  <div className="flex flex-col gap-1">
+                    <div className="flex justify-between items-center">
+                      <span className="text-[10px] opacity-65">
+                        Selection rate
+                      </span>
+                      <span className="text-[10px] font-medium opacity-90">
+                        {pct}%
+                      </span>
+                    </div>
+                    <div className="h-0.75 rounded-full bg-white/20">
+                      <div
+                        className="h-full rounded-full bg-white/80 transition-all duration-500"
+                        style={{ width: `${pct}%` }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Stats row */}
+                  <div className="flex divide-x divide-white/20">
+                    {[
+                      { value: faculty.total_contributions, label: "Total" },
+                      { value: faculty.selected_count, label: "Selected" },
+                      { value: faculty.contributor_count, label: "Students" },
+                    ].map(({ value, label }) => (
+                      <div
+                        key={label}
+                        className="flex-1 flex flex-col gap-0.5 px-2.5 first:pl-0 last:pr-0"
+                      >
+                        <span className="text-[17px] font-medium leading-none">
+                          {value}
+                        </span>
+                        <span className="text-[10px] opacity-60">{label}</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardBody>
+              </Card>
+            );
+          })}
+        </div>
+      </div>
     </div>
-  )
-}
+  );
+};

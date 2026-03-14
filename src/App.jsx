@@ -7,7 +7,14 @@ import UnauthorizedPage from "./pages/UnauthorizedPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import { ProtectedRoute } from "./components/protect-route/ProtectedRoute";
 import { DashboardLayout } from "./components/layout/DashboardLayout";
-import { 	LuGauge, LuUsers, LuSchool, LuCalendarDays, LuBookPlus, LuFileText } from "react-icons/lu";
+import {
+  LuGauge,
+  LuUsers,
+  LuSchool,
+  LuCalendarDays,
+  LuBookPlus,
+  LuFileText,
+} from "react-icons/lu";
 import { CgProfile } from "react-icons/cg";
 import { TbCategory } from "react-icons/tb";
 import { IoNotificationsOutline } from "react-icons/io5";
@@ -27,28 +34,76 @@ import Dashboard from "./features/admin/components/Dashboard";
 import { ManagerDashboard } from "./features/manager/components/Dashboard";
 
 const adminMenuItems = [
-  { name: "Dashboard", path: "/admin/dashboard", icon: <LuGauge size={20} />},
+  { name: "Dashboard", path: "/admin/dashboard", icon: <LuGauge size={20} /> },
   { name: "Users", path: "/admin/users", icon: <LuUsers size={20} /> },
   { name: "Faculties", path: "/admin/faculties", icon: <LuSchool size={20} /> },
-  { name: "Academic Years", path: "/admin/academic-years", icon: <LuCalendarDays size={20} /> },
-  { name: "Categories", path: "/admin/categories", icon: <TbCategory size={20} /> },
-  { name: "Contributions", path: "/admin/contributions", icon: <LuFileText size={20} /> },
+  {
+    name: "Academic Years",
+    path: "/admin/academic-years",
+    icon: <LuCalendarDays size={20} />,
+  },
+  {
+    name: "Categories",
+    path: "/admin/categories",
+    icon: <TbCategory size={20} />,
+  },
+  {
+    name: "Contributions",
+    path: "/admin/contributions",
+    icon: <LuFileText size={20} />,
+  },
 ];
 
 const studentMenuItems = [
-  { name: "Dashboard", path: "/student/dashboard", icon: <LuGauge size={20} />},
-  { name: "Submit Contribution", path: "/student/submit-contribution", icon: <LuBookPlus size={20} /> },
-  { name: "My Contributions", path: "/student/my-contributions", icon: <LuFileText size={20} /> },
+  {
+    name: "Dashboard",
+    path: "/student/dashboard",
+    icon: <LuGauge size={20} />,
+  },
+  {
+    name: "Submit Contribution",
+    path: "/student/submit-contribution",
+    icon: <LuBookPlus size={20} />,
+  },
+  {
+    name: "My Contributions",
+    path: "/student/my-contributions",
+    icon: <LuFileText size={20} />,
+  },
   { name: "Profile", path: "/student/profile", icon: <CgProfile size={20} /> },
-  { name: "Notifications", path: "/student/notifications", icon: <IoNotificationsOutline size={20} /> }
+  {
+    name: "Notifications",
+    path: "/student/notifications",
+    icon: <IoNotificationsOutline size={20} />,
+  },
 ];
 
 const marketingCoordinatorMenuItems = [
-  { name: "Dashboard", path: "/marketing-coordinator/dashboard", icon: <LuGauge size={20} />},
-  { name: "Students", path: "/marketing-coordinator/students", icon: <LuUsers size={20} /> },
-  { name: "Contributions", path: "/marketing-coordinator/contributions", icon: <LuFileText size={20} /> },
-  { name: "Profile", path: "/marketing-coordinator/profile", icon: <CgProfile size={20} /> },
-  { name: "Notifications", path: "/marketing-coordinator/notifications", icon: <IoNotificationsOutline size={20} /> }
+  {
+    name: "Dashboard",
+    path: "/marketing-coordinator/dashboard",
+    icon: <LuGauge size={20} />,
+  },
+  {
+    name: "Students",
+    path: "/marketing-coordinator/students",
+    icon: <LuUsers size={20} />,
+  },
+  {
+    name: "Contributions",
+    path: "/marketing-coordinator/contributions",
+    icon: <LuFileText size={20} />,
+  },
+  {
+    name: "Profile",
+    path: "/marketing-coordinator/profile",
+    icon: <CgProfile size={20} />,
+  },
+  {
+    name: "Notifications",
+    path: "/marketing-coordinator/notifications",
+    icon: <IoNotificationsOutline size={20} />,
+  },
 ];
 
 function App() {
@@ -57,12 +112,8 @@ function App() {
       {/* Routes */}
       <Routes>
         <Route index element={<HomePage />} />
-
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
-
-        <Route path="/dashboard" element={<ManagerDashboard />} />
-
         // Admin Routes
         <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
           <Route
@@ -78,6 +129,18 @@ function App() {
           </Route>
         </Route>
 
+        // Marketing Manager Route
+        <Route
+          element={<ProtectedRoute allowedRoles={["marketing_manager"]} />}
+        >
+          <Route
+            path="/marketing-manager"
+            element={<DashboardLayout menuItems={[{ name: "Dashboard", path: "/marketing-manager/dashboard", icon: <LuGauge size={20} /> }]} />}
+          >
+            <Route path="dashboard" element={<ManagerDashboard />} />
+          </Route>
+        </Route>
+
         // Student Routes
         <Route element={<ProtectedRoute allowedRoles={["student"]} />}>
           <Route
@@ -85,28 +148,40 @@ function App() {
             element={<DashboardLayout menuItems={studentMenuItems} />}
           >
             <Route path="dashboard" element={<div>Student Dashboard</div>} />
-            <Route path="submit-contribution" element={<SubmitContribution />} />
+            <Route
+              path="submit-contribution"
+              element={<SubmitContribution />}
+            />
             <Route path="my-contributions" element={<ContributionList />} />
-            <Route path="my-contributions/:id/edit" element={<EditContribution />} />
+            <Route
+              path="my-contributions/:id/edit"
+              element={<EditContribution />}
+            />
             <Route path="profile" element={<UpdateProfileForm />} />
-            <Route path="notifications" element={<NotificationList/>} />
+            <Route path="notifications" element={<NotificationList />} />
           </Route>
         </Route>
 
         // Marketing Coordinator Routes
-        <Route element={<ProtectedRoute allowedRoles={["marketing_coordinator"]} />}>
+        <Route
+          element={<ProtectedRoute allowedRoles={["marketing_coordinator"]} />}
+        >
           <Route
             path="/marketing-coordinator"
-            element={<DashboardLayout menuItems={marketingCoordinatorMenuItems} />} 
+            element={
+              <DashboardLayout menuItems={marketingCoordinatorMenuItems} />
+            }
           >
-            <Route path="dashboard" element={<div>Marketing Coordinator Dashboard</div>} />
+            <Route
+              path="dashboard"
+              element={<div>Marketing Coordinator Dashboard</div>}
+            />
             <Route path="students" element={<StudentList />} />
             <Route path="contributions" element={<ContributionsList />} />
             <Route path="profile" element={<UpdateProfileForm />} />
-            <Route path="notifications" element={<NotificationList/>} />
+            <Route path="notifications" element={<NotificationList />} />
           </Route>
         </Route>
-
         <Route path="/unauthorized" element={<UnauthorizedPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

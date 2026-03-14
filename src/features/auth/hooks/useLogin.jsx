@@ -14,7 +14,20 @@ export const useLogin = () => {
       if (data.access_token) {
         localStorage.setItem("access_token", data.access_token);
         setUser(data?.user)
-        navigate("/", { replace: true });
+        const roleName = data?.user?.role?.name
+        if (roleName === "admin") {
+          navigate("/admin/dashboard", { replace: true });
+        } else if (roleName === "student") {
+          navigate("/student/dashboard", { replace: true });
+        } else if (roleName === "marketing_coordinator") {
+          navigate("/marketing-coordinator/dashboard", { replace: true });
+        } else if (roleName === "marketing_manager") {
+          navigate("/marketing-manager/dashboard", { replace: true });
+        } else if (roleName === "guest") {
+          navigate("/guest/dashboard", { replace: true });
+        } else {
+          navigate("/", { replace: true });
+        }
         toast.success("Login successful");
       }
     },
