@@ -304,7 +304,7 @@ export function Register() {
 
           <Button
             disabled={isPending}
-            className="bg-linear-to-r from-blue-600 to-purple-600 text-white w-full"
+            className="w-full bg-linear-to-r from-[#1e3a8a] to-[#1e3a8a] text-white"
             type="submit"
             isLoading={isPending}
           >

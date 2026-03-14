@@ -11,11 +11,30 @@ import { AuthProvider } from "./context/AuthContext";
 
 const queryClient = new QueryClient();
 
+const theme = {
+  colors: {
+    primary: {
+      50: "#e6f0ff",
+      100: "#b3d1ff",
+      200: "#80b3ff",
+      300: "#4d94ff",
+      400: "#1a75ff",
+      500: "#1e3a8a",
+      600: "#1a315e",
+      700: "#162848",
+      800: "#121f32",
+      900: "#0e151c",
+      DEFAULT: "#1e3a8a",
+      foreground: "#ffffff",
+    },
+  },
+};
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <HeroUIProvider>
+        <HeroUIProvider theme={theme}>
           <AuthProvider>
             <App />
           </AuthProvider>

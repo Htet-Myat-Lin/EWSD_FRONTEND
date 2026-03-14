@@ -270,7 +270,7 @@ export const NotificationList = () => {
                     className={`
                       min-w-10 h-10 rounded-lg font-medium text-sm transition-colors
                       ${page === p 
-                        ? "bg-blue-600 text-white" 
+                        ? "bg-[#1e3a8a] text-white" 
                         : "text-gray-600 hover:bg-gray-100"
                       }
                     `}

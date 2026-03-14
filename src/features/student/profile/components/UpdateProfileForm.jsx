@@ -214,7 +214,7 @@ export function UpdateProfileForm() {
                 type="submit"
                 color="primary"
                 isLoading={isUpdatingProfile}
-                className="px-8 bg-blue-600 text-white font-medium"
+                className="px-8 bg-[#1e3a8a] text-white font-medium"
               >
                 Save Profile
               </Button>
@@ -336,7 +336,7 @@ export function UpdateProfileForm() {
                 type="submit"
                 color="primary"
                 isLoading={isUpdatingPassword}
-                className="px-8 bg-blue-600 text-white font-medium"
+                className="px-8 bg-[#1e3a8a] text-white font-medium"
               >
                 Update Password
               </Button>

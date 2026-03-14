@@ -105,7 +105,7 @@ export function Login() {
           <Button
             type="submit"
             color="primary"
-            className="w-full bg-linear-to-r from-blue-600 to-purple-600 text-white"
+            className="w-full bg-linear-to-r from-[#1e3a8a] to-[#1e3a8a] text-white"
             isLoading={isPending}
           >
             {isPending ? "Logging in..." : "Login"}
