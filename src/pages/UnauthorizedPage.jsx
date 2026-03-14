@@ -1,28 +1,224 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from "react";
+import { Link } from "react-router-dom";
+import { LuLock, LuHouse, LuLogIn } from "react-icons/lu";
+
+const styles = `
+  @import url('https://fonts.googleapis.com/css2?family=Lora:wght@700&family=DM+Sans:wght@400;500&display=swap');
+
+  .unauth-root {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: #f8fafc;
+    font-family: 'DM Sans', sans-serif;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .unauth-root::before {
+    content: '';
+    position: absolute;
+    top: -120px; right: -120px;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: rgba(245,124,0,0.06);
+    pointer-events: none;
+  }
+
+  .unauth-root::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: -80px;
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    background: rgba(30,58,138,0.05);
+    pointer-events: none;
+  }
+
+  .unauth-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+    padding: 48px 40px;
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .unauth-icon-wrap {
+    width: 72px; height: 72px;
+    background: rgba(245,124,0,0.08);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 24px;
+    border: 1.5px solid rgba(245,124,0,0.2);
+  }
+
+  .unauth-card h1 {
+    font-family: 'Lora', serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 10px;
+  }
+
+  .unauth-card p {
+    font-size: 0.9rem;
+    color: #6b7280;
+    line-height: 1.7;
+    margin-bottom: 28px;
+  }
+
+  .unauth-divider {
+    width: 40px;
+    height: 3px;
+    background: #f57c00;
+    border-radius: 2px;
+    margin: 0 auto 24px;
+  }
+
+  .unauth-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  @media (min-width: 480px) {
+    .unauth-actions { flex-direction: row; justify-content: center; }
+  }
+
+  .unauth-btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 22px;
+    border-radius: 8px;
+    border: 1.5px solid #e5e7eb;
+    background: #fff;
+    color: #374151;
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    text-decoration: none;
+    transition: all 0.18s;
+  }
+  .unauth-btn-outline:hover {
+    border-color: #1e3a8a;
+    color: #1e3a8a;
+  }
+
+  .unauth-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 22px;
+    border-radius: 8px;
+    border: none;
+    background: #1e3a8a;
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    text-decoration: none;
+    transition: background 0.18s;
+  }
+  .unauth-btn-primary:hover { background: #172554; }
+
+  .unauth-footer {
+    margin-top: 24px;
+    font-size: 0.78rem;
+    color: #9ca3af;
+  }
+
+  .unauth-footer a {
+    color: #f57c00;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .unauth-footer a:hover { text-decoration: underline; }
+
+  .unauth-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 32px;
+    text-decoration: none;
+  }
+
+  .unauth-brand-icon {
+    width: 26px; height: 26px;
+    background: #1e3a8a;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .unauth-brand-text {
+    font-family: 'Lora', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+  }
+
+  .unauth-brand-uni  { color: #1e3a8a; }
+  .unauth-brand-mag  { color: #f57c00; }
+`;
 
 export default function UnauthorizedPage() {
-	return (
-		<div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-50 to-white p-6">
-			<div className="max-w-xl w-full bg-white shadow-lg rounded-xl p-8 text-center">
-				<div className="mx-auto w-24 h-24 rounded-full bg-yellow-50 flex items-center justify-center mb-6">
-					<svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 11c1.657 0 3-1.343 3-3V6a3 3 0 10-6 0v2c0 1.657 1.343 3 3 3z" />
-						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 11h14a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2z" />
-					</svg>
-				</div>
+  return (
+    <>
+      <style>{styles}</style>
+      <div className="unauth-root">
+        <div className="unauth-card">
 
-				<h1 className="text-2xl sm:text-3xl font-semibold mb-2 text-gray-900">Access denied</h1>
-				<p className="text-gray-600 mb-6">You don't have permission to view this page. Please sign in with an account that has the required access.</p>
+          {/* Brand */}
+          <Link to="/" className="unauth-brand">
+            <div className="unauth-brand-icon">
+              <svg fill="none" height="14" viewBox="0 0 32 32" width="14">
+                <path clipRule="evenodd" d="M17.6482 10.1305L15.8785 7.02583L7.02979 22.5499H10.5278L17.6482 10.1305ZM19.8798 14.0457L18.11 17.1983L19.394 19.4511H16.8453L15.1056 22.5499H24.7272L19.8798 14.0457Z" fill="white" fillRule="evenodd" />
+              </svg>
+            </div>
+            <span className="unauth-brand-text">
+              <span className="unauth-brand-uni">Uni</span>
+              <span className="unauth-brand-mag">Magazine</span>
+            </span>
+          </Link>
 
-				<div className="flex flex-col sm:flex-row gap-3 justify-center">
-					<Link to="/" className="inline-block px-4 py-2 rounded-md border border-gray-200 bg-white text-gray-800 hover:bg-gray-50">Go to Home</Link>
-					<Link to="/login" className="inline-block px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700">Sign in</Link>
-				</div>
+          {/* Icon */}
+          <div className="unauth-icon-wrap">
+            <LuLock size={28} style={{ color: "#f57c00" }} />
+          </div>
 
-				<p className="mt-4 text-sm text-gray-500">If you believe this is an error, contact <a className="text-blue-600 hover:underline" href="mailto:support@example.com">support@example.com</a>.</p>
-			</div>
-		</div>
-	)
+          <div className="unauth-divider" />
+
+          <h1>Access Denied</h1>
+          <p>
+            You don't have permission to view this page. Please sign in with an
+            account that has the required access level.
+          </p>
+
+          <div className="unauth-actions">
+            <Link to="/" className="unauth-btn-outline">
+              <LuHouse size={14} />
+              Go to Home
+            </Link>
+            <Link to="/login" className="unauth-btn-primary">
+              <LuLogIn size={14} />
+              Sign In
+            </Link>
+          </div>
+
+          <p className="unauth-footer">
+            Think this is a mistake?{" "}
+            <a href="mailto:support@university.edu">Contact support</a>
+          </p>
+        </div>
+      </div>
+    </>
+  );
 }
-

@@ -16,205 +16,427 @@ import {
   useDisclosure,
   Badge,
 } from "@heroui/react";
-
-// Icons (using react-icons/lu for Lucide, you can use any)
-import { LuLogOut, LuMenu, LuArrowLeft, LuBell } from "react-icons/lu";
+import { LuLogOut, LuMenu, LuBell, LuChevronRight } from "react-icons/lu";
 import { useAuth } from "@/context/AuthContext";
 import { useLogout } from "@/features/auth/hooks/useLogout";
 import { useGetUnreadCount } from "@/features/notification/hooks/useGetUnreadCount";
 import { Link as RouterLink } from "react-router-dom";
 import { resolveProfileImageUrl } from "@/utils/profile-image";
-// ----------------------------------------------------------------------
-// 1. Sidebar Component (Reused for Desktop & Mobile)
-// ----------------------------------------------------------------------
+
+// ─── Styles ───────────────────────────────────────────────────────────────────
+const styles = `
+  @import url('https://fonts.googleapis.com/css2?family=Lora:wght@700&family=DM+Sans:wght@300;400;500&display=swap');
+
+  .sb-root {
+    font-family: 'DM Sans', sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: #1e3a8a;
+  }
+
+  /* Logo */
+  .sb-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 20px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    text-decoration: none;
+    transition: opacity 0.18s;
+  }
+  .sb-logo:hover { opacity: 0.85; }
+
+  .sb-logo-icon {
+    width: 32px;
+    height: 32px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .sb-logo-text { display: flex; flex-direction: column; }
+
+  .sb-brand {
+    font-family: 'Lora', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    color: #fff;
+  }
+
+  .sb-brand-mag { color: #f57c00; }
+
+  .sb-tagline {
+    font-size: 0.6rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-top: 2px;
+  }
+
+  /* Nav */
+  .sb-nav {
+    flex: 1;
+    padding: 10px 0;
+    overflow-y: auto;
+  }
+
+  .sb-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    margin: 1px 10px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.825rem;
+    font-weight: 400;
+    color: rgba(255,255,255,0.6);
+    transition: all 0.18s;
+    position: relative;
+  }
+
+  .sb-nav-item:hover {
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+  }
+
+  .sb-nav-item.active {
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    font-weight: 500;
+  }
+
+  /* Orange left accent on active */
+  .sb-nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: -10px;
+    top: 22%;
+    bottom: 22%;
+    width: 3px;
+    background: #f57c00;
+    border-radius: 0 3px 3px 0;
+  }
+
+  .sb-nav-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.18s;
+  }
+
+  .sb-nav-item:hover .sb-nav-icon {
+    background: rgba(255,255,255,0.1);
+  }
+
+  .sb-nav-item.active .sb-nav-icon {
+    background: rgba(245,124,0,0.25);
+    color: #f57c00;
+  }
+
+  .sb-nav-item svg { width: 15px; height: 15px; }
+
+  .sb-nav-arrow {
+    margin-left: auto;
+    opacity: 0;
+    transition: opacity 0.18s;
+    color: rgba(255,255,255,0.4);
+  }
+  .sb-nav-item:hover .sb-nav-arrow,
+  .sb-nav-item.active .sb-nav-arrow {
+    opacity: 1;
+  }
+
+  /* Footer */
+  .sb-footer {
+    padding: 12px 10px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .sb-user-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.08);
+    margin-bottom: 6px;
+  }
+
+  .sb-user-name {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .sb-user-role {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.45);
+    text-transform: capitalize;
+    margin-top: 1px;
+  }
+
+  .sb-logout {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.5);
+    transition: all 0.18s;
+  }
+  .sb-logout:hover {
+    background: rgba(239,68,68,0.15);
+    color: #fca5a5;
+  }
+  .sb-logout svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  /* Topbar */
+  .db-topbar {
+    background: #ffffff !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+    box-shadow: none !important;
+  }
+
+  .db-notif-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    border: 1px solid #f0f0f0 !important;
+    background: #fff !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.18s;
+    cursor: pointer;
+  }
+  .db-notif-btn:hover { border-color: #d1d5db !important; }
+`;
+
+// ─── Sidebar Content ──────────────────────────────────────────────────────────
 const SidebarContent = ({ menuItems }) => {
   const location = useLocation();
-  const { mutate: logout } = useLogout()
+  const { user } = useAuth();
+  const profileImage = resolveProfileImageUrl(user?.profile_path);
+  const { mutate: logout } = useLogout();
 
   return (
-    <div className="flex flex-col h-full">
-      {/* Sidebar Header / Logo */}
-      <div className="flex items-center justify-center h-16">
-        <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
-          <div className="relative">
-            <svg
-              fill="none"
-              height="40"
-              viewBox="0 0 32 32"
-              width="40"
-              className="text-primary drop-shadow-sm"
-            >
-              <path
-                clipRule="evenodd"
-                d="M17.6482 10.1305L15.8785 7.02583L7.02979 22.5499H10.5278L17.6482 10.1305ZM19.8798 14.0457L18.11 17.1983L19.394 19.4511H16.8453L15.1056 22.5499H24.7272L19.8798 14.0457Z"
-                fill="currentColor"
-                fillRule="evenodd"
-              />
-            </svg>
-          </div>
-          <div className="flex flex-col">
-            <p className="font-bold text-inherit text-lg tracking-tight">KMD</p>
-            <p className="text-xs text-default-500">University Magazine</p>
-          </div>
-        </Link>
-      </div>
+    <div className="sb-root">
+      {/* Logo */}
+      <Link to="/" className="sb-logo">
+        <div className="sb-logo-icon">
+          <svg fill="none" height="18" viewBox="0 0 32 32" width="18">
+            <path
+              clipRule="evenodd"
+              d="M17.6482 10.1305L15.8785 7.02583L7.02979 22.5499H10.5278L17.6482 10.1305ZM19.8798 14.0457L18.11 17.1983L19.394 19.4511H16.8453L15.1056 22.5499H24.7272L19.8798 14.0457Z"
+              fill="white"
+              fillRule="evenodd"
+            />
+          </svg>
+        </div>
+        <div className="sb-logo-text">
+          <span className="sb-brand">
+            Uni<span className="sb-brand-mag">Magazine</span>
+          </span>
+          <span className="sb-tagline">Dashboard</span>
+        </div>
+      </Link>
 
-      {/* Navigation Links */}
-      <nav className="flex-1 p-4 space-y-1">
+      {/* Nav items */}
+      <nav className="sb-nav">
         {menuItems?.map((item) => {
           const isActive = location.pathname === item.path;
           return (
             <Link
               key={item.path}
               to={item.path}
-              className={`flex items-center gap-3 px-3 py-2 rounded-xl transition-colors ${
-                isActive
-                  ? "bg-primary text-primary-foreground font-medium"
-                  : "text-default-500 hover:bg-default-100 hover:text-default-900"
-              }`}
+              className={`sb-nav-item${isActive ? " active" : ""}`}
             >
-              {item.icon}
+              <div className="sb-nav-icon">{item.icon}</div>
               <span>{item.name}</span>
+              <LuChevronRight size={13} className="sb-nav-arrow" />
             </Link>
           );
         })}
       </nav>
 
-      {/* Sidebar Footer */}
-      <div className="p-3 mt-auto border-t border-divider bg-default-50/50">
-        <div className="flex flex-col">
-          <Button
-            as={RouterLink}
-            to="/"
-            variant="light"
-            color="default"
-            startContent={<LuArrowLeft size={18} />}
-            fullWidth
-            className="justify-start text-default-600 hover:text-primary transition-colors"
-          >
-            Back to Home
-          </Button>
-          
-          <Button
-            variant="light"
-            color="danger"
-            startContent={<LuLogOut size={18} />}
-            fullWidth
-            className="justify-start opacity-80 hover:opacity-100"
-            onClick={() => logout()}
-          >
-            Logout
-          </Button>
+      {/* Footer: user + logout */}
+      <div className="sb-footer">
+        <div className="sb-user-card">
+          <Avatar
+            src={profileImage}
+            name={user?.name}
+            size="sm"
+            color="warning"
+            isBordered
+          />
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div className="sb-user-name">{user?.name}</div>
+            <div className="sb-user-role">
+              {user?.role?.name?.replace(/_/g, " ")}
+            </div>
+          </div>
         </div>
+
+        <button className="sb-logout" onClick={() => logout()}>
+          <LuLogOut />
+          <span>Sign out</span>
+        </button>
       </div>
     </div>
   );
 };
 
-// ----------------------------------------------------------------------
-// 2. Main Layout Component
-// ----------------------------------------------------------------------
+// ─── Dashboard Layout ─────────────────────────────────────────────────────────
 export function DashboardLayout({ menuItems }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const { user } = useAuth()
+  const { user } = useAuth();
   const profileImage = resolveProfileImageUrl(user?.profile_path);
 
-  // Get unread notification count - only for student and coordinator
-  const shouldShowNotification = user?.role?.name === "student" || user?.role?.name === "marketing_coordinator";
+  const shouldShowNotification =
+    user?.role?.name === "student" ||
+    user?.role?.name === "marketing_coordinator";
+
   const { data: unreadData } = useGetUnreadCount();
   const unreadCount = unreadData?.unread_count || 0;
 
-  // Get notifications path based on user role
   const getNotificationsPath = () => {
     if (user?.role?.name === "student") return "/student/notifications";
-    if (user?.role?.name === "marketing_coordinator") return "/marketing-coordinator/notifications";
+    if (user?.role?.name === "marketing_coordinator")
+      return "/marketing-coordinator/notifications";
     return "/notifications";
   };
 
   return (
-    <div className="flex h-screen w-full bg-default-50">
-      {/* --- Desktop Sidebar (Hidden on mobile) --- */}
-      <aside className="hidden md:flex w-64 flex-col border-r border-divider bg-gray-100 fixed h-full z-50">
-        <SidebarContent menuItems={menuItems} />
-      </aside>
+    <>
+      <style>{styles}</style>
+      <div className="flex h-screen w-full" style={{ background: "#f8fafc" }}>
 
-      {/* --- Main Content Area --- */}
-      <div className="flex-1 flex flex-col md:ml-64 min-h-screen">
-        {/* Top Navbar */}
-        <Navbar
-          isBordered
-          className="bg-gray-100/70 backdrop-blur-md sticky top-0 z-40 w-full h-16"
-          maxWidth="full"
+        {/* ── Desktop Sidebar ── */}
+        <aside
+          className="hidden md:flex flex-col fixed h-full z-50"
+          style={{ width: "220px" }}
         >
-          {/* Mobile Menu Toggle */}
-          <NavbarContent className="md:hidden" justify="start">
-            <Button isIconOnly variant="light" onPress={onOpen}>
-              <LuMenu size={24} />
-            </Button>
-          </NavbarContent>
+          <SidebarContent menuItems={menuItems} />
+        </aside>
 
-          {/* Brand (Visible on Mobile only usually) */}
-          <NavbarContent className="md:hidden pr-3" justify="center">
-            <NavbarBrand>
-              <p className="font-bold text-inherit">KMD</p>
-            </NavbarBrand>
-          </NavbarContent>
+        {/* ── Main area ── */}
+        <div className="flex-1 flex flex-col md:ml-55 min-h-screen">
 
-          {/* Right Side: User Menu */}
-          <NavbarContent justify="end">
-            {/* Notification Bell - Only for student and coordinator */}
-            {shouldShowNotification && (
-              <Link to={getNotificationsPath()} className="mr-3 flex items-center">
-                <Badge
-                  content={unreadCount > 0 ? unreadCount : null}
-                  color="danger"
-                  size="sm"
-                  isInvisible={unreadCount === 0}
-                >
-                  <LuBell size={22} className="text-default-600 hover:text-primary transition-colors" />
-                </Badge>
-              </Link>
-            )}
-            <Dropdown placement="bottom-end">
-              <DropdownTrigger>
-                <Avatar
-                  isBordered
-                  as="button"
-                  className="transition-transform"
-                  color="primary"
-                  name={user?.name}
-                  src={profileImage}
-                  size="sm"
-                />
-              </DropdownTrigger>
-              <DropdownMenu aria-label="Profile Actions" variant="flat">
-                <DropdownItem key="profile" className="h-14 gap-2">
-                  <p className="font-semibold">Signed in as</p>
-                  <p className="font-semibold">{user?.email}</p>
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </NavbarContent>
-        </Navbar>
+          {/* Topbar */}
+          <Navbar
+            isBordered={false}
+            className="db-topbar sticky top-0 z-40 w-full h-15"
+            maxWidth="full"
+          >
+            {/* Mobile toggle */}
+            <NavbarContent className="md:hidden" justify="start">
+              <Button isIconOnly variant="light" onPress={onOpen} size="sm">
+                <LuMenu size={20} style={{ color: "#4b5563" }} />
+              </Button>
+            </NavbarContent>
 
-        {/* Page Content (Outlet) */}
-        <main className="flex-1 p-6 overflow-y-auto">
-          <Outlet />
-        </main>
-      </div>
+            {/* Mobile brand */}
+            <NavbarContent className="md:hidden" justify="center">
+              <NavbarBrand>
+                <span style={{ fontFamily: "'Lora', serif", fontWeight: 700, fontSize: "1rem" }}>
+                  <span style={{ color: "#1e3a8a" }}>Uni</span>
+                  <span style={{ color: "#f57c00" }}>Magazine</span>
+                </span>
+              </NavbarBrand>
+            </NavbarContent>
 
-      {/* --- Mobile Sidebar (Drawer) --- */}
-      <Drawer isOpen={isOpen} onOpenChange={onOpenChange} placement="left">
-        <DrawerContent>
-          {() => (
-            <>
+            {/* Desktop greeting */}
+            <NavbarContent className="hidden md:flex" justify="start">
+              <span style={{ fontSize: "0.875rem", color: "#6b7280" }}>
+                Welcome back,{" "}
+                <span style={{ color: "#111827", fontWeight: 500 }}>
+                  {user?.name?.split(" ")[0]}
+                </span>
+              </span>
+            </NavbarContent>
+
+            {/* Right: bell + avatar */}
+            <NavbarContent justify="end" style={{ gap: "10px" }}>
+              {shouldShowNotification && (
+                <Link to={getNotificationsPath()}>
+                  <Badge
+                    content={unreadCount > 0 ? unreadCount : null}
+                    color="danger"
+                    size="sm"
+                    isInvisible={unreadCount === 0}
+                  >
+                    <button className="db-notif-btn">
+                      <LuBell size={16} style={{ color: "#4b5563" }} />
+                    </button>
+                  </Badge>
+                </Link>
+              )}
+
+              <Dropdown placement="bottom-end">
+                <DropdownTrigger>
+                  <Avatar
+                    isBordered
+                    as="button"
+                    className="transition-transform"
+                    color="warning"
+                    name={user?.name}
+                    src={profileImage}
+                    size="sm"
+                  />
+                </DropdownTrigger>
+                <DropdownMenu aria-label="Profile Actions" variant="flat">
+                  <DropdownItem key="profile" className="h-14 gap-1" isReadOnly>
+                    <p style={{ fontSize: "0.72rem", color: "#9ca3af" }}>Signed in as</p>
+                    <p style={{ fontSize: "0.875rem", fontWeight: 500, color: "#111827" }}>
+                      {user?.email}
+                    </p>
+                  </DropdownItem>
+                  <DropdownItem key="logout" color="danger">
+                    Sign out
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </NavbarContent>
+          </Navbar>
+
+          {/* Page content */}
+          <main style={{ flex: 1, padding: "24px", overflowY: "auto" }}>
+            <Outlet />
+          </main>
+        </div>
+
+        {/* ── Mobile Drawer ── */}
+        <Drawer isOpen={isOpen} onOpenChange={onOpenChange} placement="left">
+          <DrawerContent>
+            {() => (
               <DrawerBody className="p-0">
                 <SidebarContent menuItems={menuItems} />
               </DrawerBody>
-            </>
-          )}
-        </DrawerContent>
-      </Drawer>
-    </div>
+            )}
+          </DrawerContent>
+        </Drawer>
+      </div>
+    </>
   );
 }
