@@ -18,6 +18,8 @@ import {
   LuX,
 } from "react-icons/lu";
 import { formatDate, resolveProfileImageUrl } from "@/utils/helpers";
+import { ContributionService } from "@/api/services/contribution-service";
+import { toast } from "react-toastify";
 
 const getStatusColor = (status) => {
   const statusColors = {
@@ -46,9 +48,21 @@ export function ContributionDetailDialog({
 }) {
   if (!contribution) return null;
 
-  const handleDownload = () => {
-    if (contribution.file_url) {
-      window.open(contribution.file_url, "_blank");
+  const handleDownload = async () => {
+    try {
+      const blob = await ContributionService.downloadContribution(contribution.id);
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement("a");
+      link.href = url;
+      const fileName = contribution.file_url?.split("/").pop() || `contribution-${contribution.id}`;
+      link.setAttribute("download", fileName);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Download failed:", error);
+      toast.error("Failed to download file. Please try again.");
     }
   };
 

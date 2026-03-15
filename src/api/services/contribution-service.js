@@ -70,4 +70,11 @@ export const ContributionService = {
             _method: "PUT",
         })).data
     },
+
+    downloadContribution: async (id) => {
+        const response = await axiosInstance.get(`/contributions/${id}/download`, {
+            responseType: 'blob',
+        });
+        return response.data;
+    },
 }
