@@ -60,6 +60,10 @@ export const ContributionService = {
         return (await axiosInstance.get("/coordinator/dashboard")).data
     },
 
+    getStudentDashboard: async () => {
+        return (await axiosInstance.get("/student/dashboard")).data
+    },
+
     selectContributions: async (ids, action) => {
         return (await axiosInstance.patch("/contributions/select", { ids, action })).data
     },

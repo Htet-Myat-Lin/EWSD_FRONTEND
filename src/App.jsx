@@ -36,6 +36,7 @@ import { ManagerDashboard } from "./features/manager/components/Dashboard";
 import { AboutPage } from "./pages/AboutPage";
 import { TermsPage } from "./pages/TermsPage";
 import { ContactPage } from "./pages/ContactPage";
+import { StudentDashboard } from "@/features/student/dashboard/components/StudentDashboard";
 
 const adminMenuItems = [
   { name: "Dashboard", path: "/admin/dashboard", icon: <LuGauge size={20} /> },
@@ -155,7 +156,7 @@ function App() {
             path="/student"
             element={<DashboardLayout menuItems={studentMenuItems} />}
           >
-            <Route path="dashboard" element={<div>Student Dashboard</div>} />
+            <Route path="dashboard" element={<StudentDashboard />} />
             <Route
               path="submit-contribution"
               element={<SubmitContribution />}
