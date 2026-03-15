@@ -13,6 +13,7 @@ import {
   CardBody,
   Pagination,
   useDisclosure,
+  Button,
 } from "@heroui/react";
 import { toast } from "react-toastify";
 import { formatDate, STATUS_COLORS } from "@/utils/helpers";
@@ -25,6 +26,7 @@ import { useContributions } from "../hooks/useContributions";
 import { useCategories } from "../hooks/useCategories";
 import { useSelectContributions } from "../hooks/useSelectContributions";
 import { useContributionFilters } from "../hooks/useContributionFilters";
+import { ContributionService } from "@/api/services/contribution-service";
 
 const TERMINAL_STATUSES = ["selected", "rejected"];
 
@@ -99,6 +101,24 @@ export const ContributionsList = () => {
       ids: Array.from(selectedKeys),
       action: "rejected",
     });
+
+  const handleDownload = async (contribution) => {
+    try {
+      const blob = await ContributionService.downloadContribution(contribution.id);
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement("a");
+      link.href = url;
+      const fileName = contribution.file_url?.split("/").pop() || `contribution-${contribution.id}`;
+      link.setAttribute("download", fileName);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Download failed:", error);
+      toast.error("Failed to download file. Please try again.");
+    }
+  };
 
   const handleDropdownAction = (key, contribution) => {
     const action = key === "select" ? "selected" : "rejected";
@@ -201,17 +221,14 @@ export const ContributionsList = () => {
                   <TableCell>{formatDate(item.created_at)}</TableCell>
                   <TableCell>
                     {item.file_url ? (
-                      <Link
-                        href={item.file_url}
-                        download
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        color="primary"
-                        underline="hover"
+                      <Button
                         size="sm"
+                        variant="flat"
+                        color="primary"
+                        onPress={() => handleDownload(item)}
                       >
                         Download
-                      </Link>
+                      </Button>
                     ) : (
                       <span className="text-gray-400">No file</span>
                     )}

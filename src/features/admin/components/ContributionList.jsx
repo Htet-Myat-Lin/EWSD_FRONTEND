@@ -23,6 +23,8 @@ import { useCategories } from "@/features/coordinator/contributions/hooks/useCat
 import { formatDate } from "@/utils/helpers";
 import { CommentDialog } from "@/features/coordinator/contributions/components/CommentDialog";
 import { LuMessageCircle } from "react-icons/lu";
+import { ContributionService } from "@/api/services/contribution-service";
+import { toast } from "react-toastify";
 
 const columns = [
   { key: "id", label: "ID" },
@@ -47,7 +49,7 @@ const getStatusColor = (status) => {
   return statusColors[status] || "default";
 };
 
-const renderCell = (contribution, columnKey, onCommentClick) => {
+const renderCell = (contribution, columnKey, onCommentClick, onDownloadClick) => {
   switch (columnKey) {
     case "id":
       return contribution.id;
@@ -81,18 +83,14 @@ const renderCell = (contribution, columnKey, onCommentClick) => {
       return formatDate(contribution.created_at);
     case "file":
       return contribution.file_url ? (
-        <Link
-          as={"a"}
-          href={contribution.file_url}
-          download
-          target="_blank"
-          rel="noopener noreferrer"
+        <Button
+          size="sm"
+          variant="flat"
           color="primary"
-          underline="hover"
-          className="text-sm"
+          onPress={() => onDownloadClick(contribution)}
         >
           Download
-        </Link>
+        </Button>
       ) : (
         <span className="text-gray-400">No file</span>
       );
@@ -173,6 +171,24 @@ export const Contributions = () => {
   const handleCommentClick = (contribution) => {
     setSelectedContribution(contribution);
     onOpen();
+  };
+
+  const handleDownload = async (contribution) => {
+    try {
+      const blob = await ContributionService.downloadContribution(contribution.id);
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement("a");
+      link.href = url;
+      const fileName = contribution.file_url?.split("/").pop() || `contribution-${contribution.id}`;
+      link.setAttribute("download", fileName);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Download failed:", error);
+      toast.error("Failed to download file. Please try again.");
+    }
   };
 
   if (isLoading) {
@@ -302,7 +318,7 @@ export const Contributions = () => {
                 <TableRow key={contribution.id}>
                   {columns.map((column) => (
                     <TableCell key={column.key}>
-                      {renderCell(contribution, column.key, handleCommentClick)}
+                      {renderCell(contribution, column.key, handleCommentClick, handleDownload)}
                     </TableCell>
                   ))}
                 </TableRow>
