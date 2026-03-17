@@ -5,8 +5,8 @@ import AuthSidePanel from "@/components/auth-side-pannel/AuthSidePanel";
 export default function LoginPage() {
   return (
     <>
-      <Header />
-      <div className="flex h-[94vh] w-full overflow-hidden bg-background">
+      {/* <Header /> */}
+      <div className="flex h-screen w-full overflow-hidden bg-background">
         {/* Left Side: Hidden on mobile, 50% width on large screens */}
         <div className="hidden lg:block lg:w-1/2 h-full">
           <AuthSidePanel />

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { LuPenLine, LuUsers, LuAward } from "react-icons/lu";
 import authSideImage from "../../assets/auth-side-panel.jpg";
 
@@ -22,7 +23,7 @@ const features = [
 
 export default function AuthSidePanel() {
   return (
-    <div className="hidden lg:flex flex-col relative w-full h-full overflow-hidden">
+    <div className="hidden lg:flex flex-col relative w-full min-h-full overflow-hidden">
 
       {/* Background image */}
       <img
@@ -33,7 +34,7 @@ export default function AuthSidePanel() {
 
       {/* Dark navy overlay — matches site primary */}
       <div
-        className="absolute inset-0"
+        className="absolute inset-0 space-y-20"
         style={{
           background:
             "linear-gradient(160deg, rgba(15,23,42,0.93) 0%, rgba(30,58,138,0.88) 50%, rgba(29,78,216,0.82) 100%)",
@@ -56,12 +57,12 @@ export default function AuthSidePanel() {
 
       {/* Content */}
       <div
-        className="relative flex flex-col justify-between h-full"
+        className="relative flex flex-col justify-center h-full gap-8"
         style={{ zIndex: 1, padding: "40px 44px" }}
       >
 
         {/* ── Brand ── */}
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+        <Link to="/" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}>
           <div
             style={{
               width: "34px",
@@ -111,7 +112,7 @@ export default function AuthSidePanel() {
               Contribution Portal
             </p>
           </div>
-        </div>
+        </Link>
 
         {/* ── Hero text ── */}
         <div style={{ maxWidth: "340px" }}>
@@ -227,48 +228,6 @@ export default function AuthSidePanel() {
                     {f.desc}
                   </p>
                 </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Stats row */}
-          <div
-            style={{
-              display: "flex",
-              gap: "24px",
-              marginTop: "28px",
-              paddingTop: "24px",
-              borderTop: "1px solid rgba(255,255,255,0.1)",
-            }}
-          >
-            {[
-              { val: "2,450+", lbl: "Contributors" },
-              { val: "1,200+", lbl: "Published" },
-              { val: "98%",    lbl: "Satisfaction" },
-            ].map(({ val, lbl }) => (
-              <div key={lbl}>
-                <p
-                  style={{
-                    fontFamily: "'Lora', serif",
-                    fontSize: "1.15rem",
-                    fontWeight: 700,
-                    color: "#fff",
-                    lineHeight: 1,
-                    marginBottom: "3px",
-                  }}
-                >
-                  {val}
-                </p>
-                <p
-                  style={{
-                    fontSize: "0.7rem",
-                    color: "rgba(255,255,255,0.4)",
-                    letterSpacing: "0.06em",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  {lbl}
-                </p>
               </div>
             ))}
           </div>

@@ -2,7 +2,6 @@ import { Card, CardBody, CardHeader } from "@heroui/react"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts"
 
 export const FacultyComparison = ({ comparison, personalMetrics }) => {
-    console.log(comparison);
     const data = [
         {
             name: "Selection Rate",

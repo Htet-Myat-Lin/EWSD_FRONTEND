@@ -81,4 +81,18 @@ export const ContributionService = {
         });
         return response.data;
     },
+
+    getGuestDashboard: async (page = 1, categoryId = null, academicYearId = null, search = null) => {
+        const params = { page };
+        if (categoryId !== undefined && categoryId !== null) {
+            params.category_id = categoryId;
+        }
+        if (academicYearId !== undefined && academicYearId !== null) {
+            params.academic_year_id = academicYearId;
+        }
+        if (search !== undefined && search !== null && search.trim() !== '') {
+            params.search = search.trim();
+        }
+        return (await axiosInstance.get("/guest/dashboard", { params })).data;
+    },
 }

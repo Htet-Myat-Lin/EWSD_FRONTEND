@@ -58,24 +58,31 @@ const MetricCard = ({ title, value, color, maxValue = 100 }) => {
         </Card>
     )
 }
-
 export const PersonalMetrics = ({ metrics }) => {
+    // Ensure metrics has default values
+    const safeMetrics = {
+        total_submissions: 0,
+        selection_rate: 0,
+        rejection_rate: 0,
+        ...metrics,
+    }
+
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <MetricCard
                 title="Total Submissions"
-                value={metrics.total_submissions}
+                value={safeMetrics.total_submissions}
                 color="#3b82f6"
                 maxValue={20}
             />
             <MetricCard
                 title="Selection Rate"
-                value={metrics.selection_rate}
+                value={safeMetrics.selection_rate}
                 color="#10b981"
             />
             <MetricCard
                 title="Rejection Rate"
-                value={metrics.rejection_rate}
+                value={safeMetrics.rejection_rate}
                 color="#ef4444"
             />
         </div>

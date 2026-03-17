@@ -312,6 +312,7 @@ export function DashboardLayout({ menuItems }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { user } = useAuth();
   const profileImage = resolveProfileImageUrl(user?.profile_path);
+  const { mutate: logout } = useLogout();
 
   const shouldShowNotification =
     user?.role?.name === "student" ||
@@ -412,7 +413,7 @@ export function DashboardLayout({ menuItems }) {
                       {user?.email}
                     </p>
                   </DropdownItem>
-                  <DropdownItem key="logout" color="danger">
+                  <DropdownItem key="logout" color="danger" onClick={() => logout()}>
                     Sign out
                   </DropdownItem>
                 </DropdownMenu>

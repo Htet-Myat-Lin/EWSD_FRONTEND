@@ -37,6 +37,7 @@ import { AboutPage } from "./pages/AboutPage";
 import { TermsPage } from "./pages/TermsPage";
 import { ContactPage } from "./pages/ContactPage";
 import { StudentDashboard } from "@/features/student/dashboard/components/StudentDashboard";
+import { GuestDashboard } from "@/features/guest/dashboard/components/GuestDashboard";
 
 const adminMenuItems = [
   { name: "Dashboard", path: "/admin/dashboard", icon: <LuGauge size={20} /> },
@@ -107,6 +108,24 @@ const marketingCoordinatorMenuItems = [
   {
     name: "Notifications",
     path: "/marketing-coordinator/notifications",
+    icon: <IoNotificationsOutline size={20} />,
+  },
+];
+
+const guestMenuItems = [
+  {
+    name: "Dashboard",
+    path: "/guest/dashboard",
+    icon: <LuGauge size={20} />,
+  },
+  {
+    name: "Profile",
+    path: "/guest/profile",
+    icon: <CgProfile size={20} />,
+  },
+  {
+    name: "Notifications",
+    path: "/guest/notifications",
     icon: <IoNotificationsOutline size={20} />,
   },
 ];
@@ -184,6 +203,18 @@ function App() {
             <Route path="dashboard" element={<CoordinatorDashboard />} />
             <Route path="students" element={<StudentList />} />
             <Route path="contributions" element={<ContributionsList />} />
+            <Route path="profile" element={<UpdateProfileForm />} />
+            <Route path="notifications" element={<NotificationList />} />
+          </Route>
+        </Route>
+
+        // Guest Routes
+        <Route element={<ProtectedRoute allowedRoles={["guest"]} />}>
+          <Route
+            path="/guest"
+            element={<DashboardLayout menuItems={guestMenuItems} />}
+          >
+            <Route path="dashboard" element={<GuestDashboard />} />
             <Route path="profile" element={<UpdateProfileForm />} />
             <Route path="notifications" element={<NotificationList />} />
           </Route>
