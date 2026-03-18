@@ -1,6 +1,5 @@
 import { Spinner, Button } from "@heroui/react"
 import { FiRefreshCw } from "react-icons/fi"
-import PropTypes from "prop-types"
 import { useStudentDashboard } from "../hooks/useStudentDashboard"
 import { AcademicYearBanner } from "./AcademicYearBanner"
 import { ActionButtons } from "./ActionButtons"
@@ -44,17 +43,6 @@ const ErrorFallback = ({ error, onRetry }) => (
         </div>
     </div>
 )
-
-ErrorFallback.propTypes = {
-    error: PropTypes.shape({
-        message: PropTypes.string,
-    }),
-    onRetry: PropTypes.func.isRequired,
-}
-
-ErrorFallback.defaultProps = {
-    error: null,
-}
 
 export const StudentDashboard = () => {
     const { data, isLoading, error, refetch } = useStudentDashboard()
