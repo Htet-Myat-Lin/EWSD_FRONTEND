@@ -123,11 +123,6 @@ const guestMenuItems = [
     path: "/guest/profile",
     icon: <CgProfile size={20} />,
   },
-  {
-    name: "Notifications",
-    path: "/guest/notifications",
-    icon: <IoNotificationsOutline size={20} />,
-  },
 ];
 
 function App() {
@@ -216,7 +211,6 @@ function App() {
           >
             <Route path="dashboard" element={<GuestDashboard />} />
             <Route path="profile" element={<UpdateProfileForm />} />
-            <Route path="notifications" element={<NotificationList />} />
           </Route>
         </Route>
         

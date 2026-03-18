@@ -12,7 +12,7 @@ export const useLogout = () => {
         onSuccess: () => {
             localStorage.removeItem("access_token")
             setUser(null)
-            navigate("/login")
+            navigate("/")
             toast.success("Logout successful!")
         }
     })

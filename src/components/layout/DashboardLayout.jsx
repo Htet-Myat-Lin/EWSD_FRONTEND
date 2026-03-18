@@ -243,7 +243,7 @@ const SidebarContent = ({ menuItems }) => {
   return (
     <div className="sb-root">
       {/* Logo */}
-      <Link to="/" className="sb-logo">
+      <div className="sb-logo">
         <div className="sb-logo-icon">
           <svg fill="none" height="18" viewBox="0 0 32 32" width="18">
             <path
@@ -260,7 +260,7 @@ const SidebarContent = ({ menuItems }) => {
           </span>
           <span className="sb-tagline">Dashboard</span>
         </div>
-      </Link>
+      </div>
 
       {/* Nav items */}
       <nav className="sb-nav">

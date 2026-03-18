@@ -71,34 +71,35 @@ export const ContributionsList = () => {
   }, [contributions]);
 
   const handleSelectContributions = ({ ids, action }) => {
+    // Convert "all" selection to actual IDs
+    const actualIds = ids === "all" 
+      ? contributions
+          .filter((c) => !TERMINAL_STATUSES.includes(c.status))
+          .map((c) => String(c.id))
+      : Array.from(ids);
     selectContributions(
-      { ids, action },
+      { ids: actualIds, action },
       {
         onSuccess: (data) => {
-          toast.success(
-            data.message || `Contributions ${action} successfully`
-          );
+          toast.success(data.message || `Contributions ${action} successfully`);
           setSelectedKeys(new Set());
         },
         onError: (err) => {
-          toast.error(
-            err.response?.data?.message ||
-              `Failed to ${action} contributions`
-          );
+          toast.error(err.response?.data?.message || `Failed to ${action} contributions`);
         },
       }
     );
-  };
+};
 
   const handleBulkSelect = () =>
     handleSelectContributions({
-      ids: Array.from(selectedKeys),
+      ids: selectedKeys,
       action: "selected",
     });
 
   const handleBulkReject = () =>
     handleSelectContributions({
-      ids: Array.from(selectedKeys),
+      ids: selectedKeys,
       action: "rejected",
     });
 
