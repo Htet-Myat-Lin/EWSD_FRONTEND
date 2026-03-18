@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import { ContributionService } from "../../../../api/services/contribution-service"
 
 const STUDENT_DASHBOARD_QUERY_KEY = "student-dashboard"
-const STALE_TIME = 1000 * 60 * 5 // 5 minutes
+const STALE_TIME = 0 // 5 minutes
 const RETRY_COUNT = 2
 
 /**
@@ -10,7 +10,7 @@ const RETRY_COUNT = 2
  *
  * Features:
  * - Automatic retry on failure (2 attempts)
- * - 5-minute stale time to reduce API calls
+ * - 0-minute stale time to reduce API calls
  * - Refetches when window regains focus
  * - Caches data across component remounts
  *
