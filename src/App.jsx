@@ -224,7 +224,6 @@ function App() {
           </Route>
         </Route>
         
-=======
         // Guest Routes
         <Route element={<ProtectedRoute allowedRoles={["guest"]} />}>
           <Route
@@ -235,7 +234,7 @@ function App() {
             <Route path="profile" element={<UpdateProfileForm />} />
           </Route>
         </Route>
->>>>>>> Stashed changes
+
         <Route path="/unauthorized" element={<UnauthorizedPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
