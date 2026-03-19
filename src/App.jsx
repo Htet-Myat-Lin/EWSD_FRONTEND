@@ -60,6 +60,19 @@ const adminMenuItems = [
   },
 ];
 
+const managerMenuItems = [
+  {
+    name: "Dashboard",
+    path: "/marketing-manager/dashboard",
+    icon: <LuGauge size={20} />,
+  },
+  {
+    name: "Contributions",
+    path: "/marketing-manager/contributions",
+    icon: <LuFileText size={20} />,
+  },
+];
+
 const studentMenuItems = [
   {
     name: "Dashboard",
@@ -136,7 +149,6 @@ function App() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/terms" element={<TermsPage />} />
-
         // Admin Routes
         <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
           <Route
@@ -151,19 +163,18 @@ function App() {
             <Route path="contributions" element={<Contributions />} />
           </Route>
         </Route>
-
         // Marketing Manager Route
         <Route
           element={<ProtectedRoute allowedRoles={["marketing_manager"]} />}
         >
           <Route
             path="/marketing-manager"
-            element={<DashboardLayout menuItems={[{ name: "Dashboard", path: "/marketing-manager/dashboard", icon: <LuGauge size={20} /> }]} />}
+            element={<DashboardLayout menuItems={managerMenuItems} />}
           >
             <Route path="dashboard" element={<ManagerDashboard />} />
+            <Route path="contributions" element={<Contributions />} />
           </Route>
         </Route>
-
         // Student Routes
         <Route element={<ProtectedRoute allowedRoles={["student"]} />}>
           <Route
@@ -184,7 +195,6 @@ function App() {
             <Route path="notifications" element={<NotificationList />} />
           </Route>
         </Route>
-
         // Marketing Coordinator Routes
         <Route
           element={<ProtectedRoute allowedRoles={["marketing_coordinator"]} />}
@@ -214,6 +224,18 @@ function App() {
           </Route>
         </Route>
         
+=======
+        // Guest Routes
+        <Route element={<ProtectedRoute allowedRoles={["guest"]} />}>
+          <Route
+            path="/guest"
+            element={<DashboardLayout menuItems={guestMenuItems} />}
+          >
+            <Route path="dashboard" element={<GuestDashboard />} />
+            <Route path="profile" element={<UpdateProfileForm />} />
+          </Route>
+        </Route>
+>>>>>>> Stashed changes
         <Route path="/unauthorized" element={<UnauthorizedPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
