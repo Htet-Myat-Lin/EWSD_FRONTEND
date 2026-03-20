@@ -15,6 +15,7 @@ import {
   LuBookPlus,
   LuFileText,
 } from "react-icons/lu";
+import { LiaUserClockSolid } from "react-icons/lia";
 import { CgProfile } from "react-icons/cg";
 import { TbCategory } from "react-icons/tb";
 import { IoNotificationsOutline } from "react-icons/io5";
@@ -38,6 +39,7 @@ import { TermsPage } from "./pages/TermsPage";
 import { ContactPage } from "./pages/ContactPage";
 import { StudentDashboard } from "@/features/student/dashboard/components/StudentDashboard";
 import { GuestDashboard } from "@/features/guest/dashboard/components/GuestDashboard";
+import { GuestList } from "./features/coordinator/guestlists/components/GuestList";
 
 const adminMenuItems = [
   { name: "Dashboard", path: "/admin/dashboard", icon: <LuGauge size={20} /> },
@@ -112,6 +114,11 @@ const marketingCoordinatorMenuItems = [
     name: "Contributions",
     path: "/marketing-coordinator/contributions",
     icon: <LuFileText size={20} />,
+  },
+  {
+    name: "Guests",
+    path: "/marketing-coordinator/guests",
+    icon: <LiaUserClockSolid size={20} />,
   },
   {
     name: "Profile",
@@ -208,6 +215,7 @@ function App() {
             <Route path="dashboard" element={<CoordinatorDashboard />} />
             <Route path="students" element={<StudentList />} />
             <Route path="contributions" element={<ContributionsList />} />
+            <Route path="guests" element={<GuestList />} />
             <Route path="profile" element={<UpdateProfileForm />} />
             <Route path="notifications" element={<NotificationList />} />
           </Route>

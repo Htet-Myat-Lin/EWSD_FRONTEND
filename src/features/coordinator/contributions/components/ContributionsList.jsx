@@ -196,7 +196,7 @@ export const ContributionsList = () => {
               <TableColumn>title</TableColumn>
               <TableColumn>student</TableColumn>
               <TableColumn>category</TableColumn>
-              <TableColumn>academic_year</TableColumn>
+              <TableColumn>Academic Year</TableColumn>
               <TableColumn>status</TableColumn>
               <TableColumn>Submission date</TableColumn>
               <TableColumn>file</TableColumn>

@@ -8,12 +8,10 @@ import {
   TableCell,
   Chip,
   Spinner,
-  Button,
-  Tooltip,
 } from "@heroui/react";
 import { Pagination } from "@heroui/pagination";
-import { FaEye } from "react-icons/fa";
 import { useStudentList } from "../hooks/useStudentList";
+import { formatDate } from "../../../../utils/helpers";
 
 export const StudentList = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -47,13 +45,8 @@ export const StudentList = () => {
     to: data?.to,
   };
 
-  const handleViewDetail = (studentId) => {
-    // TODO: Implement view student detail
-    console.log("View student detail:", studentId);
-  };
-
   return (
-    <div className="container">
+    <div>
       <h2 className="text-2xl font-bold mb-6">Student List</h2>
 
       <Table aria-label="Student list table">
@@ -62,7 +55,8 @@ export const StudentList = () => {
           <TableColumn>EMAIL</TableColumn>
           <TableColumn>FACULTY</TableColumn>
           <TableColumn>STATUS</TableColumn>
-          <TableColumn>ACTIONS</TableColumn>
+          <TableColumn>CREATED DATE</TableColumn>
+          <TableColumn>UPDATED DATE</TableColumn>
         </TableHeader>
         <TableBody emptyContent="No students found">
           {students.map((student) => (
@@ -79,20 +73,8 @@ export const StudentList = () => {
                   {student.status}
                 </Chip>
               </TableCell>
-              <TableCell>
-                <div className="flex gap-2">
-                  <Tooltip content="View Details">
-                    <Button
-                      isIconOnly
-                      size="sm"
-                      variant="light"
-                      onPress={() => handleViewDetail(student.id)}
-                    >
-                      <FaEye className="text-lg text-stone-500" />
-                    </Button>
-                  </Tooltip>
-                </div>
-              </TableCell>
+              <TableCell>{formatDate(student.created_at)}</TableCell>
+              <TableCell>{formatDate(student.updated_at)}</TableCell>
             </TableRow>
           ))}
         </TableBody>

@@ -26,4 +26,7 @@ export const UserService = {
     getFacultyStudents: async (page = 1) => {
         return (await axiosInstance.get("/faculty/students", { params: { page } })).data
     },
+    getFacultyGuests: async (page = 1) => {
+        return (await axiosInstance.get("/faculty/guests", { params: { page } })).data
+    },
 }
