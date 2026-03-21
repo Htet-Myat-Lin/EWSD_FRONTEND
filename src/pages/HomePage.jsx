@@ -12,6 +12,7 @@ import {
 } from "react-icons/lu";
 import { Header } from "@/components/header/Header";
 import { Footer } from "@/components/footer/Footer";
+import { Chatbot } from "@/components/Chatbot";
 
 // ─── Inline styles ────────────────────────────────────────────────────────────
 const styles = `
@@ -609,6 +610,7 @@ export function HomePage() {
 
       {/* Footer lives outside hp-root so its own styles don't conflict */}
       <Footer />
+      <Chatbot />
     </>
   );
 }

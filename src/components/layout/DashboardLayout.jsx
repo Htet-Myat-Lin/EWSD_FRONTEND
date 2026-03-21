@@ -23,6 +23,7 @@ import { useGetUnreadCount } from "@/features/notification/hooks/useGetUnreadCou
 import { Link as RouterLink } from "react-router-dom";
 import { resolveProfileImageUrl } from "@/utils/helpers";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { Chatbot } from "@/components/Chatbot";
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
 const styles = `
@@ -454,6 +455,7 @@ export function DashboardLayout({ menuItems }) {
             )}
           </DrawerContent>
         </Drawer>
+        <Chatbot />
       </div>
     </>
   );
