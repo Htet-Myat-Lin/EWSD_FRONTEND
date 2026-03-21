@@ -182,15 +182,20 @@ export const ContributionsList = () => {
       />
 
       <Card>
-        <CardBody className="p-0">
+        <CardBody className="p-0 overflow-x-auto">
           <Table
             aria-label="Contributions list"
             isStriped
             removeWrapper
+            isCompact
             selectionMode="multiple"
             selectedKeys={selectedKeys}
             onSelectionChange={setSelectedKeys}
             disabledKeys={disabledKeys}
+            classNames={{
+              wrapper: "min-w-full",
+              table: "min-w-full",
+            }}
           >
             <TableHeader>
               <TableColumn>title</TableColumn>
@@ -206,10 +211,10 @@ export const ContributionsList = () => {
             <TableBody items={contributions}>
               {(item) => (
                 <TableRow key={String(item.id)}>
-                  <TableCell>{item.title || "N/A"}</TableCell>
+                  <TableCell className="font-medium">{item.title || "N/A"}</TableCell>
                   <TableCell>{item.user?.name || "N/A"}</TableCell>
                   <TableCell>{item.category?.name || "N/A"}</TableCell>
-                  <TableCell>{item.academic_year?.name || "N/A"}</TableCell>
+                  <TableCell className="hidden sm:table-cell">{item.academic_year?.name || "N/A"}</TableCell>
                   <TableCell>
                     <Chip
                       color={STATUS_COLORS[item.status] || "default"}
@@ -219,7 +224,7 @@ export const ContributionsList = () => {
                       {item.status}
                     </Chip>
                   </TableCell>
-                  <TableCell>{formatDate(item.created_at)}</TableCell>
+                  <TableCell className="whitespace-nowrap">{formatDate(item.created_at)}</TableCell>
                   <TableCell>
                     {item.file_url ? (
                       <Button

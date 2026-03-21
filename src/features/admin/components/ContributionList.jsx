@@ -294,17 +294,23 @@ export const Contributions = () => {
       
       {/* Table */}
       <Card>
-        <CardBody className="p-0">
+        <CardBody className="p-0 overflow-x-auto">
           <Table 
             aria-label="Contributions list table" 
             isStriped
             removeWrapper
+            isCompact
+            classNames={{
+              wrapper: "min-w-full",
+              table: "min-w-full",
+            }}
           >
             <TableHeader columns={columns}>
               {(column) => (
                 <TableColumn 
                   key={column.key}
-                  align={column.key === "actions" ? "center" : "start"}
+                  align={column.key === "comments" ? "center" : "start"}
+                  className={column.key === "academic_year" || column.key === "cover_photo" ? "hidden lg:table-cell" : ""}
                 >
                   {column.label}
                 </TableColumn>
@@ -317,7 +323,16 @@ export const Contributions = () => {
               {(contribution) => (
                 <TableRow key={contribution.id}>
                   {columns.map((column) => (
-                    <TableCell key={column.key}>
+                    <TableCell 
+                      key={column.key}
+                      className={
+                        column.key === "academic_year" || column.key === "cover_photo" 
+                          ? "hidden lg:table-cell" 
+                          : column.key === "created_at"
+                          ? "whitespace-nowrap"
+                          : ""
+                      }
+                    >
                       {renderCell(contribution, column.key, handleCommentClick, handleDownload)}
                     </TableCell>
                   ))}

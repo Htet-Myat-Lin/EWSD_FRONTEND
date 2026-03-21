@@ -250,7 +250,7 @@ const styles = `
 `;
 
 // ─── Sidebar Content ──────────────────────────────────────────────────────────
-const SidebarContent = ({ menuItems }) => {
+const SidebarContent = ({ menuItems, onClose }) => {
   const location = useLocation();
   const { user } = useAuth();
   const profileImage = resolveProfileImageUrl(user?.profile_path);
@@ -286,6 +286,7 @@ const SidebarContent = ({ menuItems }) => {
             <Link
               key={item.path}
               to={item.path}
+              onClick={onClose}
               className={`sb-nav-item${isActive ? " active" : ""}`}
             >
               <div className="sb-nav-icon">{item.icon}</div>
@@ -351,7 +352,7 @@ export function DashboardLayout({ menuItems }) {
 
         {/* ── Desktop Sidebar ── */}
         <aside
-          className="hidden md:flex flex-col fixed h-full z-50"
+          className="hidden md:flex flex-col fixed h-full z-40"
           style={{ width: "220px" }}
         >
           <SidebarContent menuItems={menuItems} />
@@ -368,7 +369,7 @@ export function DashboardLayout({ menuItems }) {
           >
             {/* Mobile toggle */}
             <NavbarContent className="md:hidden" justify="start">
-              <Button isIconOnly variant="light" onPress={onOpen} size="sm">
+              <Button isIconOnly variant="light" onPress={() => isOpen ? onOpenChange(false) : onOpen()} size="sm">
                 <LuMenu size={20} className="db-menu-icon" />
               </Button>
             </NavbarContent>
@@ -446,11 +447,17 @@ export function DashboardLayout({ menuItems }) {
         </div>
 
         {/* ── Mobile Drawer ── */}
-        <Drawer isOpen={isOpen} onOpenChange={onOpenChange} placement="left">
+        <Drawer 
+          isOpen={isOpen} 
+          onOpenChange={onOpenChange} 
+          placement="left"
+          shouldCloseOnBackdrop
+          shouldCloseOnEscape
+        >
           <DrawerContent>
             {() => (
               <DrawerBody className="p-0">
-                <SidebarContent menuItems={menuItems} />
+                <SidebarContent menuItems={menuItems} onClose={() => onOpenChange(false)} />
               </DrawerBody>
             )}
           </DrawerContent>
