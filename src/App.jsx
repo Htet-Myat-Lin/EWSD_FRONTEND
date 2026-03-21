@@ -14,6 +14,7 @@ import {
   LuCalendarDays,
   LuBookPlus,
   LuFileText,
+  LuInbox,
 } from "react-icons/lu";
 import { LiaUserClockSolid } from "react-icons/lia";
 import { CgProfile } from "react-icons/cg";
@@ -33,6 +34,7 @@ import { EditContribution } from "./features/student/contributions/components/Ed
 import { Contributions } from "./features/admin/components/ContributionList";
 import { NotificationList } from "./features/notification/components/NotificationList";
 import Dashboard from "./features/admin/components/Dashboard";
+import { Inbox } from "./features/admin/components/Inbox";
 import { ManagerDashboard } from "./features/manager/components/Dashboard";
 import { AboutPage } from "./pages/AboutPage";
 import { TermsPage } from "./pages/TermsPage";
@@ -44,6 +46,7 @@ import { useTheme } from "@/context/ThemeContext";
 
 const adminMenuItems = [
   { name: "Dashboard", path: "/admin/dashboard", icon: <LuGauge size={20} /> },
+  { name: "Inbox", path: "/admin/inbox", icon: <LuInbox size={20} /> },
   { name: "Users", path: "/admin/users", icon: <LuUsers size={20} /> },
   { name: "Faculties", path: "/admin/faculties", icon: <LuSchool size={20} /> },
   {
@@ -166,6 +169,7 @@ function App() {
             element={<DashboardLayout menuItems={adminMenuItems} />}
           >
             <Route path="dashboard" element={<Dashboard />} />
+            <Route path="inbox" element={<Inbox />} />
             <Route path="users" element={<Users />} />
             <Route path="faculties" element={<Faculties />} />
             <Route path="academic-years" element={<AcademicYears />} />

@@ -17,6 +17,7 @@ import {
 } from "react-icons/lu";
 import { Header } from "@/components/header/Header";
 import { Footer } from "@/components/footer/Footer";
+import { useSubmitContact } from "@/features/contact/hooks/useSubmitContact";
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
 const styles = `
@@ -427,9 +428,9 @@ const infoCards = [
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export function ContactPage() {
-  const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
+  const [form, setForm] = useState({ full_name: "", email: "", subject: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const { mutate: submitContact, isPending } = useSubmitContact();
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -437,12 +438,11 @@ export function ContactPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
-    // Simulate async submit
-    setTimeout(() => {
-      setLoading(false);
-      setSubmitted(true);
-    }, 1000);
+    submitContact(form, {
+      onSuccess: () => {
+        setSubmitted(true);
+      }
+    });
   };
 
   return (
@@ -509,14 +509,14 @@ export function ContactPage() {
 
                     <form onSubmit={handleSubmit}>
                       <div className="cp-field">
-                        <label className="cp-label" htmlFor="name">Full Name *</label>
+                        <label className="cp-label" htmlFor="full_name">Full Name *</label>
                         <input
                           className="cp-input"
-                          id="name"
-                          name="name"
+                          id="full_name"
+                          name="full_name"
                           type="text"
                           placeholder="John Doe"
-                          value={form.name}
+                          value={form.full_name}
                           onChange={handleChange}
                           required
                         />
@@ -529,7 +529,7 @@ export function ContactPage() {
                           id="email"
                           name="email"
                           type="email"
-                          placeholder="john.doe@university.edu"
+                          placeholder="john.doe@gmail.com"
                           value={form.email}
                           onChange={handleChange}
                           required
@@ -567,11 +567,11 @@ export function ContactPage() {
                       <Button
                         type="submit"
                         className="cp-submit-btn"
-                        isLoading={loading}
-                        disabled={loading}
-                        startContent={!loading && <LuSend size={15} />}
+                        isLoading={isPending}
+                        disabled={isPending}
+                        startContent={!isPending && <LuSend size={15} />}
                       >
-                        {loading ? "Sending..." : "Send Message"}
+                        {isPending ? "Sending..." : "Send Message"}
                       </Button>
                     </form>
                   </div>
