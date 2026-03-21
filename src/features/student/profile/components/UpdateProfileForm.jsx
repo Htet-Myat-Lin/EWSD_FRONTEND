@@ -62,9 +62,7 @@ export function UpdateProfileForm() {
 
   const profileFile = useWatch({ control: profileControl, name: "profile" })?.[0];
   const profilePreview = useMemo(() => {
-    if (profileFile) {
-      return URL.createObjectURL(profileFile);
-    }
+    if (profileFile) return URL.createObjectURL(profileFile);
     return resolveProfileImageUrl(user?.profile_path);
   }, [profileFile, user?.profile_path]);
 
@@ -92,7 +90,6 @@ export function UpdateProfileForm() {
 
   const onSubmitProfile = (data) => {
     if (!user?.id) return;
-
     const trimmedName = data.name?.trim() || "";
     const selectedFile = data.profile?.[0];
     const hasNameChanged = trimmedName !== (user?.name || "");
@@ -106,15 +103,11 @@ export function UpdateProfileForm() {
     if (hasNameChanged) payload.name = trimmedName;
     if (selectedFile) payload.profile_path = selectedFile;
 
-    updateProfile({
-      id: user.id,
-      payload,
-    });
+    updateProfile({ id: user.id, payload });
   };
 
   const onSubmitPassword = (data) => {
     if (!user?.id) return;
-
     updatePassword({
       id: user.id,
       payload: {
@@ -127,17 +120,34 @@ export function UpdateProfileForm() {
 
   const newPassword = useWatch({ control: passwordControl, name: "password" }) || "";
 
+  const inputIconClass = "text-gray-500 dark:text-gray-400";
+
+  const passwordToggleButton = (isVisible, setIsVisible) => (
+    <button
+      type="button"
+      onClick={() => setIsVisible(!isVisible)}
+      className="focus:outline-none"
+    >
+      {isVisible ? (
+        <LuEye size={18} className={`${inputIconClass} pointer-events-none`} />
+      ) : (
+        <LuEyeOff size={18} className={`${inputIconClass} pointer-events-none`} />
+      )}
+    </button>
+  );
+
   return (
     <div className="w-full max-w-3xl mx-auto mt-6 space-y-6">
-      <Card className="w-full shadow-sm border border-gray-200">
+      {/* Profile Details Card */}
+      <Card className="w-full shadow-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
         <CardHeader className="flex flex-col items-start px-6 pt-6 pb-4">
-          <h3 className="text-xl font-bold text-gray-900">Profile Details</h3>
-          <p className="text-sm text-gray-500 mt-1">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">Profile Details</h3>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             Update your display name and photo for your account.
           </p>
         </CardHeader>
 
-        <Divider />
+        <Divider className="dark:bg-gray-700" />
 
         <CardBody className="px-6 py-6">
           <Form
@@ -149,9 +159,9 @@ export function UpdateProfileForm() {
                 <Avatar
                   src={profilePreview || undefined}
                   name={user?.name}
-                  className="w-24 h-24 text-large ring-2 ring-blue-200"
+                  className="w-24 h-24 text-large ring-2 ring-blue-200 dark:ring-blue-800"
                 />
-                <p className="text-xs text-gray-500">JPG/PNG up to 2MB</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">JPG/PNG up to 2MB</p>
               </div>
 
               <div className="flex-1 space-y-5">
@@ -159,17 +169,16 @@ export function UpdateProfileForm() {
                   label="Full Name"
                   placeholder="Enter your full name"
                   labelPlacement="outside"
-                  startContent={<LuUser size={18} className="text-gray-500" />}
+                  startContent={<LuUser size={18} className={inputIconClass} />}
+                  classNames={{
+                    label: "text-gray-700 dark:text-gray-300",
+                    inputWrapper: "border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-900/50",
+                    input: "text-gray-900 dark:text-gray-100",
+                  }}
                   {...registerProfile("name", {
                     required: "Name is required",
-                    minLength: {
-                      value: 2,
-                      message: "Name must be at least 2 characters",
-                    },
-                    maxLength: {
-                      value: 255,
-                      message: "Name must not exceed 255 characters",
-                    },
+                    minLength: { value: 2, message: "Name must be at least 2 characters" },
+                    maxLength: { value: 255, message: "Name must not exceed 255 characters" },
                   })}
                   isInvalid={!!profileErrors.name}
                   errorMessage={profileErrors.name?.message}
@@ -178,7 +187,7 @@ export function UpdateProfileForm() {
                 <div className="space-y-2">
                   <label
                     htmlFor="profile"
-                    className="text-sm font-medium text-gray-700 flex items-center gap-2"
+                    className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center gap-2"
                   >
                     <LuImage size={16} />
                     Profile Photo
@@ -187,17 +196,20 @@ export function UpdateProfileForm() {
                     id="profile"
                     type="file"
                     accept="image/jpeg,image/png,image/jpg"
-                    className="block w-full text-sm text-gray-700 file:mr-4 file:rounded-lg file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-blue-700 hover:file:bg-blue-100"
+                    className="block w-full text-sm text-gray-700 dark:text-gray-300
+                      file:mr-4 file:rounded-lg file:border-0
+                      file:bg-blue-50 dark:file:bg-blue-900/40
+                      file:px-4 file:py-2 file:text-sm file:font-medium
+                      file:text-blue-700 dark:file:text-blue-400
+                      hover:file:bg-blue-100 dark:hover:file:bg-blue-900/60"
                     {...registerProfile("profile", {
                       validate: (files) => {
                         const file = files?.[0];
                         if (!file) return true;
-                        if (!ALLOWED_PROFILE_TYPES.includes(file.type)) {
+                        if (!ALLOWED_PROFILE_TYPES.includes(file.type))
                           return "Only JPG and PNG images are allowed";
-                        }
-                        if (file.size > MAX_PROFILE_SIZE) {
+                        if (file.size > MAX_PROFILE_SIZE)
                           return "Profile photo must be less than 2MB";
-                        }
                         return true;
                       },
                     })}
@@ -214,7 +226,7 @@ export function UpdateProfileForm() {
                 type="submit"
                 color="primary"
                 isLoading={isUpdatingProfile}
-                className="px-8 bg-[#1e3a8a] text-white font-medium"
+                className="px-8 bg-blue-900 dark:bg-blue-600 hover:bg-blue-800 dark:hover:bg-blue-500 text-white font-medium"
               >
                 Save Profile
               </Button>
@@ -223,15 +235,16 @@ export function UpdateProfileForm() {
         </CardBody>
       </Card>
 
-      <Card className="w-full shadow-sm border border-gray-200">
+      {/* Change Password Card */}
+      <Card className="w-full shadow-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
         <CardHeader className="flex flex-col items-start px-6 pt-6 pb-4">
-          <h3 className="text-xl font-bold text-gray-900">Change Password</h3>
-          <p className="text-sm text-gray-500 mt-1">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">Change Password</h3>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             Update your account password to maintain security.
           </p>
         </CardHeader>
 
-        <Divider />
+        <Divider className="dark:bg-gray-700" />
 
         <CardBody className="px-6 py-6">
           <Form
@@ -244,20 +257,13 @@ export function UpdateProfileForm() {
                 placeholder="Enter current password"
                 labelPlacement="outside"
                 type={isVisibleCurrent ? "text" : "password"}
-                startContent={<LuLock size={18} className="text-gray-500" />}
-                endContent={
-                  <button
-                    type="button"
-                    onClick={() => setIsVisibleCurrent(!isVisibleCurrent)}
-                    className="focus:outline-none"
-                  >
-                    {isVisibleCurrent ? (
-                      <LuEye size={18} className="text-gray-500 pointer-events-none" />
-                    ) : (
-                      <LuEyeOff size={18} className="text-gray-500 pointer-events-none" />
-                    )}
-                  </button>
-                }
+                startContent={<LuLock size={18} className={inputIconClass} />}
+                endContent={passwordToggleButton(isVisibleCurrent, setIsVisibleCurrent)}
+                classNames={{
+                  label: "text-gray-700 dark:text-gray-300",
+                  inputWrapper: "border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-900/50",
+                  input: "text-gray-900 dark:text-gray-100",
+                }}
                 {...registerPassword("current_password", {
                   required: "Current password is required",
                 })}
@@ -272,30 +278,17 @@ export function UpdateProfileForm() {
                 placeholder="Enter new password"
                 labelPlacement="outside"
                 type={isVisibleNew ? "text" : "password"}
-                startContent={<LuLock size={18} className="text-gray-500" />}
-                endContent={
-                  <button
-                    type="button"
-                    onClick={() => setIsVisibleNew(!isVisibleNew)}
-                    className="focus:outline-none"
-                  >
-                    {isVisibleNew ? (
-                      <LuEye size={18} className="text-gray-500 pointer-events-none" />
-                    ) : (
-                      <LuEyeOff size={18} className="text-gray-500 pointer-events-none" />
-                    )}
-                  </button>
-                }
+                startContent={<LuLock size={18} className={inputIconClass} />}
+                endContent={passwordToggleButton(isVisibleNew, setIsVisibleNew)}
+                classNames={{
+                  label: "text-gray-700 dark:text-gray-300",
+                  inputWrapper: "border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-900/50",
+                  input: "text-gray-900 dark:text-gray-100",
+                }}
                 {...registerPassword("password", {
                   required: "New password is required",
-                  minLength: {
-                    value: 8,
-                    message: "Password must be at least 8 characters",
-                  },
-                  maxLength: {
-                    value: 16,
-                    message: "Password must not exceed 16 characters",
-                  },
+                  minLength: { value: 8, message: "Password must be at least 8 characters" },
+                  maxLength: { value: 16, message: "Password must not exceed 16 characters" },
                 })}
                 isInvalid={!!passwordErrors.password}
                 errorMessage={passwordErrors.password?.message}
@@ -308,20 +301,13 @@ export function UpdateProfileForm() {
                 placeholder="Confirm new password"
                 labelPlacement="outside"
                 type={isVisibleConfirm ? "text" : "password"}
-                startContent={<LuLock size={18} className="text-gray-500" />}
-                endContent={
-                  <button
-                    type="button"
-                    onClick={() => setIsVisibleConfirm(!isVisibleConfirm)}
-                    className="focus:outline-none"
-                  >
-                    {isVisibleConfirm ? (
-                      <LuEye size={18} className="text-gray-500 pointer-events-none" />
-                    ) : (
-                      <LuEyeOff size={18} className="text-gray-500 pointer-events-none" />
-                    )}
-                  </button>
-                }
+                startContent={<LuLock size={18} className={inputIconClass} />}
+                endContent={passwordToggleButton(isVisibleConfirm, setIsVisibleConfirm)}
+                classNames={{
+                  label: "text-gray-700 dark:text-gray-300",
+                  inputWrapper: "border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-900/50",
+                  input: "text-gray-900 dark:text-gray-100",
+                }}
                 {...registerPassword("password_confirmation", {
                   required: "Please confirm your new password",
                   validate: (value) => value === newPassword || "Passwords do not match",
@@ -336,7 +322,7 @@ export function UpdateProfileForm() {
                 type="submit"
                 color="primary"
                 isLoading={isUpdatingPassword}
-                className="px-8 bg-[#1e3a8a] text-white font-medium"
+                className="px-8 bg-blue-900 dark:bg-blue-600 hover:bg-blue-800 dark:hover:bg-blue-500 text-white font-medium"
               >
                 Update Password
               </Button>

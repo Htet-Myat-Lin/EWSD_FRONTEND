@@ -79,7 +79,7 @@ export function Register() {
 
   return (
     <div className="flex items-center justify-center h-full w-full">
-      <div className="w-full max-w-lg p-6 bg-white rounded-lg">
+      <div className="w-full max-w-lg p-6 bg-white dark:bg-slate-800 rounded-lg">
         <Form
           className="w-full flex flex-col gap-5"
           onSubmit={handleSubmit(handleRegister)}
@@ -90,7 +90,7 @@ export function Register() {
           <LoginRegisterTabs />
 
           <div className="text-left">
-            <h2 className="text-xl font-bold">Create Account</h2>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white">Create Account</h2>
             <p className="text-default-500 text-sm">
               Join the university magazine community
             </p>
@@ -107,7 +107,7 @@ export function Register() {
               name="name"
               placeholder="Enter your full name"
               type="text"
-              startContent={<LuUser size={18} className="text-gray-500" />}
+              startContent={<LuUser size={18} className="text-gray-500 dark:text-slate-400" />}
               isInvalid={!!errors.name}
               errorMessage={errors.name?.message}
               {...register("name", {
@@ -128,7 +128,7 @@ export function Register() {
               name="email"
               placeholder="your.email@university.edu"
               type="email"
-              startContent={<LuMail size={18} className="text-gray-500" />}
+              startContent={<LuMail size={18} className="text-gray-500 dark:text-slate-400" />}
               isInvalid={!!errors.email}
               errorMessage={errors.email?.message}
               {...register("email", {
@@ -139,7 +139,7 @@ export function Register() {
                 },
               })}
             />
-            <p className="text-xs text-gray-500 mt-1">Use your university email address for student</p>
+            <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">Use your university email address for student</p>
           </div>
 
           {/* Faculty */}
@@ -154,7 +154,7 @@ export function Register() {
                   labelPlacement="outside-top"
                   placeholder="Select your faculty"
                   startContent={
-                    <LuSchool size={18} className="text-gray-500" />
+                    <LuSchool size={18} className="text-gray-500 dark:text-slate-400" />
                   }
                   isInvalid={!!errors.faculty_id}
                   errorMessage={errors.faculty_id?.message}
@@ -183,7 +183,7 @@ export function Register() {
                   labelPlacement="outside-top"
                   placeholder="Select your role"
                   startContent={
-                    <LuShieldCheck size={18} className="text-gray-500" />
+                    <LuShieldCheck size={18} className="text-gray-500 dark:text-slate-400" />
                   }
                   isInvalid={!!errors.role_id}
                   errorMessage={errors.role_id?.message}
@@ -208,18 +208,18 @@ export function Register() {
               name="password"
               placeholder="Create a strong password"
               type={isVisible ? "text" : "password"}
-              startContent={<LuLock size={18} className="text-gray-500" />}
+              startContent={<LuLock size={18} className="text-gray-500 dark:text-slate-400" />}
               endContent={
                 isVisible ? (
                   <LuEye
                     size={18}
-                    className="text-gray-500 cursor-pointer"
+                    className="text-gray-500 dark:text-slate-400 cursor-pointer"
                     onClick={toggleVisibility}
                   />
                 ) : (
                   <LuEyeOff
                     size={18}
-                    className="text-gray-500 cursor-pointer"
+                    className="text-gray-500 dark:text-slate-400 cursor-pointer"
                     onClick={toggleVisibility}
                   />
                 )
@@ -234,7 +234,7 @@ export function Register() {
                 },
               })}
             />
-            <p className="text-xs text-gray-500 mt-1">At least 8 characters</p>
+            <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">At least 8 characters</p>
           </div>
 
           {/* Confirm Password */}
@@ -249,18 +249,18 @@ export function Register() {
                 isVisible ? (
                   <LuEye
                     size={18}
-                    className="text-gray-500 cursor-pointer"
+                    className="text-gray-500 dark:text-slate-400 cursor-pointer"
                     onClick={toggleVisibility}
                   />
                 ) : (
                   <LuEyeOff
                     size={18}
-                    className="text-gray-500 cursor-pointer"
+                    className="text-gray-500 dark:text-slate-400 cursor-pointer"
                     onClick={toggleVisibility}
                   />
                 )
               }
-              startContent={<LuLock size={18} className="text-gray-500" />}
+              startContent={<LuLock size={18} className="text-gray-500 dark:text-slate-400" />}
               isInvalid={!!errors.password_confirmation}
               errorMessage={errors.password_confirmation?.message}
               {...register("password_confirmation", {
@@ -275,7 +275,7 @@ export function Register() {
           </div>
 
           {/* Checkbox */}
-          <div className="border w-full border-gray-200 rounded-md p-4 bg-gray-50">
+          <div className="border w-full border-gray-200 dark:border-slate-700 rounded-md p-4 bg-gray-50 dark:bg-slate-900">
             <Checkbox
               color="primary"
               {...register("terms", {
@@ -283,7 +283,7 @@ export function Register() {
               })}
               isInvalid={!!errors.terms}
             >
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-gray-600 dark:text-slate-300">
                 I agree to the{" "}
                 <a href="#" className="text-primary">
                   Terms of Service
@@ -311,14 +311,14 @@ export function Register() {
             {isPending ? "Creating..." : "Create an account"}
           </Button>
 
-          <p className="text-center text-xs text-gray-600 w-full">
+          <p className="text-center text-xs text-gray-600 dark:text-slate-300 w-full">
             By registering, you'll be able to submit articles and contribute to
             the university magazine
           </p>
 
-          <p className="text-center text-sm text-gray-600 w-full">
+          <p className="text-center text-sm text-gray-600 dark:text-slate-300 w-full">
             Need help? Contact{" "}
-            <span className="text-gray-900 cursor-pointer">
+            <span className="text-gray-900 dark:text-white cursor-pointer">
               support@university.edu
             </span>
           </p>

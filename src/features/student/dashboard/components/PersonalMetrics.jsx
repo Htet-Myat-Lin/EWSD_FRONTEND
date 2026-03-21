@@ -13,7 +13,9 @@ const MetricCard = ({ title, value, color, maxValue = 100 }) => {
     ]
 
     return (
-        <Card className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900">
+        <Card classNames={{
+            base: "bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 !shadow-none"
+        }}>
             <CardBody className="flex flex-col items-center justify-center p-6">
                 <ResponsiveContainer width="100%" height={180}>
                     <RadialBarChart

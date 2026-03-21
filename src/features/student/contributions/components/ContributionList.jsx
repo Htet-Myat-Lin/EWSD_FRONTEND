@@ -170,10 +170,10 @@ const ContributionList = () => {
         </Select>
       </div>
 
-      <div className="flex items-center justify-between px-4 py-3 bg-gray-50 rounded-lg border border-gray-200">
-        <div className="text-sm text-gray-600">
-          Showing <span className="font-semibold text-gray-900">{contributions.length}</span> of{" "}
-          <span className="font-semibold text-gray-900">{total}</span> contribution{total !== 1 ? 's' : ''}
+      <div className="flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+        <div className="text-sm text-gray-600 dark:text-gray-400">
+          Showing <span className="font-semibold text-gray-900 dark:text-gray-100">{contributions.length}</span> of{" "}
+          <span className="font-semibold text-gray-900 dark:text-gray-100">{total}</span> contribution{total !== 1 ? 's' : ''}
         </div>
         {activeFiltersCount > 0 && (
           <Chip size="sm" variant="flat" color="primary">

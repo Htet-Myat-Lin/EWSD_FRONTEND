@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
+import { ThemeProvider } from "./context/ThemeContext";
 
 const queryClient = new QueryClient();
 
@@ -34,11 +35,13 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <HeroUIProvider theme={theme}>
-          <AuthProvider>
-            <App />
-          </AuthProvider>
-        </HeroUIProvider>
+        <ThemeProvider>
+          <HeroUIProvider theme={theme}>
+            <AuthProvider>
+              <App />
+            </AuthProvider>
+          </HeroUIProvider>
+        </ThemeProvider>
       </BrowserRouter>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>

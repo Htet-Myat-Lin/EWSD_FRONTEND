@@ -19,11 +19,11 @@ export const LoginRegisterTabs = () => {
             radius="full"
             variant="light"
             classNames={{
-              tabList: "bg-default-100/80 p-1 border-none relative",
-              cursor: "bg-background shadow-md border border-default-200",
+              tabList: "bg-default-100/80 dark:bg-slate-700/80 p-1 border-none relative",
+              cursor: "bg-background dark:bg-slate-600 shadow-md border border-default-200 dark:border-slate-500",
               tab: "h-9",
               tabContent:
-                "group-data-[selected=true]:text-default-900 font-medium text-default-500",
+                "group-data-[selected=true]:text-default-900 dark:text-white font-medium text-default-500 dark:text-slate-400",
             }}
           >
             <Tab key="login" title="Login" />

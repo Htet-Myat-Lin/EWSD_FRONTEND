@@ -22,6 +22,7 @@ import { useLogout } from "@/features/auth/hooks/useLogout";
 import { useGetUnreadCount } from "@/features/notification/hooks/useGetUnreadCount";
 import { Link as RouterLink } from "react-router-dom";
 import { resolveProfileImageUrl } from "@/utils/helpers";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
 const styles = `
@@ -32,7 +33,7 @@ const styles = `
     display: flex;
     flex-direction: column;
     height: 100%;
-    background: #1e3a8a;
+    background: var(--sidebar-bg);
   }
 
   /* Logo */
@@ -66,7 +67,7 @@ const styles = `
     font-weight: 700;
     line-height: 1;
     letter-spacing: -0.01em;
-    color: #fff;
+    color: var(--sidebar-text);
   }
 
   .sb-brand-mag { color: #f57c00; }
@@ -97,19 +98,19 @@ const styles = `
     text-decoration: none;
     font-size: 0.825rem;
     font-weight: 400;
-    color: rgba(255,255,255,0.6);
+    color: var(--sidebar-text-muted);
     transition: all 0.18s;
     position: relative;
   }
 
   .sb-nav-item:hover {
-    background: rgba(255,255,255,0.08);
-    color: #fff;
+    background: var(--sidebar-hover);
+    color: var(--sidebar-text);
   }
 
   .sb-nav-item.active {
-    background: rgba(255,255,255,0.12);
-    color: #fff;
+    background: var(--sidebar-active);
+    color: var(--sidebar-text);
     font-weight: 500;
   }
 
@@ -177,7 +178,7 @@ const styles = `
   .sb-user-name {
     font-size: 0.8rem;
     font-weight: 500;
-    color: #fff;
+    color: var(--sidebar-text);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -213,8 +214,8 @@ const styles = `
 
   /* Topbar */
   .db-topbar {
-    background: #ffffff !important;
-    border-bottom: 1px solid #f0f0f0 !important;
+    background: var(--topbar-bg) !important;
+    border-bottom: 1px solid var(--topbar-border) !important;
     box-shadow: none !important;
   }
 
@@ -222,15 +223,29 @@ const styles = `
     width: 34px;
     height: 34px;
     border-radius: 8px;
-    border: 1px solid #f0f0f0 !important;
-    background: #fff !important;
+    border: 1px solid var(--notif-btn-border) !important;
+    background: var(--notif-btn-bg) !important;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: border-color 0.18s;
     cursor: pointer;
   }
-  .db-notif-btn:hover { border-color: #d1d5db !important; }
+  .db-notif-btn:hover { border-color: var(--notif-btn-hover) !important; }
+
+  .db-topbar-text {
+    font-size: 0.875rem;
+    color: var(--topbar-text);
+  }
+  .db-topbar-text-bold {
+    color: var(--topbar-text-bold);
+    font-weight: 500;
+  }
+
+  .db-brand-primary { color: var(--primary); }
+  .db-brand-accent { color: #f57c00; }
+  .db-menu-icon { color: var(--notif-icon); }
+  .db-content-bg { background: var(--content-bg); }
 `;
 
 // ─── Sidebar Content ──────────────────────────────────────────────────────────
@@ -331,7 +346,7 @@ export function DashboardLayout({ menuItems }) {
   return (
     <>
       <style>{styles}</style>
-      <div className="flex h-screen w-full" style={{ background: "#f8fafc" }}>
+      <div className="flex h-screen w-full db-content-bg">
 
         {/* ── Desktop Sidebar ── */}
         <aside
@@ -353,7 +368,7 @@ export function DashboardLayout({ menuItems }) {
             {/* Mobile toggle */}
             <NavbarContent className="md:hidden" justify="start">
               <Button isIconOnly variant="light" onPress={onOpen} size="sm">
-                <LuMenu size={20} style={{ color: "#4b5563" }} />
+                <LuMenu size={20} className="db-menu-icon" />
               </Button>
             </NavbarContent>
 
@@ -361,17 +376,17 @@ export function DashboardLayout({ menuItems }) {
             <NavbarContent className="md:hidden" justify="center">
               <NavbarBrand>
                 <span style={{ fontFamily: "'Lora', serif", fontWeight: 700, fontSize: "1rem" }}>
-                  <span style={{ color: "#1e3a8a" }}>Uni</span>
-                  <span style={{ color: "#f57c00" }}>Magazine</span>
+                  <span className="db-brand-primary">Uni</span>
+                  <span className="db-brand-accent">Magazine</span>
                 </span>
               </NavbarBrand>
             </NavbarContent>
 
             {/* Desktop greeting */}
             <NavbarContent className="hidden md:flex" justify="start">
-              <span style={{ fontSize: "0.875rem", color: "#6b7280" }}>
+              <span className="db-topbar-text">
                 Welcome back,{" "}
-                <span style={{ color: "#111827", fontWeight: 500 }}>
+                <span className="db-topbar-text-bold">
                   {user?.name?.split(" ")[0]}
                 </span>
               </span>
@@ -388,11 +403,13 @@ export function DashboardLayout({ menuItems }) {
                     isInvisible={unreadCount === 0}
                   >
                     <button className="db-notif-btn">
-                      <LuBell size={16} style={{ color: "#4b5563" }} />
+                      <LuBell size={16} className="db-menu-icon" />
                     </button>
                   </Badge>
                 </Link>
               )}
+
+              <ThemeToggle />
 
               <Dropdown placement="bottom-end">
                 <DropdownTrigger>

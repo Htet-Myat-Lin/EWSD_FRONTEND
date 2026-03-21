@@ -93,9 +93,9 @@ const StatCard = ({ label, value, color, icon }) => {
 const ChartTooltip = ({ active, payload, label, suffix = "" }) => {
   if (!active || !payload?.length) return null;
   return (
-    <div className="bg-white border border-default-100 rounded-lg shadow-sm p-2.5 text-xs">
-      <p className="font-medium text-default-700 mb-0.5">{label || payload[0].name}</p>
-      <p className="text-default-500">{payload[0].value} {suffix}</p>
+    <div className="bg-white dark:bg-slate-800 border border-default-100 dark:border-slate-700 rounded-lg shadow-sm p-2.5 text-xs">
+      <p className="font-medium text-default-700 dark:text-slate-200 mb-0.5">{label || payload[0].name}</p>
+      <p className="text-default-500 dark:text-slate-400">{payload[0].value} {suffix}</p>
     </div>
   );
 };
@@ -107,7 +107,7 @@ const ContributorRankBadge = ({ index }) => {
     "bg-[#F5C4B3] text-[#712B13]",
   ];
   return (
-    <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-medium shrink-0 ${styles[index] ?? "bg-default-100 text-default-400"}`}>
+    <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-medium shrink-0 ${styles[index] ?? "bg-default-100 dark:bg-slate-700 text-default-400 dark:text-slate-400"}`}>
       {index + 1}
     </span>
   );
@@ -251,7 +251,7 @@ export const ManagerDashboard = () => {
               <p className="text-xs text-default-400 text-center py-6">No contributors yet</p>
             ) : (
               top_contributors.map((contributor, i) => (
-                <div key={i} className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-default-50 hover:bg-default-100 transition-colors">
+                <div key={i} className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-default-50 dark:bg-slate-800/50 hover:bg-default-100 dark:hover:bg-slate-700/50 transition-colors">
                   <ContributorRankBadge index={i} />
                   <Avatar src={resolveProfileImageUrl(contributor.profile_path)} name={contributor.name} size="sm" color="primary" isBordered />
                   <div className="flex-1 min-w-0">

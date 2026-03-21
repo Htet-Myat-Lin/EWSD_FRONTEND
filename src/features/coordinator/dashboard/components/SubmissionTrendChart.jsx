@@ -77,10 +77,10 @@ const SubmissionTrendChart = ({ submissionTrend }) => {
                   contentStyle={{
                     backgroundColor: "var(--color-surface-raised)",
                     border: "none",
-                    color: "#000",
+                    color: "var(--color-text-1)",
                   }}
-                  itemStyle={{ color: "#000" }}
-                  labelStyle={{ color: "#000" }}
+                  itemStyle={{ color: "var(--color-text-2)" }}
+                  labelStyle={{ color: "var(--color-text-1)" }}
                   formatter={(value) => [value, "Submissions"]}
                   labelFormatter={(label) => label}
                 />

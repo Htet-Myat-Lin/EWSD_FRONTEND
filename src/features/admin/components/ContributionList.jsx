@@ -280,10 +280,10 @@ export const Contributions = () => {
       </div>
 
       {/* Stats Bar */}
-      <div className="flex items-center justify-between px-4 py-3 bg-gray-50 rounded-lg border border-gray-200">
-        <div className="text-sm text-gray-600">
-          Showing <span className="font-semibold text-gray-900">{contributions.length}</span> of{" "}
-          <span className="font-semibold text-gray-900">{total}</span> contribution{total !== 1 ? 's' : ''}
+      <div className="flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700">
+        <div className="text-sm text-gray-600 dark:text-slate-300">
+          Showing <span className="font-semibold text-gray-900 dark:text-white">{contributions.length}</span> of{" "}
+          <span className="font-semibold text-gray-900 dark:text-white">{total}</span> contribution{total !== 1 ? 's' : ''}
         </div>
         {activeFiltersCount > 0 && (
           <Chip size="sm" variant="flat" color="primary">

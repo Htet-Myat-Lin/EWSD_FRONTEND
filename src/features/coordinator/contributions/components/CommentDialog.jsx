@@ -179,7 +179,7 @@ export function CommentDialog({ isOpen, onOpenChange, contribution }) {
           <ModalContent>
             <ModalBody>
               <div className="flex items-center justify-center py-8">
-                <p className="text-gray-500">Loading...</p>
+                <p className="text-gray-500 dark:text-slate-400">Loading...</p>
               </div>
             </ModalBody>
           </ModalContent>
@@ -195,16 +195,16 @@ export function CommentDialog({ isOpen, onOpenChange, contribution }) {
                 <ModalBody>
                   {/* Only show contribution details for admin/coordinator */}
                   {contribution && (
-                    <div className="mb-4 p-3 bg-gray-50 rounded-lg">
-                      <p className="text-sm font-medium text-gray-700">
+                    <div className="mb-4 p-3 bg-gray-50 dark:bg-slate-800 rounded-lg">
+                      <p className="text-sm font-medium text-gray-700 dark:text-slate-300">
                         {isStudent || isCoordinator
                           ? "Commenting on:"
                           : "View Comments for:"}
                       </p>
-                      <p className="text-sm text-gray-900">
+                      <p className="text-sm text-gray-900 dark:text-white">
                         {contribution.title}
                       </p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-gray-500 dark:text-slate-400">
                         by {contribution.user?.name || "Unknown"}
                       </p>
                     </div>
@@ -213,7 +213,7 @@ export function CommentDialog({ isOpen, onOpenChange, contribution }) {
                   {/* Comments List */}
                   <div className="mb-4 max-h-64 overflow-y-auto">
                     {isFetching ? (
-                      <div className="text-center py-4 text-gray-500">
+                      <div className="text-center py-4 text-gray-500 dark:text-slate-400">
                         Loading comments...
                       </div>
                     ) : comments.length > 0 ? (
@@ -221,7 +221,7 @@ export function CommentDialog({ isOpen, onOpenChange, contribution }) {
                         {comments.map((commentItem) => (
                           <div
                             key={commentItem.id}
-                            className="p-3 bg-gray-50 rounded-lg"
+                            className="p-3 bg-gray-50 dark:bg-slate-800 rounded-lg"
                           >
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center gap-2">
@@ -234,10 +234,10 @@ export function CommentDialog({ isOpen, onOpenChange, contribution }) {
                                   )}
                                 />
                                 <div>
-                                  <p className="text-sm font-medium text-gray-900">
+                                  <p className="text-sm font-medium text-gray-900 dark:text-white">
                                     {commentItem.user?.name || "Unknown User"}
                                   </p>
-                                  <p className="text-xs text-gray-500">
+                                  <p className="text-xs text-gray-500 dark:text-slate-400">
                                     {formatDate(commentItem.created_at)}
                                   </p>
                                 </div>
@@ -303,7 +303,7 @@ export function CommentDialog({ isOpen, onOpenChange, contribution }) {
                                 </div>
                               </div>
                             ) : (
-                              <p className="text-sm text-gray-700 ml-10">
+                              <p className="text-sm text-gray-700 dark:text-slate-300 ml-10">
                                 {commentItem.content}
                               </p>
                             )}
@@ -360,11 +360,11 @@ export function CommentDialog({ isOpen, onOpenChange, contribution }) {
                             {/* Replies */}
                             {commentItem.replies &&
                               commentItem.replies.length > 0 && (
-                                <div className="ml-8 mt-2 space-y-2 border-l-2 border-gray-200 pl-3">
+                                <div className="ml-8 mt-2 space-y-2 border-l-2 border-gray-200 dark:border-slate-700 pl-3">
                                   {commentItem.replies.map((reply) => (
                                     <div
                                       key={reply.id}
-                                      className="p-2 bg-white rounded"
+                                      className="p-2 bg-white dark:bg-slate-700 rounded"
                                     >
                                       <div className="flex items-center justify-between mb-1">
                                         <div className="flex items-center gap-2">
@@ -373,10 +373,10 @@ export function CommentDialog({ isOpen, onOpenChange, contribution }) {
                                             size="xs"
                                             className="text-xs"
                                           />
-                                          <span className="text-xs font-medium text-gray-900">
+                                          <span className="text-xs font-medium text-gray-900 dark:text-white">
                                             {reply.user?.name || "Unknown User"}
                                           </span>
-                                          <span className="text-xs text-gray-500">
+                                          <span className="text-xs text-gray-500 dark:text-slate-400">
                                             {formatDate(reply.created_at)}
                                           </span>
                                         </div>
@@ -450,7 +450,7 @@ export function CommentDialog({ isOpen, onOpenChange, contribution }) {
                                           </div>
                                         </div>
                                       ) : (
-                                        <p className="text-sm text-gray-700 ml-6">
+                                        <p className="text-sm text-gray-700 dark:text-slate-300 ml-6">
                                           {reply.content}
                                         </p>
                                       )}
@@ -462,7 +462,7 @@ export function CommentDialog({ isOpen, onOpenChange, contribution }) {
                         ))}
                       </div>
                     ) : (
-                      <div className="text-center py-4 text-gray-500">
+                      <div className="text-center py-4 text-gray-500 dark:text-slate-400">
                         No comments yet.
                       </div>
                     )}

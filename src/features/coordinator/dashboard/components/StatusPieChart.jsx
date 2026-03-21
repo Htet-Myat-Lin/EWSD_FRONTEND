@@ -102,8 +102,8 @@ const StatusPieChart = ({ statusDistribution }) => {
                     backgroundColor: "var(--color-surface-raised)",
                     border: "none",
                   }}
-                  itemStyle={{ color: "#000" }}
-                  labelStyle={{ color: "#000" }}
+                  itemStyle={{ color: "var(--color-text-2)" }}
+                  labelStyle={{ color: "var(--color-text-1)" }}
                   formatter={(value, name) => [value, name]}
                 />
                 <Legend payload={statusLegendPayload} />

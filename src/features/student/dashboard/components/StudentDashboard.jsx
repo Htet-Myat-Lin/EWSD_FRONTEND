@@ -72,7 +72,7 @@ export const StudentDashboard = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 md:p-2">
+        <div className="bg-gray-50 dark:bg-gray-900 p-4 md:p-2">
             <div className="max-w-full space-y-6">
                 {/* Top Bar */}
                 <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
@@ -94,7 +94,7 @@ export const StudentDashboard = () => {
 
                 {/* Personal Metrics */}
                 <section>
-                    <h2 className="text-xl font-semibold mb-4">Your Performance</h2>
+                    <h2 className="text-xl font-semibold mb-4 dark:text-gray-100">Your Performance</h2>
                     <PersonalMetrics metrics={safeData.personal_metrics} />
                 </section>
 
@@ -108,7 +108,7 @@ export const StudentDashboard = () => {
 
                 {/* Status Breakdown */}
                 <section>
-                    <h2 className="text-xl font-semibold mb-4">Submission Status</h2>
+                    <h2 className="text-xl font-semibold mb-4 dark:text-gray-100">Submission Status</h2>
                     <StatusBreakdown breakdown={safeData.status_breakdown} />
                 </section>
 

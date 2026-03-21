@@ -10,15 +10,11 @@ const baseTerms = [
   "You retain copyright of your work but grant non-exclusive publication rights.",
 ];
 
-export function TermsAndConditions({
-  isAgreed,
-  onAgreeChange,
-}) {
+export function TermsAndConditions({ isAgreed, onAgreeChange }) {
   const { data: yearsRes } = useAcademicYears();
 
   const academicYears = yearsRes?.data ?? [];
-  const targetYear =
-    academicYears.find((year) => year.is_active);
+  const targetYear = academicYears.find((year) => year.is_active);
   const finalClosureDate = targetYear?.final_closure_date ?? "TBD";
 
   const terms = [
@@ -28,27 +24,34 @@ export function TermsAndConditions({
   ];
 
   return (
-    <Card shadow="none" className="border border-[#e2e8f0]" radius="lg">
+    <Card
+      shadow="none"
+      className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800"
+      radius="lg"
+    >
       <CardBody className="p-4 sm:p-6">
-        <h2 className="mb-4 sm:mb-5 text-lg sm:text-xl font-bold text-[#1a1a2e]">
+        <h2 className="mb-4 sm:mb-5 text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100">
           Terms and Conditions
         </h2>
 
-        <div className="rounded-lg bg-[#eef2f7] p-4 sm:p-5">
-          <p className="mb-3 sm:mb-4 text-xs sm:text-sm font-medium text-[#1e3a5f] leading-relaxed">
+        <div className="rounded-lg bg-blue-50 dark:bg-blue-950/30 p-4 sm:p-5">
+          <p className="mb-3 sm:mb-4 text-xs sm:text-sm font-medium text-blue-900 dark:text-blue-300 leading-relaxed">
             By submitting content to the University Magazine, you agree to the
             following terms:
           </p>
           <ol className="flex flex-col gap-2 sm:gap-2.5">
             {terms.map((term, index) => (
-              <li key={index} className="text-xs sm:text-sm text-[#1e3a5f] leading-relaxed">
+              <li
+                key={index}
+                className="text-xs sm:text-sm text-blue-900 dark:text-blue-200 leading-relaxed"
+              >
                 {index + 1}. {term}
               </li>
             ))}
           </ol>
         </div>
 
-        <div className="mt-4 sm:mt-5 rounded-lg border border-[#e2e8f0] bg-[#f8f9fb] p-3 sm:p-4">
+        <div className="mt-4 sm:mt-5 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 p-3 sm:p-4">
           <Checkbox
             isSelected={isAgreed}
             onValueChange={onAgreeChange}
@@ -56,7 +59,7 @@ export function TermsAndConditions({
             size="md"
             classNames={{
               base: "items-start max-w-full",
-              label: "text-xs sm:text-sm text-[#1a1a2e] leading-relaxed",
+              label: "text-xs sm:text-sm text-gray-900 dark:text-gray-100 leading-relaxed",
             }}
           >
             I have read and agree to the Terms and Conditions. I confirm that

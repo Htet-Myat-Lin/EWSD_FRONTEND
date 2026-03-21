@@ -13,30 +13,22 @@ export function DetailsForm({
   initialCoverPhotoName = "Current cover photo",
   allowCoverPhotoRemoval = true,
 }) {
-  // const { data: yearsRes, isPending: yearsLoading } = useAcademicYears();
   const { data: catsRes, isPending: catsLoading } = useCategories();
 
-  // const academicYears = yearsRes?.data ?? [];
   const allCategories = catsRes?.data ?? [];
-  
-  // Filter categories based on contribution type
+
   const categories = allCategories.filter((cat) => {
-    if (contributionType === "article") {
-      return cat.type === "article";
-    } else if (contributionType === "photography") {
-      return cat.type === "gallery";
-    }
+    if (contributionType === "article") return cat.type === "article";
+    if (contributionType === "photography") return cat.type === "gallery";
     return false;
   });
-  
+
   const loadingDropdowns = catsLoading;
   const [previewUrl, setPreviewUrl] = useState(null);
 
   useEffect(() => {
     return () => {
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
-      }
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
     };
   }, [previewUrl]);
 
@@ -57,16 +49,25 @@ export function DetailsForm({
     }
   };
 
+  const inputClassNames = {
+    label: "text-sm font-medium text-gray-900 dark:text-gray-100",
+    inputWrapper: "border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-900/50",
+    input: "text-gray-900 dark:text-gray-100",
+  };
+
   return (
-    <Card shadow="none" className="border border-[#e2e8f0]" radius="lg">
+    <Card
+      shadow="none"
+      className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800"
+      radius="lg"
+    >
       <CardBody className="p-4 sm:p-6">
-        <h2 className="mb-4 sm:mb-5 text-lg sm:text-xl font-bold text-[#1a1a2e]">
-          {contributionType === "article"
-            ? "Article Details"
-            : "Photography Details"}
+        <h2 className="mb-4 sm:mb-5 text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100">
+          {contributionType === "article" ? "Article Details" : "Photography Details"}
         </h2>
 
         <div className="flex flex-col gap-4 sm:gap-5">
+          {/* Title */}
           <Input
             label="Title"
             placeholder={
@@ -79,12 +80,10 @@ export function DetailsForm({
             variant="bordered"
             isRequired
             labelPlacement="outside"
-            classNames={{
-              label: "text-sm font-medium text-[#1a1a2e]",
-              inputWrapper: "border-[#e2e8f0]",
-            }}
+            classNames={inputClassNames}
           />
 
+          {/* Abstract / Caption */}
           {contributionType === "article" ? (
             <Textarea
               label="Abstract"
@@ -95,10 +94,7 @@ export function DetailsForm({
               isRequired
               labelPlacement="outside"
               minRows={4}
-              classNames={{
-                label: "text-sm font-medium text-[#1a1a2e]",
-                inputWrapper: "border-[#e2e8f0]",
-              }}
+              classNames={inputClassNames}
             />
           ) : (
             <Textarea
@@ -110,10 +106,7 @@ export function DetailsForm({
               isRequired
               labelPlacement="outside"
               minRows={3}
-              classNames={{
-                label: "text-sm font-medium text-[#1a1a2e]",
-                inputWrapper: "border-[#e2e8f0]",
-              }}
+              classNames={inputClassNames}
             />
           )}
 
@@ -132,8 +125,9 @@ export function DetailsForm({
             labelPlacement="outside"
             startContent={loadingDropdowns ? <Spinner size="sm" /> : null}
             classNames={{
-              label: "text-sm font-medium text-[#1a1a2e]",
-              trigger: "border-[#e2e8f0]",
+              label: "text-sm font-medium text-gray-900 dark:text-gray-100",
+              trigger: "border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-900/50",
+              value: "text-gray-900 dark:text-gray-100",
             }}
           >
             {categories.map((cat) => (
@@ -143,14 +137,16 @@ export function DetailsForm({
             ))}
           </Select>
 
-          {/* Cover Photo Upload */}
+          {/* Cover Photo */}
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-[#1a1a2e]">
-              Cover Photo <span className="text-[#64748b] font-normal">(Optional)</span>
+            <label className="text-sm font-medium text-gray-900 dark:text-gray-100">
+              Cover Photo{" "}
+              <span className="text-gray-500 dark:text-gray-400 font-normal">(Optional)</span>
             </label>
 
+            {/* Existing cover photo preview */}
             {!coverPhoto && initialCoverPhotoUrl && (
-              <div className="rounded-lg border border-[#e2e8f0] bg-white p-3">
+              <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 p-3">
                 <div className="flex items-center gap-3">
                   <img
                     src={initialCoverPhotoUrl}
@@ -158,10 +154,10 @@ export function DetailsForm({
                     className="h-16 w-16 rounded object-cover"
                   />
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-medium text-[#1a1a2e]">
+                    <p className="truncate text-sm font-medium text-gray-900 dark:text-gray-100">
                       {initialCoverPhotoName}
                     </p>
-                    <p className="text-xs text-[#64748b]">
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
                       Upload a new image to replace it.
                     </p>
                   </div>
@@ -169,14 +165,15 @@ export function DetailsForm({
               </div>
             )}
 
+            {/* Upload dropzone */}
             {!coverPhoto ? (
-              <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-[#e2e8f0] bg-[#f8f9fb] px-4 py-6 transition-colors hover:border-[#3b82f6] hover:bg-[#eff6ff]">
-                <HiPhoto className="h-10 w-10 text-[#94a3b8]" />
+              <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-900/50 px-4 py-6 transition-colors hover:border-blue-500 dark:hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/30">
+                <HiPhoto className="h-10 w-10 text-gray-400 dark:text-gray-500" />
                 <div className="text-center">
-                  <p className="text-sm font-medium text-[#1a1a2e]">
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
                     {initialCoverPhotoUrl ? "Replace Cover Photo" : "Upload Cover Photo"}
                   </p>
-                  <p className="mt-1 text-xs text-[#64748b]">
+                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                     JPG, JPEG, PNG up to 2MB
                   </p>
                 </div>
@@ -188,7 +185,8 @@ export function DetailsForm({
                 />
               </label>
             ) : (
-              <div className="relative rounded-lg border border-[#e2e8f0] bg-white p-3">
+              /* Selected cover photo preview */
+              <div className="relative rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 p-3">
                 <div className="flex items-center gap-3">
                   {previewUrl && (
                     <img
@@ -198,10 +196,10 @@ export function DetailsForm({
                     />
                   )}
                   <div className="flex-1 min-w-0">
-                    <p className="truncate text-sm font-medium text-[#1a1a2e]">
+                    <p className="truncate text-sm font-medium text-gray-900 dark:text-gray-100">
                       {coverPhoto.name}
                     </p>
-                    <p className="text-xs text-[#64748b]">
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
                       {(coverPhoto.size / 1024).toFixed(1)} KB
                     </p>
                   </div>
@@ -209,7 +207,7 @@ export function DetailsForm({
                     <button
                       type="button"
                       onClick={removeCoverPhoto}
-                      className="rounded-lg bg-[#fee2e2] px-3 py-1.5 text-xs font-medium text-[#dc2626] transition-colors hover:bg-[#fecaca]"
+                      className="rounded-lg bg-red-100 dark:bg-red-950/50 px-3 py-1.5 text-xs font-medium text-red-600 dark:text-red-400 transition-colors hover:bg-red-200 dark:hover:bg-red-900/50"
                     >
                       Remove
                     </button>

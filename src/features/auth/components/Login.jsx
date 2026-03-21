@@ -30,14 +30,14 @@ export function Login() {
 
   return (
     <div className="flex items-center justify-center min-h-screen w-full">
-      <div className="w-full max-w-lg p-6 bg-white rounded-lg space-y-6">
+      <div className="w-full max-w-lg p-6 bg-white dark:bg-slate-800 rounded-lg space-y-6">
 
         <LoginRegisterHeading />
 
         <LoginRegisterTabs />
 
         <div className="text-left">
-          <h2 className="text-xl font-bold">Welcome Back</h2>
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">Welcome Back</h2>
           <p className="text-default-500 text-sm">
             Sign in to access your account
           </p>
@@ -53,7 +53,7 @@ export function Login() {
               label="Email"
               placeholder="Enter your email"
               labelPlacement="outside"
-              startContent={<LuMail size={18} className="text-gray-500" />}
+              startContent={<LuMail size={18} className="text-gray-500 dark:text-slate-400" />}
               {...register("email", {
                 required: "Email is required",
               })}
@@ -72,18 +72,18 @@ export function Login() {
                 isVisible ? (
                   <LuEye
                     size={18}
-                    className="text-gray-500 cursor-pointer"
+                    className="text-gray-500 dark:text-slate-400 cursor-pointer"
                     onClick={toggleVisibility}
                   />
                 ) : (
                   <LuEyeOff
                     size={18}
-                    className="text-gray-500 cursor-pointer"
+                    className="text-gray-500 dark:text-slate-400 cursor-pointer"
                     onClick={toggleVisibility}
                   />
                 )
               }
-              startContent={<LuLock size={18} className="text-gray-500" />}
+              startContent={<LuLock size={18} className="text-gray-500 dark:text-slate-400" />}
               {...register("password", { required: "Password is required" })}
               isInvalid={!!errors.password}
               errorMessage={errors.password?.message}
@@ -92,11 +92,11 @@ export function Login() {
 
           <div className="w-full flex items-center justify-between">
             <Checkbox color="primary">
-              <span className="text-gray-600 text-sm">Remember me</span>
+              <span className="text-gray-600 dark:text-slate-300 text-sm">Remember me</span>
             </Checkbox>
             <Link
               to="/forgot-password"
-              className="text-sm text-gray-600 hover:text-gray-900"
+              className="text-sm text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white"
             >
               Forgot password?
             </Link>
@@ -111,9 +111,9 @@ export function Login() {
             {isPending ? "Logging in..." : "Login"}
           </Button>
 
-          <p className="text-center text-sm text-gray-600 w-full">
+          <p className="text-center text-sm text-gray-600 dark:text-slate-300 w-full">
             Need help? Contact{" "}
-            <span className="text-gray-900 cursor-pointer">
+            <span className="text-gray-900 dark:text-white cursor-pointer">
               support@university.edu
             </span>
           </p>

@@ -110,9 +110,9 @@ const contributionType =
 
   if (isPending) {
     return (
-      <main className="min-h-screen bg-[#f8f9fb]">
+      <main className="min-h-screen bg-[#f8f9fb] dark:bg-slate-900">
         <div className="mx-auto max-w-4xl px-3 py-10 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-2 text-[#64748b]">
+          <div className="flex items-center gap-2 text-[#64748b] dark:text-slate-400">
             <Spinner size="sm" />
             <p>Loading contribution...</p>
           </div>
@@ -123,12 +123,12 @@ const contributionType =
 
   if (isError || !contribution) {
     return (
-      <main className="min-h-screen bg-[#f8f9fb]">
+      <main className="min-h-screen bg-[#f8f9fb] dark:bg-slate-900">
         <div className="mx-auto max-w-4xl px-3 py-10 sm:px-6 lg:px-8">
-          <Card shadow="none" className="border border-[#fecaca]" radius="lg">
+          <Card shadow="none" className="border border-[#fecaca] dark:border-red-900/50 bg-white dark:bg-slate-800" radius="lg">
             <CardBody>
-              <h2 className="text-lg font-semibold text-[#b91c1c]">Unable to load contribution</h2>
-              <p className="mt-2 text-sm text-[#7f1d1d]">
+              <h2 className="text-lg font-semibold text-[#b91c1c] dark:text-red-400">Unable to load contribution</h2>
+              <p className="mt-2 text-sm text-[#7f1d1d] dark:text-red-300">
                 {error?.response?.data?.message || "Contribution not found or you do not have access."}
               </p>
               <div className="mt-4">
@@ -148,13 +148,13 @@ const contributionType =
   }
 
   return (
-    <main className="min-h-screen bg-[#f8f9fb]">
+    <main className="min-h-screen bg-[#f8f9fb] dark:bg-slate-900">
       <div className="mx-auto max-w-4xl px-3 py-6 sm:px-6 sm:py-10 lg:px-8">
         <div className="mb-6 sm:mb-8">
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#1a1a2e]">
+          <h1 className="text-2xl sm:text-3xl font-bold text-[#1a1a2e] dark:text-white">
             Edit Contribution
           </h1>
-          <p className="mt-1.5 sm:mt-2 text-sm sm:text-base text-[#64748b] leading-relaxed">
+          <p className="mt-1.5 sm:mt-2 text-sm sm:text-base text-[#64748b] dark:text-slate-400 leading-relaxed">
             Update your contribution details and file before final closure.
           </p>
         </div>
@@ -189,12 +189,12 @@ const contributionType =
         )}
 
         {isAfterFinalClosureDate && (
-          <div className="my-6 flex items-start gap-3 rounded-xl border-l-4 border-[#dc2626] bg-[#fef2f2] px-4 py-4 shadow-sm">
+          <div className="my-6 flex items-start gap-3 rounded-xl border-l-4 border-[#dc2626] bg-[#fef2f2] dark:bg-red-900/20 px-4 py-4 shadow-sm">
             <div>
-              <p className="text-sm font-bold text-[#dc2626]">
+              <p className="text-sm font-bold text-[#dc2626] dark:text-red-400">
                 Editing Is Closed
               </p>
-              <p className="mt-0.5 text-xs text-[#b91c1c]">
+              <p className="mt-0.5 text-xs text-[#b91c1c] dark:text-red-300">
                 The final closure date (
                 <span className="font-semibold">{finalClosureDateText}</span>) has
                 passed. This contribution can no longer be edited.
@@ -209,7 +209,7 @@ const contributionType =
               <Button
                 variant="bordered"
                 onPress={handleBack}
-                className="border-[#e2e8f0] text-[#1a1a2e]"
+                className="border-[#e2e8f0] dark:border-slate-600 text-[#1a1a2e] dark:text-white"
                 radius="lg"
                 size="md"
               >
@@ -219,7 +219,7 @@ const contributionType =
               <Button
                 variant="bordered"
                 onPress={() => navigate(`/student/my-contributions${location.search || ""}`)}
-                className="border-[#e2e8f0] text-[#1a1a2e]"
+                className="border-[#e2e8f0] dark:border-slate-600 text-[#1a1a2e] dark:text-white"
                 radius="lg"
                 size="md"
               >

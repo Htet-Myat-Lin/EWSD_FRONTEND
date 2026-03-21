@@ -1,7 +1,11 @@
 import { Card, CardBody, CardHeader } from "@heroui/react"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts"
+import { useTheme } from "@/context/ThemeContext"
 
 export const FacultyComparison = ({ comparison, personalMetrics }) => {
+    const { theme } = useTheme()
+    const isDark = theme === "dark"
+
     const data = [
         {
             name: "Selection Rate",
@@ -15,10 +19,17 @@ export const FacultyComparison = ({ comparison, personalMetrics }) => {
         },
     ]
 
+    const tooltipStyle = {
+        backgroundColor: isDark ? 'rgba(31, 41, 55, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+        border: isDark ? '1px solid #374151' : '1px solid #e5e7eb',
+        borderRadius: '8px',
+        color: isDark ? '#f3f4f6' : '#111827',
+    }
+
     return (
-        <Card>
+        <Card className="dark:bg-gray-800">
             <CardHeader className="pb-0">
-                <h3 className="text-lg font-semibold">Faculty Comparison</h3>
+                <h3 className="text-lg font-semibold dark:text-gray-100">Faculty Comparison</h3>
             </CardHeader>
             <CardBody>
                 <ResponsiveContainer width="100%" height={300}>
@@ -27,19 +38,13 @@ export const FacultyComparison = ({ comparison, personalMetrics }) => {
                         <XAxis 
                             dataKey="name" 
                             className="text-sm"
-                            tick={{ fill: 'currentColor' }}
+                            tick={{ fill: 'currentColor', className: isDark ? 'fill-gray-300' : 'fill-gray-700' }}
                         />
                         <YAxis 
                             className="text-sm"
-                            tick={{ fill: 'currentColor' }}
+                            tick={{ fill: 'currentColor', className: isDark ? 'fill-gray-300' : 'fill-gray-700' }}
                         />
-                        <Tooltip 
-                            contentStyle={{ 
-                                backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                                border: '1px solid #e5e7eb',
-                                borderRadius: '8px'
-                            }}
-                        />
+                        <Tooltip contentStyle={tooltipStyle} />
                         <Legend />
                         <Bar dataKey="Your Rate" fill="#3b82f6" radius={[8, 8, 0, 0]} />
                         <Bar dataKey="Faculty Average" fill="#8b5cf6" radius={[8, 8, 0, 0]} />

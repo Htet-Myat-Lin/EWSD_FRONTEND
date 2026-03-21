@@ -20,14 +20,14 @@ const STATUS_ICON_TEXT_COLORS = {
 // eslint-disable-next-line no-unused-vars
 const StatusCard = ({ icon: Icon, label, count, status }) => {
     return (
-        <Card className="hover:shadow-lg transition-shadow">
+        <Card className="hover:shadow-lg transition-shadow dark:bg-gray-800">
             <CardBody className="flex flex-row items-center gap-4 p-4">
                 <div className={`p-3 rounded-full ${STATUS_ICON_BG_COLORS[status]}`}>
                     <Icon className={`text-2xl ${STATUS_ICON_TEXT_COLORS[status]}`} />
                 </div>
                 <div className="flex-1">
                     <p className="text-sm text-gray-600 dark:text-gray-400">{label}</p>
-                    <p className="text-2xl font-bold">{count}</p>
+                    <p className="text-2xl font-bold dark:text-gray-100">{count}</p>
                 </div>
                 <Chip color={STATUS_COLORS[status]} variant="flat" size="sm">
                     {status}

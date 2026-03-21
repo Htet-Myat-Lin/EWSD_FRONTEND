@@ -43,7 +43,6 @@ export function SubmitContribution() {
   })();
 
   const { mutate: storeContribution, isPending } = useStoreContribution(() => {
-    // Reset form after successful submission
     setCurrentStep(1);
     setContributionType(null);
     setIsAgreed(false);
@@ -66,15 +65,11 @@ export function SubmitContribution() {
     formData.category_id;
 
   const handleNext = () => {
-    if (currentStep < 3) {
-      setCurrentStep(currentStep + 1);
-    }
+    if (currentStep < 3) setCurrentStep(currentStep + 1);
   };
 
   const handleBack = () => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
-    }
+    if (currentStep > 1) setCurrentStep(currentStep - 1);
   };
 
   const handleSubmit = () => {
@@ -92,16 +87,16 @@ export function SubmitContribution() {
   };
 
   return (
-    <main className="min-h-screen bg-[#f8f9fb]">
+    <main className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
       <div className="mx-auto max-w-4xl px-3 py-6 sm:px-6 sm:py-10 lg:px-8">
+
         {/* Header */}
         <div className="mb-6 sm:mb-8">
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#1a1a2e]">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
             Submit New Contribution
           </h1>
-          <p className="mt-1.5 sm:mt-2 text-sm sm:text-base text-[#64748b] leading-relaxed">
-            Submit your article or photography for the 2025-2026 university
-            magazine
+          <p className="mt-1.5 sm:mt-2 text-sm sm:text-base text-gray-500 dark:text-gray-400 leading-relaxed">
+            Submit your article or photography for the 2025-2026 university magazine
           </p>
         </div>
 
@@ -113,16 +108,19 @@ export function SubmitContribution() {
         {/* Step 1: Type & Terms */}
         {currentStep === 1 && (
           <div className="flex flex-col gap-4 sm:gap-6">
-            {/* Contribution Type Selection */}
-            <Card shadow="none" className="border border-[#e2e8f0]" radius="lg">
+            <Card
+              shadow="none"
+              className="border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800"
+              radius="lg"
+            >
               <CardBody className="p-4 sm:p-6">
-                <h2 className="mb-4 sm:mb-5 text-lg sm:text-xl font-bold text-[#1a1a2e]">
+                <h2 className="mb-4 sm:mb-5 text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100">
                   Select Contribution Type
                 </h2>
                 <div className="grid grid-cols-1 gap-3 sm:gap-5 sm:grid-cols-2">
                   <ContributionTypeCard
                     icon={
-                      <LuFileText className="h-8 w-8 sm:h-10 sm:w-10 text-[#3b82f6]" />
+                      <LuFileText className="h-8 w-8 sm:h-10 sm:w-10 text-blue-500 dark:text-blue-400" />
                     }
                     title="Article"
                     description="Submit research papers, projects, creative writing, or reviews"
@@ -135,7 +133,7 @@ export function SubmitContribution() {
                   />
                   <ContributionTypeCard
                     icon={
-                      <HiCamera className="h-8 w-8 sm:h-10 sm:w-10 text-[#3b82f6]" />
+                      <HiCamera className="h-8 w-8 sm:h-10 sm:w-10 text-blue-500 dark:text-blue-400" />
                     }
                     title="Photography"
                     description="Submit high-quality images and photographs"
@@ -150,7 +148,7 @@ export function SubmitContribution() {
               </CardBody>
             </Card>
 
-            {/* Terms and Conditions — shown only after a type is selected */}
+            {/* Terms and Conditions */}
             <div
               className={`transition-all duration-500 ease-in-out ${
                 contributionType
@@ -190,13 +188,14 @@ export function SubmitContribution() {
           />
         )}
 
+        {/* Closure Banner */}
         {currentStep === 1 && isAfterClosureDate && (
-          <div className="my-6 flex items-start gap-3 rounded-xl border-l-4 border-[#dc2626] bg-[#fef2f2] px-4 py-4 shadow-sm">
+          <div className="my-6 flex items-start gap-3 rounded-xl border-l-4 border-red-600 dark:border-red-500 bg-red-50 dark:bg-red-950/40 px-4 py-4 shadow-sm">
             <div>
-              <p className="text-sm font-bold text-[#dc2626]">
+              <p className="text-sm font-bold text-red-600 dark:text-red-400">
                 Submissions Are Closed
               </p>
-              <p className="mt-0.5 text-xs text-[#b91c1c]">
+              <p className="mt-0.5 text-xs text-red-700 dark:text-red-300">
                 The closure date (
                 <span className="font-semibold">{closureDateText}</span>) has
                 passed. No new contributions can be accepted.
@@ -212,7 +211,7 @@ export function SubmitContribution() {
               <Button
                 variant="bordered"
                 onPress={handleBack}
-                className="border-[#e2e8f0] text-[#1a1a2e]"
+                className="border-gray-200 dark:border-gray-600 text-gray-900 dark:text-gray-100 bg-transparent dark:hover:bg-gray-700"
                 radius="lg"
                 size="md"
               >
@@ -228,7 +227,7 @@ export function SubmitContribution() {
                 isDisabled={
                   currentStep === 1 ? !canProceedStep1 : !canProceedStep2
                 }
-                className="bg-[#1e3a5f] text-[#ffffff] text-xs sm:text-sm"
+                className="bg-blue-900 dark:bg-blue-600 text-white text-xs sm:text-sm hover:bg-blue-800 dark:hover:bg-blue-500"
                 radius="lg"
                 size="md"
               >
@@ -242,7 +241,7 @@ export function SubmitContribution() {
                 onPress={handleSubmit}
                 isDisabled={files.length === 0 || isPending}
                 isLoading={isPending}
-                className="bg-[#1e3a5f] text-[#ffffff] text-xs sm:text-sm"
+                className="bg-blue-900 dark:bg-blue-600 text-white text-xs sm:text-sm hover:bg-blue-800 dark:hover:bg-blue-500"
                 radius="lg"
                 size="md"
               >
@@ -251,6 +250,7 @@ export function SubmitContribution() {
             )}
           </div>
         </div>
+
       </div>
     </main>
   );

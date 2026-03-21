@@ -32,7 +32,6 @@ export const NotificationCard = ({
     });
   };
 
-  // API doesn't have is_read field, using remind as differentiator
   const isReminder = notification.remind === false;
 
   return (
@@ -40,15 +39,15 @@ export const NotificationCard = ({
       className={`
         group relative p-5 rounded-xl border transition-all duration-200 cursor-pointer
         ${isReminder 
-          ? "bg-linear-to-r from-orange-50 to-amber-50 border-orange-200 hover:border-orange-300 hover:shadow-lg hover:shadow-orange-100" 
-          : "bg-white border-gray-200 hover:border-blue-300 hover:shadow-lg hover:shadow-blue-50"
+          ? "bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/30 dark:to-amber-950/30 border-orange-200 dark:border-orange-800 hover:border-orange-300 dark:hover:border-orange-700 hover:shadow-lg hover:shadow-orange-100 dark:hover:shadow-orange-950/20" 
+          : "bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-lg hover:shadow-blue-50 dark:hover:shadow-blue-950/20"
         }
       `}
       onClick={() => showCheckbox && onSelect(notification.id)}
     >
       {/* Reminder indicator */}
       {isReminder && (
-        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-12 bg-orange-500 rounded-r-full" />
+        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-12 bg-orange-500 dark:bg-orange-400 rounded-r-full" />
       )}
 
       <div className="flex items-start gap-4">
@@ -59,7 +58,7 @@ export const NotificationCard = ({
               type="checkbox"
               checked={isSelected}
               onChange={() => onSelect(notification.id)}
-              className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+              className="w-5 h-5 rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 cursor-pointer accent-blue-600"
             />
           </div>
         )}
@@ -69,8 +68,8 @@ export const NotificationCard = ({
           <div className={`
             w-12 h-12 rounded-full flex items-center justify-center
             ${isReminder 
-              ? "bg-orange-100 text-orange-600" 
-              : "bg-blue-100 text-blue-600"
+              ? "bg-orange-100 dark:bg-orange-900/40 text-orange-600 dark:text-orange-400" 
+              : "bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400"
             }
           `}>
             {isReminder ? (
@@ -88,16 +87,16 @@ export const NotificationCard = ({
         {/* Content */}
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-4 mb-2">
-            <h3 className="font-semibold text-base truncate text-gray-900">
+            <h3 className="font-semibold text-base truncate text-gray-900 dark:text-gray-100">
               {notification.name}
             </h3>
-            
+
             {/* Action buttons */}
             <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity" onClick={(e) => e.stopPropagation()}>
               <button
                 onClick={handleMarkAsRead}
                 disabled={markAsRead.isPending}
-                className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50"
+                className="p-2 text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/40 rounded-lg transition-colors disabled:opacity-50"
                 title="Mark as read"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -107,7 +106,7 @@ export const NotificationCard = ({
               <button
                 onClick={handleDelete}
                 disabled={deleteNotification.isPending}
-                className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
+                className="p-2 text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/40 rounded-lg transition-colors disabled:opacity-50"
                 title="Delete"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -117,14 +116,14 @@ export const NotificationCard = ({
             </div>
           </div>
 
-          <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+          <p className="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">
             {notification.description}
           </p>
 
-          <div className="flex items-center justify-between text-xs text-gray-400">
+          <div className="flex items-center justify-between text-xs text-gray-400 dark:text-gray-500">
             <div className="flex items-center gap-3">
               {isReminder && (
-                <span className="flex items-center gap-1 text-orange-600 font-medium">
+                <span className="flex items-center gap-1 text-orange-600 dark:text-orange-400 font-medium">
                   <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
                   </svg>

@@ -40,6 +40,7 @@ import { ContactPage } from "./pages/ContactPage";
 import { StudentDashboard } from "@/features/student/dashboard/components/StudentDashboard";
 import { GuestDashboard } from "@/features/guest/dashboard/components/GuestDashboard";
 import { GuestList } from "./features/coordinator/guestlists/components/GuestList";
+import { useTheme } from "@/context/ThemeContext";
 
 const adminMenuItems = [
   { name: "Dashboard", path: "/admin/dashboard", icon: <LuGauge size={20} /> },
@@ -146,6 +147,8 @@ const guestMenuItems = [
 ];
 
 function App() {
+  const { theme } = useTheme();
+  
   return (
     <>
       {/* Routes */}
@@ -258,7 +261,7 @@ function App() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="light"
+        theme={theme === "dark" ? "dark" : "light"}
         transition={Slide}
       />
     </>
