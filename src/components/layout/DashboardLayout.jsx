@@ -425,8 +425,8 @@ export function DashboardLayout({ menuItems }) {
                 </DropdownTrigger>
                 <DropdownMenu aria-label="Profile Actions" variant="flat">
                   <DropdownItem key="profile" className="h-14 gap-1" isReadOnly>
-                    <p style={{ fontSize: "0.72rem", color: "#9ca3af" }}>Signed in as</p>
-                    <p style={{ fontSize: "0.875rem", fontWeight: 500, color: "#111827" }}>
+                    <p className="text-[0.72rem] text-gray-400 dark:text-slate-500">Signed in as</p>
+                    <p className="text-[0.875rem] font-medium text-gray-900 dark:text-white">
                       {user?.email}
                     </p>
                   </DropdownItem>
