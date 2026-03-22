@@ -9,7 +9,6 @@ import {
   Spinner,
   Card,
   CardBody,
-  Link,
   Chip,
   Select,
   SelectItem,
@@ -22,9 +21,10 @@ import { useContributions } from "@/features/coordinator/contributions/hooks/use
 import { useCategories } from "@/features/coordinator/contributions/hooks/useCategories";
 import { formatDate } from "@/utils/helpers";
 import { CommentDialog } from "@/features/coordinator/contributions/components/CommentDialog";
-import { LuMessageCircle } from "react-icons/lu";
+import { LuMessageCircleMore } from "react-icons/lu";
 import { ContributionService } from "@/api/services/contribution-service";
 import { toast } from "react-toastify";
+import { useAuth } from "@/context/AuthContext";
 
 const columns = [
   { key: "id", label: "ID" },
@@ -104,7 +104,7 @@ const renderCell = (contribution, columnKey, onCommentClick, onDownloadClick) =>
           aria-label="View comments"
           onPress={() => onCommentClick(contribution)}
         >
-          <LuMessageCircle size={18} />
+          <LuMessageCircleMore size={18} />
         </Button>
       );
     default:
@@ -128,6 +128,7 @@ export const Contributions = () => {
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [selectedContribution, setSelectedContribution] = useState(null);
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
+  const { user } = useAuth()
   
   // Debounce search input
   useEffect(() => {
@@ -147,10 +148,12 @@ export const Contributions = () => {
   const { data: categoriesData, isLoading: categoriesLoading } = useCategories();
 
   // Compute derived values before conditional returns
-  const contributions = data?.data ?? [];
+  let contributions = data?.data ?? [];
   const currentPage = data?.meta?.current_page ?? 1;
   const lastPage = data?.meta?.last_page ?? 1;
   const total = data?.meta?.total ?? 0;
+
+  contributions = user.role?.name === "marketing_manager" ? contributions.filter(contri => contri.status === "selected") : contributions
 
   const categoryOptions = useMemo(() => {
     const categories = categoriesData?.data ?? [];

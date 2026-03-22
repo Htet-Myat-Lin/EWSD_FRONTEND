@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { Button, Chip } from "@heroui/react";
 import { LuCheck, LuX } from "react-icons/lu";
 
