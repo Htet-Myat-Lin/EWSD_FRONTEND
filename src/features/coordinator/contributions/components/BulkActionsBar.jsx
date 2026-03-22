@@ -1,5 +1,6 @@
 import { Button, Chip } from "@heroui/react";
 import { LuCheck, LuX } from "react-icons/lu";
+import { motion } from "framer-motion";
 
 export const BulkActionsBar = ({ count, totalSelectable, onBulkSelect, onBulkReject, onClear }) => {
   if (count === 0) return null;
