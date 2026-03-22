@@ -35,7 +35,7 @@ import {
 import { AcademicYearFormModal } from "./AcademicYearFormModal";
 
 const columns = [
-  { key: "id", label: "ID" },
+  { key: "number", label: "#" },
   { key: "name", label: "Name" },
   { key: "start_date", label: "Start Date" },
   { key: "end_date", label: "End Date" },
@@ -219,7 +219,7 @@ export const AcademicYears = () => {
           {(column) => (
             <TableColumn
               key={column.key}
-              align={column.key === "actions" ? "center" : "start"}
+              align={column.key === "actions" || column.key === "number" ? "center" : "start"}
             >
               {column.label}
             </TableColumn>
@@ -231,11 +231,16 @@ export const AcademicYears = () => {
           loadingContent={<Spinner label="Loading academic years..." />}
           emptyContent="No academic years found."
         >
-          {(year) => (
-            <TableRow key={year.id}>
-              {(columnKey) => (
-                <TableCell>{renderCell(year, columnKey)}</TableCell>
-              )}
+          {(item) => (
+            <TableRow key={item.id}>
+              {(columnKey) => {
+                const rowIndex = academicYears.indexOf(item);
+                return (
+                  <TableCell>
+                    {columnKey === "number" ? rowIndex + 1 : renderCell(item, columnKey)}
+                  </TableCell>
+                );
+              }}
             </TableRow>
           )}
         </TableBody>

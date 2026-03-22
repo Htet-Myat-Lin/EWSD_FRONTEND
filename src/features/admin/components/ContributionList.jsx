@@ -27,7 +27,7 @@ import { toast } from "react-toastify";
 import { useAuth } from "@/context/AuthContext";
 
 const columns = [
-  { key: "id", label: "ID" },
+  { key: "number", label: "No." },
   { key: "title", label: "Title" },
   { key: "student", label: "Student" },
   { key: "cover_photo", label: "Cover Photo" },
@@ -49,10 +49,10 @@ const getStatusColor = (status) => {
   return statusColors[status] || "default";
 };
 
-const renderCell = (contribution, columnKey, onCommentClick, onDownloadClick) => {
+const renderCell = (contribution, columnKey, index, onCommentClick, onDownloadClick) => {
   switch (columnKey) {
-    case "id":
-      return contribution.id;
+    case "number":
+      return index + 1;
     case "title":
       return contribution.title || "N/A";
     case "student":
@@ -323,7 +323,7 @@ export const Contributions = () => {
               items={contributions}
               emptyContent="No contributions found."
             >
-              {(contribution) => (
+              {contributions.map((contribution, contributionIndex) => (
                 <TableRow key={contribution.id}>
                   {columns.map((column) => (
                     <TableCell 
@@ -336,11 +336,11 @@ export const Contributions = () => {
                           : ""
                       }
                     >
-                      {renderCell(contribution, column.key, handleCommentClick, handleDownload)}
+                      {renderCell(contribution, column.key, contributionIndex, handleCommentClick, handleDownload)}
                     </TableCell>
                   ))}
                 </TableRow>
-              )}
+              ))}
             </TableBody>
           </Table>
         </CardBody>
