@@ -90,7 +90,7 @@ export function Chatbot() {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="mb-4 w-85.7 sm:w-95 bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100 flex flex-col"
+            className="mb-4 w-85.7 sm:w-95 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden border border-gray-100 dark:border-gray-700 flex flex-col"
             style={{ height: "500px", maxHeight: "80vh" }}
           >
             {/* Header */}
@@ -118,7 +118,7 @@ export function Chatbot() {
             </div>
 
             {/* Messages Area */}
-            <div className="flex-1 p-4 overflow-y-auto bg-gray-50 flex flex-col gap-4 font-sans">
+            <div className="flex-1 p-4 overflow-y-auto bg-gray-50 dark:bg-gray-900 flex flex-col gap-4 font-sans">
               {messages.map((msg) => (
                 <div
                   key={msg.id}
@@ -128,11 +128,11 @@ export function Chatbot() {
                   <div
                     className={`max-w-[85%] rounded-2xl p-3 text-sm leading-relaxed shadow-sm ${msg.sender === "user"
                       ? "bg-blue-600 text-white rounded-tr-sm"
-                      : "bg-white text-gray-800 border border-gray-100 rounded-tl-sm"
+                      : "bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 border border-gray-100 dark:border-gray-700 rounded-tl-sm"
                       }`}
                   >
                     {msg.sender === "bot" && (
-                      <div className="flex items-center gap-2 mb-1 text-xs text-gray-400 font-medium">
+                      <div className="flex items-center gap-2 mb-1 text-xs text-gray-400 dark:text-gray-500 font-medium">
                         <LuBot size={12} />Orioin Bot
                       </div>
                     )}
@@ -148,7 +148,7 @@ export function Chatbot() {
 
               {isLoading && (
                 <div className="flex justify-start">
-                  <div className="max-w-[85%] rounded-2xl rounded-tl-sm p-4 bg-white border border-gray-100 text-gray-800 shadow-sm flex items-center gap-2">
+                  <div className="max-w-[85%] rounded-2xl rounded-tl-sm p-4 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 text-gray-800 dark:text-gray-100 shadow-sm flex items-center gap-2">
                     <span className="flex gap-1">
                       <motion.span
                         animate={{ y: [0, -5, 0] }}
@@ -175,7 +175,7 @@ export function Chatbot() {
             {/* Input Area */}
             <form
               onSubmit={handleSend}
-              className="p-3 bg-white border-t border-gray-100 shrink-0 font-sans"
+              className="p-3 bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 shrink-0 font-sans"
             >
               <div className="relative flex items-center">
                 <input
@@ -183,7 +183,7 @@ export function Chatbot() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Type a message..."
-                  className="w-full pl-4 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-full text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-shadow"
+                  className="w-full pl-4 pr-12 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-full text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-shadow placeholder-gray-400 dark:placeholder-gray-500"
                   disabled={isLoading}
                 />
                 <button
