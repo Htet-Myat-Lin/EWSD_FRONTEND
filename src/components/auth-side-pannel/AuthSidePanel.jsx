@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { LuPenLine, LuUsers, LuAward } from "react-icons/lu";
 import authSideImage from "../../assets/auth-side-panel.jpg";
+import { FaUniversity } from "react-icons/fa";
 
 const features = [
   {
@@ -24,7 +25,6 @@ const features = [
 export default function AuthSidePanel() {
   return (
     <div className="hidden lg:flex flex-col relative w-full min-h-full overflow-hidden">
-
       {/* Background image */}
       <img
         src={authSideImage}
@@ -60,36 +60,22 @@ export default function AuthSidePanel() {
         className="relative flex flex-col justify-center h-full gap-8"
         style={{ zIndex: 1, padding: "40px 44px" }}
       >
-
         {/* ── Brand ── */}
-        <Link to="/" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}>
-          <div
-            style={{
-              width: "34px",
-              height: "34px",
-              background: "rgba(255,255,255,0.15)",
-              borderRadius: "8px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              border: "1px solid rgba(255,255,255,0.2)",
-              backdropFilter: "blur(8px)",
-              flexShrink: 0,
-            }}
-          >
-            <svg fill="none" height="16" viewBox="0 0 32 32" width="16">
-              <path
-                clipRule="evenodd"
-                d="M17.6482 10.1305L15.8785 7.02583L7.02979 22.5499H10.5278L17.6482 10.1305ZM19.8798 14.0457L18.11 17.1983L19.394 19.4511H16.8453L15.1056 22.5499H24.7272L19.8798 14.0457Z"
-                fill="white"
-                fillRule="evenodd"
-              />
-            </svg>
+        <Link
+          to="/"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            textDecoration: "none",
+          }}
+        >
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-white/20 bg-white/10 shadow-sm backdrop-blur-md">
+            <FaUniversity className="text-white/90" size={16} />
           </div>
           <div>
             <p
               style={{
-                fontFamily: "'Lora', serif",
                 fontSize: "1rem",
                 fontWeight: 700,
                 color: "#fff",
@@ -97,8 +83,8 @@ export default function AuthSidePanel() {
                 letterSpacing: "-0.01em",
               }}
             >
-              Uni
-              <span style={{ color: "#f57c00" }}>Magazine</span>
+              Orion
+              <span style={{ color: "#f57c00" }}>University</span>
             </p>
             <p
               style={{
@@ -148,7 +134,6 @@ export default function AuthSidePanel() {
 
           <h1
             style={{
-              fontFamily: "'Lora', serif",
               fontSize: "clamp(2rem, 3.5vw, 2.75rem)",
               fontWeight: 700,
               color: "#fff",
@@ -183,11 +168,17 @@ export default function AuthSidePanel() {
             }}
           />
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "18px" }}
+          >
             {features.map((f) => (
               <div
                 key={f.title}
-                style={{ display: "flex", alignItems: "flex-start", gap: "14px" }}
+                style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "14px",
+                }}
               >
                 {/* Icon badge */}
                 <div
@@ -232,7 +223,6 @@ export default function AuthSidePanel() {
             ))}
           </div>
         </div>
-
       </div>
     </div>
   );

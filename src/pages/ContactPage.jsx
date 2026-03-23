@@ -406,7 +406,7 @@ const infoCards = [
   {
     icon: <LuMail size={22} />,
     title: "Email",
-    lines: ["magazine@university.edu", "support@university.edu"],
+    lines: ["orion@university.edu", "support@orion.edu"],
   },
   {
     icon: <LuPhone size={22} />,
@@ -606,7 +606,7 @@ export function ContactPage() {
                   </p>
                   <div className="cp-bullet">
                     <span className="cp-bullet-dot">•</span>
-                    <span>Email: support@university.edu</span>
+                    <span>Email: support@orion.edu</span>
                   </div>
                   <div className="cp-bullet">
                     <span className="cp-bullet-dot">•</span>

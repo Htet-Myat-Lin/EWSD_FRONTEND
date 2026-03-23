@@ -129,7 +129,7 @@ export function Footer({ footerQuickLinks, footerSupport }) {
   const contactItems = [
     { icon: <LuMapPin size={14} />, text: "123 University Ave, Academic City, AC 12345" },
     { icon: <LuPhone size={14} />,  text: "+1 (555) 123-4567" },
-    { icon: <LuMail size={14} />,   text: "submissions@unimagazine.edu" },
+    { icon: <LuMail size={14} />,   text: "orion@university.edu" },
   ];
 
   return (
@@ -142,7 +142,7 @@ export function Footer({ footerQuickLinks, footerSupport }) {
             {/* Brand */}
             <div>
               <div className="ft-brand">
-                Uni<span>Magazine</span>
+                Orion<span>University</span>
               </div>
               <p className="ft-brand-desc">
                 Empowering student voices through academic publishing since 2020.

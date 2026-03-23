@@ -23,7 +23,11 @@ import { useGetUnreadCount } from "@/features/notification/hooks/useGetUnreadCou
 import { Link as RouterLink } from "react-router-dom";
 import { resolveProfileImageUrl } from "@/utils/helpers";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+<<<<<<< Updated upstream
 import { Chatbot } from "@/components/Chatbot";
+=======
+import { FaUniversity } from "react-icons/fa";
+>>>>>>> Stashed changes
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
 const styles = `
@@ -260,19 +264,12 @@ const SidebarContent = ({ menuItems, onClose }) => {
     <div className="sb-root">
       {/* Logo */}
       <div className="sb-logo">
-        <div className="sb-logo-icon">
-          <svg fill="none" height="18" viewBox="0 0 32 32" width="18">
-            <path
-              clipRule="evenodd"
-              d="M17.6482 10.1305L15.8785 7.02583L7.02979 22.5499H10.5278L17.6482 10.1305ZM19.8798 14.0457L18.11 17.1983L19.394 19.4511H16.8453L15.1056 22.5499H24.7272L19.8798 14.0457Z"
-              fill="white"
-              fillRule="evenodd"
-            />
-          </svg>
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-white/20 bg-white/10 shadow-sm backdrop-blur-md">
+          <FaUniversity className="text-white/90" size={16} />
         </div>
         <div className="sb-logo-text">
           <span className="sb-brand">
-            Uni<span className="sb-brand-mag">Magazine</span>
+            Orioin<span className="sb-brand-mag">University</span>
           </span>
           <span className="sb-tagline">Dashboard</span>
         </div>
@@ -349,7 +346,6 @@ export function DashboardLayout({ menuItems }) {
     <>
       <style>{styles}</style>
       <div className="flex h-screen w-full db-content-bg">
-
         {/* ── Desktop Sidebar ── */}
         <aside
           className="hidden md:flex flex-col fixed h-full z-40"
@@ -360,7 +356,6 @@ export function DashboardLayout({ menuItems }) {
 
         {/* ── Main area ── */}
         <div className="flex-1 flex flex-col md:ml-55 min-h-screen">
-
           {/* Topbar */}
           <Navbar
             isBordered={false}
@@ -377,7 +372,13 @@ export function DashboardLayout({ menuItems }) {
             {/* Mobile brand */}
             <NavbarContent className="md:hidden" justify="center">
               <NavbarBrand>
-                <span style={{ fontFamily: "'Lora', serif", fontWeight: 700, fontSize: "1rem" }}>
+                <span
+                  style={{
+                    fontFamily: "'Lora', serif",
+                    fontWeight: 700,
+                    fontSize: "1rem",
+                  }}
+                >
                   <span className="db-brand-primary">Uni</span>
                   <span className="db-brand-accent">Magazine</span>
                 </span>
@@ -427,12 +428,18 @@ export function DashboardLayout({ menuItems }) {
                 </DropdownTrigger>
                 <DropdownMenu aria-label="Profile Actions" variant="flat">
                   <DropdownItem key="profile" className="h-14 gap-1" isReadOnly>
-                    <p className="text-[0.72rem] text-gray-400 dark:text-slate-500">Signed in as</p>
+                    <p className="text-[0.72rem] text-gray-400 dark:text-slate-500">
+                      Signed in as
+                    </p>
                     <p className="text-[0.875rem] font-medium text-gray-900 dark:text-white">
                       {user?.email}
                     </p>
                   </DropdownItem>
-                  <DropdownItem key="logout" color="danger" onClick={() => logout()}>
+                  <DropdownItem
+                    key="logout"
+                    color="danger"
+                    onClick={() => logout()}
+                  >
                     Sign out
                   </DropdownItem>
                 </DropdownMenu>

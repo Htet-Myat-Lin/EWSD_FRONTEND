@@ -19,6 +19,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useLogout } from "@/features/auth/hooks/useLogout";
 import { HiMenu, HiX } from "react-icons/hi";
 import { resolveProfileImageUrl } from "@/utils/helpers";
+import { FaUniversity } from "react-icons/fa";
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
 const styles = `
@@ -174,32 +175,16 @@ const styles = `
 
 // ─── Logo ─────────────────────────────────────────────────────────────────────
 export const AcmeLogo = () => (
-  <RouterLink to="/" className="kmd-brand flex items-center gap-2.5 hover:opacity-90 transition-opacity">
-    <div
-      style={{
-        width: "28px",
-        height: "28px",
-        background: "rgba(255,255,255,0.12)",
-        borderRadius: "6px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        flexShrink: 0,
-        border: "1px solid rgba(255,255,255,0.15)",
-      }}
-    >
-      <svg fill="none" height="14" viewBox="0 0 32 32" width="14">
-        <path
-          clipRule="evenodd"
-          d="M17.6482 10.1305L15.8785 7.02583L7.02979 22.5499H10.5278L17.6482 10.1305ZM19.8798 14.0457L18.11 17.1983L19.394 19.4511H16.8453L15.1056 22.5499H24.7272L19.8798 14.0457Z"
-          fill="white"
-          fillRule="evenodd"
-        />
-      </svg>
+  <RouterLink
+    to="/"
+    className="kmd-brand flex items-center gap-2.5 hover:opacity-90 transition-opacity"
+  >
+    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-white/20 bg-white/10 shadow-sm backdrop-blur-md">
+      <FaUniversity className="text-white/90" size={16} />
     </div>
     <span className="kmd-brand">
-      <span className="kmd-brand-uni">Uni</span>
-      <span className="kmd-brand-mag">Magazine</span>
+      <span className="kmd-brand-uni">Orion</span>
+      <span className="kmd-brand-mag">University</span>
     </span>
   </RouterLink>
 );
@@ -216,19 +201,19 @@ export function Header() {
 
   const redirectToDashboard = () => {
     const routes = {
-      admin:                  "/admin/dashboard",
-      student:                "/student/dashboard",
-      marketing_coordinator:  "/marketing-coordinator/dashboard",
-      marketing_manager:      "/marketing-manager/dashboard",
+      admin: "/admin/dashboard",
+      student: "/student/dashboard",
+      marketing_coordinator: "/marketing-coordinator/dashboard",
+      marketing_manager: "/marketing-manager/dashboard",
     };
     const route = routes[user?.role?.name];
     if (route) navigate(route);
   };
 
   const menuItems = [
-    { name: "Home",     route: "/" },
-    { name: "About",    route: "/about" },
-    { name: "Contact",  route: "/contact" },
+    { name: "Home", route: "/" },
+    { name: "About", route: "/about" },
+    { name: "Contact", route: "/contact" },
     { name: "Terms", route: "/terms" },
   ];
 
@@ -246,9 +231,11 @@ export function Header() {
           <NavbarMenuToggle
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
             icon={
-              isMenuOpen
-                ? <HiX size={20} style={{ color: "rgba(255,255,255,0.7)" }} />
-                : <HiMenu size={20} style={{ color: "rgba(255,255,255,0.7)" }} />
+              isMenuOpen ? (
+                <HiX size={20} style={{ color: "rgba(255,255,255,0.7)" }} />
+              ) : (
+                <HiMenu size={20} style={{ color: "rgba(255,255,255,0.7)" }} />
+              )
             }
           />
           <NavbarBrand>
@@ -264,8 +251,10 @@ export function Header() {
         </NavbarContent>
 
         {/* ── Desktop: Nav + Auth ── */}
-        <NavbarContent className="hidden sm:flex items-center gap-6" justify="end">
-
+        <NavbarContent
+          className="hidden sm:flex items-center gap-6"
+          justify="end"
+        >
           {menuItems.map((item) => (
             <NavbarItem key={item.route}>
               <NavLink
@@ -305,7 +294,11 @@ export function Header() {
                   <DropdownItem key="dashboard" onPress={redirectToDashboard}>
                     Dashboard
                   </DropdownItem>
-                  <DropdownItem key="logout" color="danger" onPress={handleLogout}>
+                  <DropdownItem
+                    key="logout"
+                    color="danger"
+                    onPress={handleLogout}
+                  >
                     Sign out
                   </DropdownItem>
                 </DropdownMenu>
@@ -356,7 +349,10 @@ export function Header() {
                 <p className="kmd-user-email">{user?.email}</p>
                 <Button
                   fullWidth
-                  onPress={() => { redirectToDashboard(); setIsMenuOpen(false); }}
+                  onPress={() => {
+                    redirectToDashboard();
+                    setIsMenuOpen(false);
+                  }}
                   className="kmd-mobile-login text-sm"
                 >
                   Dashboard
