@@ -101,7 +101,7 @@ export function Chatbot() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-[1.05rem] leading-tight font-sans">
-                    Support Assistant
+                    Orioin Bot
                   </h3>
                   <p className="text-xs text-blue-100 font-medium font-sans">
                     Ask me anything
@@ -122,20 +122,18 @@ export function Chatbot() {
               {messages.map((msg) => (
                 <div
                   key={msg.id}
-                  className={`flex ${
-                    msg.sender === "user" ? "justify-end" : "justify-start"
-                  }`}
+                  className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"
+                    }`}
                 >
                   <div
-                    className={`max-w-[85%] rounded-2xl p-3 text-sm leading-relaxed shadow-sm ${
-                      msg.sender === "user"
-                        ? "bg-blue-600 text-white rounded-tr-sm"
-                        : "bg-white text-gray-800 border border-gray-100 rounded-tl-sm"
-                    }`}
+                    className={`max-w-[85%] rounded-2xl p-3 text-sm leading-relaxed shadow-sm ${msg.sender === "user"
+                      ? "bg-blue-600 text-white rounded-tr-sm"
+                      : "bg-white text-gray-800 border border-gray-100 rounded-tl-sm"
+                      }`}
                   >
                     {msg.sender === "bot" && (
                       <div className="flex items-center gap-2 mb-1 text-xs text-gray-400 font-medium">
-                        <LuBot size={12} /> EWSD Bot
+                        <LuBot size={12} />Orioin Bot
                       </div>
                     )}
                     {msg.sender === "user" && (
