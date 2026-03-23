@@ -23,11 +23,8 @@ import { useGetUnreadCount } from "@/features/notification/hooks/useGetUnreadCou
 import { Link as RouterLink } from "react-router-dom";
 import { resolveProfileImageUrl } from "@/utils/helpers";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
-<<<<<<< Updated upstream
 import { Chatbot } from "@/components/Chatbot";
-=======
 import { FaUniversity } from "react-icons/fa";
->>>>>>> Stashed changes
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
 const styles = `

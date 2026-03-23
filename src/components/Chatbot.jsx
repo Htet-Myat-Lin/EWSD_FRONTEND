@@ -90,11 +90,11 @@ export function Chatbot() {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="mb-4 w-[350px] sm:w-[380px] bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100 flex flex-col"
+            className="mb-4 w-85.7 sm:w-95 bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100 flex flex-col"
             style={{ height: "500px", maxHeight: "80vh" }}
           >
             {/* Header */}
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-4 flex items-center justify-between text-white shrink-0">
+            <div className="bg-linear-to-r from-blue-600 to-indigo-600 p-4 flex items-center justify-between text-white shrink-0">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
                   <LuBot size={22} className="text-white" />
