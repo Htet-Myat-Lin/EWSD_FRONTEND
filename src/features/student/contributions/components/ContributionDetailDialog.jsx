@@ -15,10 +15,10 @@ import {
   LuFolder,
   LuUser,
   LuGraduationCap,
-  LuX,
 } from "react-icons/lu";
 import { formatDate, resolveProfileImageUrl } from "@/utils/helpers";
 import { ContributionService } from "@/api/services/contribution-service";
+import { AISummary } from "./AISummary";
 import { toast } from "react-toastify";
 
 const getStatusColor = (status) => {
@@ -155,6 +155,11 @@ export function ContributionDetailDialog({
               </p>
             </div>
           </div>
+
+          {/* AI Summary */}
+          {isOpen && contribution.id && (
+            <AISummary contributionId={contribution.id} />
+          )}
 
           {/* Information Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

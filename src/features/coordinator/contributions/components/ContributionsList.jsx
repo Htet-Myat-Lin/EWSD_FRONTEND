@@ -18,6 +18,7 @@ import { formatDate } from "@/utils/helpers";
 import { ActionsCell } from "./ActionsCell";
 import { BulkActionsBar } from "./BulkActionsBar";
 import { CommentDialog } from "./CommentDialog";
+import { AISummaryDialog } from "./AISummaryDialog";
 
 import { useContributions } from "../hooks/useContributions";
 import { useCategories } from "../hooks/useCategories";
@@ -176,6 +177,7 @@ const ContributionCard = ({
   onToggle,
   onDropdownAction,
   onCommentClick,
+  onAISummaryClick,
   onDownload,
 }) => {
   const statusCfg = getStatusConfig(item.status);
@@ -218,7 +220,7 @@ const ContributionCard = ({
             <p className="text-xs text-default-400 dark:text-default-500 leading-none mb-0.5 truncate">
               {name || "Unknown"}
             </p>
-            <p className="font-semibold text-sm text-default-900 dark:text-default-50 truncate leading-snug">
+            <p className="font-semibold text-sm text-foreground truncate leading-snug">
               {item.title || "Untitled"}
             </p>
           </div>
@@ -269,7 +271,7 @@ const ContributionCard = ({
             Download
           </Button>
         ) : (
-          <span className="text-xs text-default-300 dark:text-default-600 italic">No file</span>
+          <span className="text-xs text-default-400 dark:text-default-500 italic">No file</span>
         )}
 
         <div className="ml-auto">
@@ -277,6 +279,7 @@ const ContributionCard = ({
             contribution={item}
             onDropdownAction={onDropdownAction}
             onCommentClick={onCommentClick}
+            onAISummaryClick={onAISummaryClick}
           />
         </div>
       </div>
@@ -292,6 +295,8 @@ export const ContributionsList = () => {
   const [selectedContribution, setSelectedContribution] = useState(null);
   const [selectedKeys, setSelectedKeys] = useState(new Set());
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [summaryContribution, setSummaryContribution] = useState(null);
+  const { isOpen: isSummaryOpen, onOpen: onSummaryOpen, onOpenChange: onSummaryOpenChange } = useDisclosure();
 
   const { data, isLoading, isError, error } = useContributions(
     filters.page,
@@ -373,6 +378,11 @@ export const ContributionsList = () => {
     onOpen();
   };
 
+  const handleAISummaryClick = (contribution) => {
+    setSummaryContribution(contribution);
+    onSummaryOpen();
+  };
+
   const toggleCard = (id) =>
     setSelectedKeys((prev) => {
       const next = new Set(prev);
@@ -385,7 +395,7 @@ export const ContributionsList = () => {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
         <Spinner size="lg" color="primary" />
-        <p className="text-sm text-default-400 tracking-wide">Loading contributions…</p>
+        <p className="text-sm text-default-500 dark:text-default-400 tracking-wide">Loading contributions…</p>
       </div>
     );
   }
@@ -402,7 +412,7 @@ export const ContributionsList = () => {
                   d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
               </svg>
             </div>
-            <p className="font-semibold text-default-800 dark:text-default-100">
+            <p className="font-semibold text-foreground">
               Failed to load contributions
             </p>
             <p className="text-sm text-default-400">
@@ -423,7 +433,7 @@ export const ContributionsList = () => {
           <p className="text-[11px] font-bold uppercase tracking-widest text-primary mb-1">
             Review Portal
           </p>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-default-900 dark:text-default-50">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
             Contributions
           </h1>
           {totalItems > 0 && (
@@ -448,7 +458,7 @@ export const ContributionsList = () => {
               >
                 <span className={`w-1.5 h-1.5 rounded-full`} />
                 {cfg.label}
-                <span className="font-bold text-default-800 dark:text-default-100">{count}</span>
+                <span className="font-bold text-foreground">{count}</span>
               </div>
             );
           })}
@@ -476,13 +486,15 @@ export const ContributionsList = () => {
 
       {/* ── Card grid ── */}
       {contributions.length === 0 ? (
-        <div className="py-20 flex flex-col items-center gap-3 text-default-400">
-          <svg className="w-10 h-10 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
-          <p className="text-sm font-medium">No contributions found</p>
-          <p className="text-xs">Try adjusting your filters</p>
+        <div className="py-20 flex flex-col items-center gap-3 text-default-400 dark:text-default-500">
+          <div className="w-16 h-16 rounded-full bg-default-100 dark:bg-default-800 flex items-center justify-center">
+            <svg className="w-8 h-8 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          </div>
+          <p className="text-sm font-medium text-default-600 dark:text-default-300">No contributions found</p>
+          <p className="text-xs text-default-400 dark:text-default-500">Try adjusting your filters</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -495,6 +507,7 @@ export const ContributionsList = () => {
               onToggle={() => toggleCard(item.id)}
               onDropdownAction={handleDropdownAction}
               onCommentClick={handleCommentClick}
+              onAISummaryClick={handleAISummaryClick}
               onDownload={handleDownload}
             />
           ))}
@@ -525,6 +538,12 @@ export const ContributionsList = () => {
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         contribution={selectedContribution}
+      />
+
+      <AISummaryDialog
+        isOpen={isSummaryOpen}
+        onOpenChange={onSummaryOpenChange}
+        contribution={summaryContribution}
       />
     </div>
   );
