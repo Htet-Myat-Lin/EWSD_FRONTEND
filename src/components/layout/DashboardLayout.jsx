@@ -16,7 +16,7 @@ import {
   useDisclosure,
   Badge,
 } from "@heroui/react";
-import { LuLogOut, LuMenu, LuBell, LuChevronRight } from "react-icons/lu";
+import { LuLogOut, LuMenu, LuBell, LuChevronRight, LuX } from "react-icons/lu";
 import { useAuth } from "@/context/AuthContext";
 import { useLogout } from "@/features/auth/hooks/useLogout";
 import { useGetUnreadCount } from "@/features/notification/hooks/useGetUnreadCount";
@@ -260,16 +260,29 @@ const SidebarContent = ({ menuItems, onClose }) => {
   return (
     <div className="sb-root">
       {/* Logo */}
-      <div className="sb-logo">
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-white/20 bg-white/10 shadow-sm backdrop-blur-md">
-          <FaUniversity className="text-white/90" size={16} />
+      <div className="sb-logo" style={{ justifyContent: "space-between", paddingRight: "12px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-white/20 bg-white/10 shadow-sm backdrop-blur-md">
+            <FaUniversity className="text-white/90" size={16} />
+          </div>
+          <div className="sb-logo-text">
+            <span className="sb-brand">
+              Orioin<span className="sb-brand-mag">University</span>
+            </span>
+            <span className="sb-tagline">Dashboard</span>
+          </div>
         </div>
-        <div className="sb-logo-text">
-          <span className="sb-brand">
-            Orioin<span className="sb-brand-mag">University</span>
-          </span>
-          <span className="sb-tagline">Dashboard</span>
-        </div>
+        
+        {/* Mobile Close Button */}
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="md:hidden p-1 text-white/50 hover:text-white transition-colors"
+            aria-label="Close menu"
+          >
+            <LuX size={20} />
+          </button>
+        )}
       </div>
 
       {/* Nav items */}
@@ -455,13 +468,14 @@ export function DashboardLayout({ menuItems }) {
           isOpen={isOpen} 
           onOpenChange={onOpenChange} 
           placement="left"
+          hideCloseButton
           shouldCloseOnBackdrop
           shouldCloseOnEscape
         >
           <DrawerContent>
-            {() => (
+            {(onClose) => (
               <DrawerBody className="p-0">
-                <SidebarContent menuItems={menuItems} onClose={() => onOpenChange(false)} />
+                <SidebarContent menuItems={menuItems} onClose={onClose} />
               </DrawerBody>
             )}
           </DrawerContent>
