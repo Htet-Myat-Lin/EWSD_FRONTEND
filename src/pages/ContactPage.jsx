@@ -18,6 +18,7 @@ import {
 import { Header } from "@/components/header/Header";
 import { Footer } from "@/components/footer/Footer";
 import { useSubmitContact } from "@/features/contact/hooks/useSubmitContact";
+import { useTrackPageView } from "@/utils/useTrackPageView";
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
 const styles = `
@@ -431,6 +432,11 @@ export function ContactPage() {
   const [form, setForm] = useState({ full_name: "", email: "", subject: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
   const { mutate: submitContact, isPending } = useSubmitContact();
+  const { mutate } = useTrackPageView("Contact Page");
+
+  React.useEffect(() => {
+    mutate();
+  }, []);
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));

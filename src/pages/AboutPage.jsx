@@ -12,6 +12,7 @@ import {
 } from "react-icons/lu";
 import { Header } from "@/components/header/Header";
 import { Footer } from "@/components/footer/Footer";
+import { useTrackPageView } from "@/utils/useTrackPageView";
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
 const styles = `
@@ -355,6 +356,12 @@ const values = [
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export function AboutPage() {
+  const { mutate } = useTrackPageView("About Page")
+
+  React.useEffect(() => {
+    mutate()
+  }, [])
+
   return (
     <>
       <style>{styles}</style>

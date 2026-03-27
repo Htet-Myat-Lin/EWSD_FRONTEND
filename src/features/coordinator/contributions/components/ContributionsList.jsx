@@ -329,6 +329,11 @@ export const ContributionsList = () => {
             .map((c) => String(c.id))
         : Array.from(ids);
 
+    if (actualIds.length === 0) {
+      toast.error("No contributions selected");
+      return;
+    }
+
     selectContributions(
       { ids: actualIds, action },
       {

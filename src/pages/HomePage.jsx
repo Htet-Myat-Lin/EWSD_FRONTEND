@@ -13,6 +13,7 @@ import {
 import { Header } from "@/components/header/Header";
 import { Footer } from "@/components/footer/Footer";
 import { Chatbot } from "@/components/Chatbot";
+import { useTrackPageView } from "@/utils/useTrackPageView";
 
 // ─── Inline styles ────────────────────────────────────────────────────────────
 const styles = `
@@ -403,6 +404,12 @@ const activities = [
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export function HomePage() {
+  const { mutate } = useTrackPageView("Home Page");
+
+  React.useEffect(() => {
+    mutate();
+  }, []);
+
   return (
     <>
       <style>{styles}</style>
