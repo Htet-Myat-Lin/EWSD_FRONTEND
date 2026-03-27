@@ -4,6 +4,7 @@ import { LuFilter, LuRotateCcw, LuGraduationCap, LuBookOpen, LuFolder, LuSearch,
 import { useGuestDashboard } from "../hooks/useGuestDashboard";
 import { GuestContributionCard } from "./GuestContributionCard";
 import { ContributionDetailDialog } from "@/features/student/contributions/components/ContributionDetailDialog";
+import { WelcomeBanner } from "@/components/welcome-banner/WelcomeBanner";
 
 const ErrorFallback = ({ error, onRetry }) => (
     <div className="flex items-center justify-center min-h-screen p-4">
@@ -89,33 +90,8 @@ export function GuestDashboard() {
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-4 md:p-6">
             <div className="max-w-full space-y-6">
-                {/* Welcome Banner */}
-                <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-default-100">
-                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                        <div>
-                            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                                Welcome back, {user?.name || "Guest"}
-                            </h1>
-                            {user?.faculty && (
-                                <p className="text-gray-600 dark:text-gray-400 mt-1">
-                                    {user.faculty.name}
-                                </p>
-                            )}
-                        </div>
-                        {academicYear && (
-                            <Chip
-                                startContent={<LuGraduationCap className="w-4 h-4" />}
-                                variant="flat"
-                                color="primary"
-                                classNames={{
-                                    content: "font-medium",
-                                }}
-                            >
-                                {academicYear.name}
-                            </Chip>
-                        )}
-                    </div>
-                </div>
+                <WelcomeBanner />
+
 
                 {/* Filter Section */}
                 <div className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-default-100">

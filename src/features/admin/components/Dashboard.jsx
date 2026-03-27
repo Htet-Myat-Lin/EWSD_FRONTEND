@@ -3,6 +3,7 @@ import { useGetDashboardData } from '../hooks/useGetDashboardData'
 import { Spinner, Card, CardBody, CardHeader, Table, TableHeader, TableBody, TableColumn, TableRow, TableCell } from '@heroui/react'
 import { LuUsers, LuFileText, LuBuilding2, LuCalendarClock, LuEye } from 'react-icons/lu'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, PieChart, Pie, Legend } from 'recharts'
+import { WelcomeBanner } from '@/components/welcome-banner/WelcomeBanner'
 
 const COLORS = ['#378ADD','#1D9E75','#7F77DD','#639922','#D85A30','#BA7517']
 
@@ -65,6 +66,7 @@ const Dashboard = () => {
 
   return (
     <div className="space-y-4">
+      <WelcomeBanner />
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
         <StatCard label="Total users"          value={total_users}          color="blue"   icon={<LuUsers size={15}/>} />

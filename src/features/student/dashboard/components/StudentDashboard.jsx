@@ -8,6 +8,7 @@ import { FacultyComparison } from "./FacultyComparison"
 import { StatusBreakdown } from "./StatusBreakdown"
 import { RecentActivity } from "./RecentActivity"
 import { NotificationsPanel } from "./NotificationsPanel"
+import { WelcomeBanner } from "@/components/welcome-banner/WelcomeBanner"
 
 // Error fallback component with retry functionality
 const ErrorFallback = ({ error, onRetry }) => (
@@ -71,9 +72,9 @@ export const StudentDashboard = () => {
         ...data,
     }
 
-    return (
-        <div className="bg-gray-50 dark:bg-gray-900 p-4 md:p-2">
+    return (        <div className="bg-gray-50 dark:bg-gray-900 p-4 md:p-2">
             <div className="max-w-full space-y-6">
+                <WelcomeBanner />
                 {/* Top Bar */}
                 <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
                     <div className="flex-1 w-full md:w-auto">
@@ -82,7 +83,7 @@ export const StudentDashboard = () => {
                     <ActionButtons />
                 </div>
 
-                {/* Student Info */}
+                {/* Student Info
                 <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                         Welcome, {safeData.student_info?.name || "Student"}
@@ -90,7 +91,7 @@ export const StudentDashboard = () => {
                     <p className="text-gray-600 dark:text-gray-400">
                         {safeData.student_info?.faculty || ""}
                     </p>
-                </div>
+                </div> */}
 
                 {/* Personal Metrics */}
                 <section>

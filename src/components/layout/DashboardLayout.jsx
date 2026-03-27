@@ -396,14 +396,14 @@ export function DashboardLayout({ menuItems }) {
             </NavbarContent>
 
             {/* Desktop greeting */}
-            <NavbarContent className="hidden md:flex" justify="start">
+            {/* <NavbarContent className="hidden md:flex" justify="start">
               <span className="db-topbar-text">
                 Welcome back,{" "}
                 <span className="db-topbar-text-bold">
                   {user?.name?.split(" ")[0]}
                 </span>
               </span>
-            </NavbarContent>
+            </NavbarContent> */}
 
             {/* Right: bell + avatar */}
             <NavbarContent justify="end" style={{ gap: "10px" }}>

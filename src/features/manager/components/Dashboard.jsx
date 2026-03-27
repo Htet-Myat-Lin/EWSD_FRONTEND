@@ -36,6 +36,7 @@ import {
 import { resolveProfileImageUrl } from "@/utils/helpers";
 import { axiosInstance } from "@/api/axios-instance";
 import { toast } from "react-toastify";
+import { WelcomeBanner } from "@/components/welcome-banner/WelcomeBanner";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -235,6 +236,7 @@ export const ManagerDashboard = () => {
 
   return (
     <div className="space-y-4">
+      <WelcomeBanner />
       {/* ── Header ── */}
       <div className="flex justify-between items-start">
         <div>

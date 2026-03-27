@@ -19,6 +19,7 @@ import StatusPieChart from "./StatusPieChart";
 import SubmissionTrendChart from "./SubmissionTrendChart";
 import LatestSubmissionsCard from "./LatestSubmissionsCard";
 import OldestPendingCard from "./OldestPendingCard";
+import { WelcomeBanner } from "@/components/welcome-banner/WelcomeBanner";
 
 const CoordinatorDashboard = () => {
   const navigate = useNavigate();
@@ -67,6 +68,7 @@ const CoordinatorDashboard = () => {
 
   return (
     <div className="space-y-6">
+      <WelcomeBanner />
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold">Marketing Coordinator Dashboard</h1>

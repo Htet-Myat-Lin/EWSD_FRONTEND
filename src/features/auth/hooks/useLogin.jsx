@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AuthService } from "@/api/services/auth-service";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -6,14 +6,25 @@ import { useAuth } from "@/context/AuthContext";
 
 export const useLogin = () => {
   const navigate = useNavigate();
-  const { setUser } = useAuth()
+  const { setUser, setWelcomeMessage } = useAuth()
+  const queryClient = useQueryClient()
+
 
   return useMutation({
     mutationFn: (credentials) => AuthService.login(credentials),
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       if (data.access_token) {
         localStorage.setItem("access_token", data.access_token);
         setUser(data?.user)
+        
+        if (data?.meta?.is_first_login) {
+          setWelcomeMessage(data?.meta?.welcome_message || "Welcome!")
+        } else {
+          setWelcomeMessage(null)
+        }
+
+        await queryClient.invalidateQueries({ queryKey: ["currentUser"] })
+
         const roleName = data?.user?.role?.name
         if (roleName === "admin") {
           navigate("/admin/dashboard", { replace: true });
