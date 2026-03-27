@@ -1,7 +1,7 @@
 import React from 'react'
 import { useGetDashboardData } from '../hooks/useGetDashboardData'
-import { Spinner, Card, CardBody, CardHeader, Table, TableHeader, TableBody, TableColumn, TableRow, TableCell } from '@heroui/react'
-import { LuUsers, LuFileText, LuBuilding2, LuCalendarClock, LuEye } from 'react-icons/lu'
+import { Spinner, Card, CardBody, CardHeader, Table, TableHeader, TableBody, TableColumn, TableRow, TableCell, Avatar } from '@heroui/react'
+import { LuUsers, LuFileText, LuBuilding2, LuCalendarClock, LuEye, LuGlobe, LuMonitor } from 'react-icons/lu'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, PieChart, Pie, Legend } from 'recharts'
 import { WelcomeBanner } from '@/components/welcome-banner/WelcomeBanner'
 
@@ -48,13 +48,19 @@ const Dashboard = () => {
     </div>
   )
 
-  const { total_users, active_users, total_contributions, days_to_closure, contributions_by_faculty, recent_contributions } = dashboardData
+  const { total_users, active_users, total_contributions, days_to_closure, contributions_by_faculty, recent_contributions, most_active_users, total_browsers, browser_stats, total_page_views, most_viewed_pages } = dashboardData
   const total_faculties = contributions_by_faculty.length
   const totalContributions = contributions_by_faculty.reduce((s, f) => s + f.contributions_count, 0)
 
   const barData = contributions_by_faculty.map(f => ({ name: f.name, contributions: f.contributions_count }))
   const pieData = contributions_by_faculty.map(f => ({ name: f.name, value: f.contributors_count }))
   const hbarData = contributions_by_faculty.map(f => ({ name: f.name, alerts: f.exception_alerts }))
+  
+  // Browser stats for pie chart
+  const browserData = browser_stats.map(b => ({ name: b.browser, value: b.total }))
+  
+  // Page view data
+  const pageViewData = most_viewed_pages.map(p => ({ name: p.page_name, views: p.views }))
 
   const statusBadge = (status) => {
     const map = {
@@ -197,6 +203,82 @@ const Dashboard = () => {
           </Table>
         </CardBody>
       </Card>
+
+      {/* Browser & Page Views Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        {/* Browser Statistics */}
+        <Card className="border border-default-100 shadow-none">
+          <CardHeader className="text-[13px] font-medium flex items-center gap-1.5">
+            <LuGlobe size={14} /> Browser Statistics
+          </CardHeader>
+          <CardBody>
+            <div className="flex items-center gap-4 mb-4">
+              <div className="text-3xl font-bold text-default-900">{total_browsers}</div>
+              <div className="text-xs text-default-400">Users with browser data</div>
+            </div>
+            <ResponsiveContainer width="100%" height={180}>
+              <PieChart>
+                <Pie data={browserData} cx="50%" cy="50%" outerRadius={60} innerRadius={30} dataKey="value" labelLine={false}>
+                  {browserData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                </Pie>
+                <Tooltip content={<CustomTooltip suffix="users" />} />
+                <Legend iconType="square" iconSize={8} wrapperStyle={{ fontSize: 10 }} />
+              </PieChart>
+            </ResponsiveContainer>
+          </CardBody>
+        </Card>
+
+        {/* Page View Statistics */}
+        <Card className="border border-default-100 shadow-none">
+          <CardHeader className="text-[13px] font-medium flex items-center gap-1.5">
+            <LuEye size={14} /> Page Views
+          </CardHeader>
+          <CardBody>
+            <div className="flex items-center gap-4 mb-4">
+              <div className="text-3xl font-bold text-default-900">{total_page_views}</div>
+              <div className="text-xs text-default-400">Total views</div>
+            </div>
+            <ResponsiveContainer width="100%" height={180}>
+              <BarChart data={pageViewData} layout="vertical" margin={{ top: 0, right: 8, left: 60, bottom: 0 }}>
+                <XAxis type="number" tick={{ fontSize: 10 }} axisLine={false} tickLine={false} />
+                <YAxis type="category" dataKey="name" width={70} tick={{ fontSize: 10 }} axisLine={false} tickLine={false} />
+                <Tooltip content={<CustomTooltip suffix="views" />} />
+                <Bar dataKey="views" radius={[0,4,4,0]}>
+                  {pageViewData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </CardBody>
+        </Card>
+
+        {/* Most Active Users */}
+        <Card className="border border-default-100 shadow-none">
+          <CardHeader className="text-[13px] font-medium flex items-center gap-1.5">
+            <LuUsers size={14} /> Most Active Users
+          </CardHeader>
+          <CardBody className="p-0">
+            <Table aria-label="Most active users" removeWrapper>
+              <TableHeader>
+                <TableColumn className="text-[11px]">User</TableColumn>
+                <TableColumn className="text-[11px] text-right">Contributions</TableColumn>
+              </TableHeader>
+              <TableBody>
+                {most_active_users.slice(0, 6).map((user, i) => (
+                  <TableRow key={i}>
+                    <TableCell className="text-xs">
+                      <div className="flex items-center gap-2">
+                        <Avatar size="sm" name={user.name} src={user.profile_path ? `http://localhost:8000/storage/${user.profile_path}` : null} />
+                        <span className="truncate max-w-24">{user.name}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-xs text-right font-medium">{user.total_contributions}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardBody>
+        </Card>
+      </div>
     </div>
   )
 }

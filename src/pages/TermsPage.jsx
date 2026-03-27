@@ -16,6 +16,7 @@ import {
 } from "react-icons/lu";
 import { Header } from "@/components/header/Header";
 import { Footer } from "@/components/footer/Footer";
+import { useTrackPageView } from "@/utils/useTrackPageView";
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
 const styles = `
@@ -451,6 +452,12 @@ const agreementItems = [
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export function TermsPage() {
+  const { mutate } = useTrackPageView("Terms Page");
+
+  React.useEffect(() => {
+    mutate();
+  }, []);
+
   return (
     <>
       <style>{styles}</style>

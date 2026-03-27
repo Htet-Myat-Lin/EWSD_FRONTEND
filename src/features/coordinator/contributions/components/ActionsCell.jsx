@@ -29,12 +29,11 @@ export const ActionsCell = ({ contribution, onDropdownAction, onCommentClick, on
           isIconOnly
           size="sm"
           variant="light"
-          isDisabled={isDisabled}
-          className={isDisabled ? "opacity-50" : "hover:bg-primary-100"}
+          className="hover:bg-primary-100"
         >
           <LuMessageCircleMore
             size={18}
-            className={isDisabled ? "text-gray-300" : "text-primary"}
+            className="text-primary"
           />
         </Button>
       </Tooltip>
