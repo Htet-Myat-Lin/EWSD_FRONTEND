@@ -1,6 +1,7 @@
 import { axiosInstance } from "@/api/axios-instance";
-import { useMutation, useCallback } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useRef } from "react";
+import { useCallback } from "react";
 
 export const useTrackPageView = (pageName) => {
   const hasTracked = useRef(false);

@@ -43,6 +43,7 @@ import { StudentDashboard } from "@/features/student/dashboard/components/Studen
 import { GuestDashboard } from "@/features/guest/dashboard/components/GuestDashboard";
 import { GuestList } from "./features/coordinator/guestlists/components/GuestList";
 import { useTheme } from "@/context/ThemeContext";
+import { TwoFactorAuthPage } from "./pages/TwoFactorAuthPage";
 
 const adminMenuItems = [
   { name: "Dashboard", path: "/admin/dashboard", icon: <LuGauge size={20} /> },
@@ -162,6 +163,7 @@ function App() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/terms" element={<TermsPage />} />
+        <Route path="/two-factor-auth" element={<TwoFactorAuthPage />} />
         // Admin Routes
         <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
           <Route

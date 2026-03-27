@@ -205,9 +205,9 @@ const Dashboard = () => {
       </Card>
 
       {/* Browser & Page Views Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        {/* Browser Statistics */}
-        <Card className="border border-default-100 shadow-none">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+        {/* Browser Statistics - Full width on mobile, 1 col on tablet */}
+        <Card className="border border-default-100 shadow-none lg:col-span-1">
           <CardHeader className="text-[13px] font-medium flex items-center gap-1.5">
             <LuGlobe size={14} /> Browser Statistics
           </CardHeader>
@@ -216,20 +216,22 @@ const Dashboard = () => {
               <div className="text-3xl font-bold text-default-900">{total_browsers}</div>
               <div className="text-xs text-default-400">Users with browser data</div>
             </div>
-            <ResponsiveContainer width="100%" height={180}>
-              <PieChart>
-                <Pie data={browserData} cx="50%" cy="50%" outerRadius={60} innerRadius={30} dataKey="value" labelLine={false}>
-                  {browserData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
-                </Pie>
-                <Tooltip content={<CustomTooltip suffix="users" />} />
-                <Legend iconType="square" iconSize={8} wrapperStyle={{ fontSize: 10 }} />
-              </PieChart>
-            </ResponsiveContainer>
+            <div className="min-h-[180px]">
+              <ResponsiveContainer width="100%" height={180}>
+                <PieChart>
+                  <Pie data={browserData} cx="50%" cy="50%" outerRadius={60} innerRadius={30} dataKey="value" labelLine={false}>
+                    {browserData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                  </Pie>
+                  <Tooltip content={<CustomTooltip suffix="users" />} />
+                  <Legend iconType="square" iconSize={8} wrapperStyle={{ fontSize: 10 }} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
           </CardBody>
         </Card>
 
-        {/* Page View Statistics */}
-        <Card className="border border-default-100 shadow-none">
+        {/* Page View Statistics - Full width on mobile, 1 col on tablet */}
+        <Card className="border border-default-100 shadow-none lg:col-span-1">
           <CardHeader className="text-[13px] font-medium flex items-center gap-1.5">
             <LuEye size={14} /> Page Views
           </CardHeader>
@@ -238,44 +240,48 @@ const Dashboard = () => {
               <div className="text-3xl font-bold text-default-900">{total_page_views}</div>
               <div className="text-xs text-default-400">Total views</div>
             </div>
-            <ResponsiveContainer width="100%" height={180}>
-              <BarChart data={pageViewData} layout="vertical" margin={{ top: 0, right: 8, left: 60, bottom: 0 }}>
-                <XAxis type="number" tick={{ fontSize: 10 }} axisLine={false} tickLine={false} />
-                <YAxis type="category" dataKey="name" width={70} tick={{ fontSize: 10 }} axisLine={false} tickLine={false} />
-                <Tooltip content={<CustomTooltip suffix="views" />} />
-                <Bar dataKey="views" radius={[0,4,4,0]}>
-                  {pageViewData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
+            <div className="min-h-[180px]">
+              <ResponsiveContainer width="100%" height={180}>
+                <BarChart data={pageViewData} layout="vertical" margin={{ top: 0, right: 8, left: 60, bottom: 0 }}>
+                  <XAxis type="number" tick={{ fontSize: 10 }} axisLine={false} tickLine={false} />
+                  <YAxis type="category" dataKey="name" width={70} tick={{ fontSize: 10 }} axisLine={false} tickLine={false} />
+                  <Tooltip content={<CustomTooltip suffix="views" />} />
+                  <Bar dataKey="views" radius={[0,4,4,0]}>
+                    {pageViewData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </CardBody>
         </Card>
 
-        {/* Most Active Users */}
-        <Card className="border border-default-100 shadow-none">
+        {/* Most Active Users - Full width on mobile, 1 col on tablet */}
+        <Card className="border border-default-100 shadow-none lg:col-span-1">
           <CardHeader className="text-[13px] font-medium flex items-center gap-1.5">
             <LuUsers size={14} /> Most Active Users
           </CardHeader>
           <CardBody className="p-0">
-            <Table aria-label="Most active users" removeWrapper>
-              <TableHeader>
-                <TableColumn className="text-[11px]">User</TableColumn>
-                <TableColumn className="text-[11px] text-right">Contributions</TableColumn>
-              </TableHeader>
-              <TableBody>
-                {most_active_users.slice(0, 6).map((user, i) => (
-                  <TableRow key={i}>
-                    <TableCell className="text-xs">
-                      <div className="flex items-center gap-2">
-                        <Avatar size="sm" name={user.name} src={user.profile_path ? `http://localhost:8000/storage/${user.profile_path}` : null} />
-                        <span className="truncate max-w-24">{user.name}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-xs text-right font-medium">{user.total_contributions}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+            <div className="overflow-x-auto">
+              <Table aria-label="Most active users" removeWrapper>
+                <TableHeader>
+                  <TableColumn className="text-[11px]">User</TableColumn>
+                  <TableColumn className="text-[11px] text-right">Contributions</TableColumn>
+                </TableHeader>
+                <TableBody>
+                  {most_active_users.slice(0, 6).map((user, i) => (
+                    <TableRow key={i}>
+                      <TableCell className="text-xs">
+                        <div className="flex items-center gap-2">
+                          <Avatar size="sm" name={user.name} src={user.profile_path ? `http://localhost:8000/storage/${user.profile_path}` : null} />
+                          <span className="truncate max-w-24">{user.name}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-xs text-right font-medium">{user.total_contributions}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           </CardBody>
         </Card>
       </div>

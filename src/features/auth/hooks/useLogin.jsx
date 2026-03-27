@@ -9,10 +9,12 @@ export const useLogin = () => {
   const { setUser, setWelcomeMessage } = useAuth()
   const queryClient = useQueryClient()
 
-
   return useMutation({
     mutationFn: (credentials) => AuthService.login(credentials),
     onSuccess: async (data) => {
+      if (data?.status === "2fa_required") {
+        navigate("/two-factor-auth", { replace: true, state: { email: data?.email } });
+      }
       if (data.access_token) {
         localStorage.setItem("access_token", data.access_token);
         setUser(data?.user)
@@ -26,6 +28,7 @@ export const useLogin = () => {
         await queryClient.invalidateQueries({ queryKey: ["currentUser"] })
 
         const roleName = data?.user?.role?.name
+
         if (roleName === "admin") {
           navigate("/admin/dashboard", { replace: true });
         } else if (roleName === "student") {
@@ -43,7 +46,7 @@ export const useLogin = () => {
       }
     },
     onError: (error) => {
-      console.error("Login failed:", error);
+      console.error(error)
       toast.error(
         error?.response?.data?.message || "Login failed. Please try again.",
       );

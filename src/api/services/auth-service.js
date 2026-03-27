@@ -15,5 +15,13 @@ export const AuthService = {
 
     getCurrentUser: async() => {
         return (await axiosInstance.get("/user")).data
-    }
+    },
+
+    verfiy2FA: async(payload) => {
+        return (await axiosInstance.post("/login/verify", payload)).data
+    },
+
+    resendOTP: async(email) => {
+        return (await axiosInstance.post("/login/resend", {email})).data
+    },
 }
