@@ -15,12 +15,16 @@ export const AuthProvider = ({ children }) => {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setLoading(false)
       setUser(data?.user)
+      
+      // Always sync is_new_user from backend to localStorage
       if (data?.meta?.is_new_user) {
         setWelcomeMessage("Welcome to our platform! We're excited to have you here.")
         setLastLogin(null)
+        localStorage.setItem("is_new_user", "true")
       } else {
         setWelcomeMessage(null)
         setLastLogin(data?.meta?.last_login)
+        localStorage.setItem("is_new_user", "false")
       }
     }
   }, [isPending, data])

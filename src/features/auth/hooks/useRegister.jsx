@@ -13,6 +13,9 @@ export const useRegister = () => {
     mutationFn: AuthService.register,
     onSuccess: (data) => {
       localStorage.setItem("access_token", data.access_token);
+      if (data?.meta?.is_new_user !== undefined) {
+        localStorage.setItem("is_new_user", String(data.meta.is_new_user));
+      }
       setUser(data?.user);
       setWelcomeMessage(data?.meta?.welcome_message || null);
       queryClient.invalidateQueries({ queryKey: ["currentUser"] });

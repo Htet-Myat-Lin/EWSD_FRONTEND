@@ -25,6 +25,7 @@ import { resolveProfileImageUrl } from "@/utils/helpers";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { Chatbot } from "@/components/Chatbot";
 import { FaUniversity } from "react-icons/fa";
+import { DashboardTour } from "@/components/tour/DashboardTour";
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
 const styles = `
@@ -355,9 +356,11 @@ export function DashboardLayout({ menuItems }) {
   return (
     <>
       <style>{styles}</style>
+      <DashboardTour />
       <div className="flex h-screen w-full db-content-bg">
         {/* ── Desktop Sidebar ── */}
         <aside
+          data-tour="sidebar-nav"
           className="hidden md:flex flex-col fixed h-full z-40"
           style={{ width: "220px" }}
         >
@@ -415,18 +418,21 @@ export function DashboardLayout({ menuItems }) {
                     size="sm"
                     isInvisible={unreadCount === 0}
                   >
-                    <button className="db-notif-btn">
+                    <button data-tour="notification-button" className="db-notif-btn">
                       <LuBell size={16} className="db-menu-icon" />
                     </button>
                   </Badge>
                 </Link>
               )}
 
-              <ThemeToggle />
+              <div data-tour="theme-toggle">
+                <ThemeToggle />
+              </div>
 
               <Dropdown placement="bottom-end">
                 <DropdownTrigger>
                   <Avatar
+                    data-tour="profile-menu"
                     isBordered
                     as="button"
                     className="transition-transform"

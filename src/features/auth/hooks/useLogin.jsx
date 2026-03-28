@@ -20,9 +20,11 @@ export const useLogin = () => {
         setUser(data?.user)
         
         if (data?.meta?.is_first_login) {
-          setWelcomeMessage(data?.meta?.welcome_message || "Welcome!")
+          localStorage.setItem("is_new_user", "true");
+          setWelcomeMessage(data?.meta?.welcome_message || "Welcome!");
         } else {
-          setWelcomeMessage(null)
+          localStorage.setItem("is_new_user", "false");
+          setWelcomeMessage(null);
         }
 
         await queryClient.invalidateQueries({ queryKey: ["currentUser"] })

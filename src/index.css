@@ -35,6 +35,7 @@
   --color-text-3: #6b7280;
   --color-border-3: #e5e7eb;
   --color-surface-raised: #ffffff;
+  --beacon-color: #FFFDD0;
 }
 
 .dark {
@@ -70,6 +71,7 @@
   --color-text-3: #94a3b8;
   --color-border-3: #334155;
   --color-surface-raised: #1e293b;
+  --beacon-color: #ffffff;
 }
 
 .dark body {
