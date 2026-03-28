@@ -29,4 +29,7 @@ export const UserService = {
     getFacultyGuests: async (page = 1) => {
         return (await axiosInstance.get("/faculty/guests", { params: { page } })).data
     },
+    toggle2FA: async (current_password) => {
+        return (await axiosInstance.post("/user/toggle-2fa", { current_password })).data
+    },
 }
