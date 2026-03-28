@@ -23,7 +23,7 @@ const StatCard = ({ label, value, color, icon }) => {
       </div>
       <div>
         <p className={`text-[11px] font-medium ${t.label}`}>{label}</p>
-        <p className={`text-2xl font-medium ${t.val}`}>{value}</p>
+        <p className={`text-xl font-medium ${t.val}`}>{value}</p>
       </div>
     </div>
   )
@@ -48,7 +48,7 @@ const Dashboard = () => {
     </div>
   )
 
-  const { total_users, active_users, total_contributions, days_to_closure, contributions_by_faculty, recent_contributions, most_active_users, total_browsers, browser_stats, total_page_views, most_viewed_pages } = dashboardData
+  const { total_users, active_users, total_contributions, current_academic_year, days_to_closure, contributions_by_faculty, recent_contributions, most_active_users, total_browsers, browser_stats, total_page_views, most_viewed_pages } = dashboardData
   const total_faculties = contributions_by_faculty.length
   const totalContributions = contributions_by_faculty.reduce((s, f) => s + f.contributions_count, 0)
 
@@ -74,12 +74,13 @@ const Dashboard = () => {
     <div className="space-y-4">
       <WelcomeBanner />
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-6 gap-3">
         <StatCard label="Total users"          value={total_users}          color="blue"   icon={<LuUsers size={15}/>} />
         <StatCard label="Contributions"        value={total_contributions}  color="teal"   icon={<LuFileText size={15}/>} />
         <StatCard label="Active contributors"  value={active_users}         color="green"  icon={<LuUsers size={15}/>} />
         <StatCard label="Faculties"            value={total_faculties}      color="purple" icon={<LuBuilding2 size={15}/>} />
-        <StatCard label="Days to closure"      value={days_to_closure}      color="amber"  icon={<LuCalendarClock size={15}/>} />
+        <StatCard label="Academic Year"       value={current_academic_year || '-'} color="blue" icon={<LuCalendarClock size={15}/>} />
+        <StatCard label="Days to closure"      value={days_to_closure !== null ? (days_to_closure < 0 ? `${Math.abs(days_to_closure)} days passed` : days_to_closure) : '-'}      color="amber"  icon={<LuCalendarClock size={15}/>} />
       </div>
 
       {/* Charts row */}
