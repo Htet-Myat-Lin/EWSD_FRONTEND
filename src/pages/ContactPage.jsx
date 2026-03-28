@@ -474,7 +474,7 @@ export function ContactPage() {
           </div>
         </section>
 
-        <section className="py-20">
+        <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             {/* ── Info Cards ── */}
@@ -660,7 +660,7 @@ export function ContactPage() {
         </section>
 
         {/* ── Map Placeholder ── */}
-        <section className="pb-20">
+        <section className="pb-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="cp-map">
               <div className="cp-map-icon">
