@@ -32,4 +32,8 @@ export const UserService = {
     completeTour: async () => {
         return (await axiosInstance.post("/user/complete-tour")).data
     },
+    
+    toggle2FA: async (current_password) => {
+        return (await axiosInstance.post("/user/toggle-2fa", { current_password })).data
+    },
 }

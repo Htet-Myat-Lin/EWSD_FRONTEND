@@ -9,22 +9,41 @@ import {
   CardHeader,
   Divider,
   Avatar,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  Switch,
 } from "@heroui/react";
-import { LuLock, LuEye, LuEyeOff, LuUser, LuImage } from "react-icons/lu";
+import { LuLock, LuEye, LuEyeOff, LuUser, LuImage, LuShieldCheck } from "react-icons/lu";
 import { toast } from "react-toastify";
 import { useAuth } from "@/context/AuthContext";
 import { useUpdatePassword } from "@/features/student/profile/hooks/useUpdatePassword";
 import { useUpdateProfile } from "@/features/student/profile/hooks/useUpdateProfile";
+import { useToggle2FA } from "@/features/student/profile/hooks/useToggle2FA";
 import { resolveProfileImageUrl } from "@/utils/helpers";
 
 const MAX_PROFILE_SIZE = 2 * 1024 * 1024;
 const ALLOWED_PROFILE_TYPES = ["image/jpeg", "image/png", "image/jpg"];
+
+function isTwoFactorEnabled(user) {
+  if (!user) return false;
+  if (typeof user.is_2fa_on === "boolean") return user.is_2fa_on;
+  if (user.is_2fa_on === 1 || user.is_2fa_on === "1") return true;
+  if (typeof user.two_factor_enabled === "boolean") return user.two_factor_enabled;
+  if (user.two_factor_enabled === 1 || user.two_factor_enabled === "1") return true;
+  return Boolean(user.two_factor_confirmed_at);
+}
 
 export function UpdateProfileForm() {
   const { user, setUser } = useAuth();
   const [isVisibleCurrent, setIsVisibleCurrent] = useState(false);
   const [isVisibleNew, setIsVisibleNew] = useState(false);
   const [isVisibleConfirm, setIsVisibleConfirm] = useState(false);
+  const [is2FAModalOpen, setIs2FAModalOpen] = useState(false);
+  const [twoFAPassword, setTwoFAPassword] = useState("");
+  const [isVisible2FAPassword, setIsVisible2FAPassword] = useState(false);
 
   const {
     register: registerProfile,
@@ -87,6 +106,29 @@ export function UpdateProfileForm() {
     useUpdatePassword(() => {
       resetPasswordForm();
     });
+
+  const twoFactorOn = isTwoFactorEnabled(user);
+
+  const { mutate: toggle2FA, isPending: isToggling2FA } = useToggle2FA();
+
+  const close2FAModal = () => {
+    setIs2FAModalOpen(false);
+    setTwoFAPassword("");
+    setIsVisible2FAPassword(false);
+  };
+
+  const onConfirmToggle2FA = (e) => {
+    e.preventDefault();
+    if (!twoFAPassword.trim()) {
+      toast.error("Please enter your current password.");
+      return;
+    }
+    toggle2FA({ current_password: twoFAPassword }, { onSuccess: () => {
+      setIs2FAModalOpen(false);
+      setTwoFAPassword("");
+      setIsVisible2FAPassword(false);
+    } });
+  };
 
   const onSubmitProfile = (data) => {
     if (!user?.id) return;
@@ -234,6 +276,101 @@ export function UpdateProfileForm() {
           </Form>
         </CardBody>
       </Card>
+
+      {/* Two-factor authentication */}
+      <Card className="w-full shadow-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+        <CardHeader className="flex flex-col items-start px-6 pt-6 pb-4">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+            Two-factor authentication
+          </h3>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            Add an extra step at sign-in with a code sent to your email.
+          </p>
+        </CardHeader>
+
+        <Divider className="dark:bg-gray-700" />
+
+        <CardBody className="px-6 py-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="flex items-start gap-3">
+              <div className="mt-0.5 rounded-lg bg-blue-50 dark:bg-blue-900/30 p-2 text-blue-700 dark:text-blue-300">
+                <LuShieldCheck size={22} className="shrink-0" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                  {twoFactorOn ? "Two-factor authentication is on" : "Two-factor authentication is off"}
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 max-w-xl">
+                  You will be asked for a verification code after your password when this is enabled.
+                </p>
+              </div>
+            </div>
+            <Switch
+              isSelected={twoFactorOn}
+              onValueChange={() => {
+                setTwoFAPassword("");
+                setIsVisible2FAPassword(false);
+                setIs2FAModalOpen(true);
+              }}
+              aria-label={
+                twoFactorOn ? "Open confirmation to turn off two-factor authentication" : "Open confirmation to turn on two-factor authentication"
+              }
+              classNames={{
+                base: "flex-row-reverse gap-3 max-sm:w-full max-sm:justify-between",
+                label: "text-sm font-medium text-gray-700 dark:text-gray-300",
+              }}
+            >
+              {twoFactorOn ? "On" : "Off"}
+            </Switch>
+          </div>
+        </CardBody>
+      </Card>
+
+      <Modal isOpen={is2FAModalOpen} onClose={close2FAModal} size="md">
+        <ModalContent>
+          <form onSubmit={onConfirmToggle2FA}>
+            <ModalHeader className="flex flex-col gap-1">
+              {twoFactorOn ? "Turn off two-factor authentication?" : "Turn on two-factor authentication?"}
+            </ModalHeader>
+            <ModalBody className="gap-4">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                {twoFactorOn
+                  ? "You will only need your password to sign in. Enter your current password to confirm."
+                  : "Enter your current password to enable two-factor authentication on your account."}
+              </p>
+              <Input
+                label="Current password"
+                labelPlacement="outside"
+                placeholder="Enter your current password"
+                type={isVisible2FAPassword ? "text" : "password"}
+                autoComplete="current-password"
+                value={twoFAPassword}
+                onValueChange={setTwoFAPassword}
+                startContent={<LuLock size={18} className={inputIconClass} />}
+                endContent={passwordToggleButton(isVisible2FAPassword, setIsVisible2FAPassword)}
+                classNames={{
+                  label: "text-gray-700 dark:text-gray-300",
+                  inputWrapper: "border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-900/50",
+                  input: "text-gray-900 dark:text-gray-100",
+                }}
+              />
+            </ModalBody>
+            <ModalFooter>
+              <Button variant="light" onPress={close2FAModal} isDisabled={isToggling2FA}>
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                color="primary"
+                className="bg-blue-900 dark:bg-blue-600 text-white font-medium"
+                isLoading={isToggling2FA}
+              >
+                Confirm
+              </Button>
+            </ModalFooter>
+          </form>
+        </ModalContent>
+      </Modal>
 
       {/* Change Password Card */}
       <Card className="w-full shadow-sm border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
