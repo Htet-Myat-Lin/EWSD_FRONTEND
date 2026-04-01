@@ -56,7 +56,7 @@ const TwoFactorAuth = () => {
   const handleResend = () => {
     if (resendCooldown > 0) return;
 
-    resendOTP({email},{
+    resendOTP({ email },{
       onSuccess: () => {
         setResendCooldown(60);
         setOtp("");
