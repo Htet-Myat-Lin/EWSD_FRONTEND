@@ -24,4 +24,16 @@ export const AuthService = {
     resendOTP: async(email) => {
         return (await axiosInstance.post("/login/resend", {email})).data
     },
+
+    forgotPassword: async(email) => {
+        return (await axiosInstance.post("/forgot-password", { email })).data
+    },
+
+    verifyPasswordCode: async (payload) => {
+        return (await axiosInstance.post("/forgot-password/verify", payload)).data
+    },
+
+    resetPassword: async (payload) => {
+        return await axiosInstance.post("/forgot-password/reset", payload)
+    }
 }

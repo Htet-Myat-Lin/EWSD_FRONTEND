@@ -44,6 +44,8 @@ import { GuestDashboard } from "@/features/guest/dashboard/components/GuestDashb
 import { GuestList } from "./features/coordinator/guestlists/components/GuestList";
 import { useTheme } from "@/context/ThemeContext";
 import { TwoFactorAuthPage } from "./pages/TwoFactorAuthPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 
 const adminMenuItems = [
   { name: "Dashboard", path: "/admin/dashboard", icon: <LuGauge size={20} /> },
@@ -164,6 +166,8 @@ function App() {
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/terms" element={<TermsPage />} />
         <Route path="/two-factor-auth" element={<TwoFactorAuthPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
         // Admin Routes
         <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
           <Route
