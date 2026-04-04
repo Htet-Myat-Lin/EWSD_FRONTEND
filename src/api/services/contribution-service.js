@@ -95,4 +95,38 @@ export const ContributionService = {
         }
         return (await axiosInstance.get("/guest/dashboard", { params })).data;
     },
+
+    getSelectedContributions: async (page = 1, categoryId = null, academicYearId = null, search = null) => {
+        const params = { page };
+        if (categoryId !== undefined && categoryId !== null) {
+            params.category_id = categoryId;
+        }
+        if (academicYearId !== undefined && academicYearId !== null) {
+            params.academic_year_id = academicYearId;
+        }
+        if (search !== undefined && search !== null && search.trim() !== '') {
+            params.search = search.trim();
+        }
+        const response = (await axiosInstance.get("/contributions/selected/student", { params })).data;
+        
+        if (response.contributions) {
+            return {
+                data: response.contributions.data ?? [],
+                meta: {
+                    current_page: response.contributions.current_page ?? 1,
+                    last_page: response.contributions.last_page ?? 1,
+                    total: response.contributions.total ?? 0,
+                },
+            };
+        }
+        
+        return {
+            data: response.data ?? [],
+            meta: {
+                current_page: response.current_page ?? 1,
+                last_page: response.last_page ?? 1,
+                total: response.total ?? 0,
+            },
+        };
+    },
 }
