@@ -10,6 +10,8 @@ export const useCreateComment = (contributionId) => {
             toast.success("Comment added successfully");
             queryClient.invalidateQueries({ queryKey: ['contribution-comments'] })
         },
-        onError: (err) => console.error(err)
+        onError: (err) => {
+            toast.error(err?.response?.data?.message || "Failed to add comment");
+        }
     })
 }

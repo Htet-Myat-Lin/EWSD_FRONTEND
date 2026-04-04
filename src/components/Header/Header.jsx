@@ -205,6 +205,7 @@ export function Header() {
       student: "/student/dashboard",
       marketing_coordinator: "/marketing-coordinator/dashboard",
       marketing_manager: "/marketing-manager/dashboard",
+      guest: "/guest/dashboard"
     };
     const route = routes[user?.role?.name];
     if (route) navigate(route);
