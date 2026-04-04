@@ -15,6 +15,7 @@ import {
   LuBookPlus,
   LuFileText,
   LuInbox,
+  LuFileCheck,
 } from "react-icons/lu";
 import { LiaUserClockSolid } from "react-icons/lia";
 import { CgProfile } from "react-icons/cg";
@@ -29,6 +30,7 @@ import { UpdateProfileForm } from "./features/student/profile/components/UpdateP
 import { ContributionsList } from "./features/coordinator/contributions/components/ContributionsList";
 import { StudentList } from "./features/coordinator/userlists/components/StudentList";
 import ContributionList from "./features/student/contributions/components/ContributionList";
+import { SelectedContributionsList } from "./features/student/contributions/components/SelectedContributionsList";
 import CoordinatorDashboard from "./features/coordinator/dashboard/components/CoordinatorDashboard";
 import { EditContribution } from "./features/student/contributions/components/EditContribution";
 import { Contributions } from "./features/admin/components/ContributionList";
@@ -97,6 +99,11 @@ const studentMenuItems = [
     name: "My Contributions",
     path: "/student/my-contributions",
     icon: <LuFileText size={20} />,
+  },
+  {
+    name: "Selected Contributions",
+    path: "/student/selected-contributions",
+    icon: <LuFileCheck size={20} />,
   },
   { name: "Profile", path: "/student/profile", icon: <CgProfile size={20} /> },
   {
@@ -211,6 +218,7 @@ function App() {
               path="my-contributions/:id/edit"
               element={<EditContribution />}
             />
+            <Route path="selected-contributions" element={<SelectedContributionsList />} />
             <Route path="profile" element={<UpdateProfileForm />} />
             <Route path="notifications" element={<NotificationList />} />
           </Route>
