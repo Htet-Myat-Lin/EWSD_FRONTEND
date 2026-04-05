@@ -25,9 +25,9 @@ export const useContributionFilters = () => {
 
   return {
     page, setPage,
-    statusFilter, onStatusChange: handleStatusChange,
-    categoryFilter, onCategoryChange: handleCategoryChange,
-    searchQuery, onSearchChange: setSearchQuery,
+    statusFilter, setStatus: handleStatusChange,
+    categoryFilter, setCategory: handleCategoryChange,
+    searchQuery, setSearch: setSearchQuery,
     debouncedSearch,
     activeFiltersCount,
     // API-ready params

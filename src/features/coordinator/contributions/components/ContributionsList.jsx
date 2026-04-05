@@ -89,7 +89,7 @@ const InlineFilters = ({ filters, categoryOptions, categoriesLoading }) => {
       <div className="flex gap-2">
         <Input
           placeholder="Search contributions…"
-          value={filters.searchParam ?? ""}
+          value={filters.searchQuery ?? ""}
           onValueChange={filters.setSearch}
           startContent={<SearchIcon />}
           size="sm"
@@ -110,7 +110,7 @@ const InlineFilters = ({ filters, categoryOptions, categoriesLoading }) => {
         >
           Filters
           {/* Active dot if any filter is set */}
-          {(filters.statusParam || filters.categoryParam) && (
+          {(filters.statusFilter !== "all" || filters.categoryFilter !== "all") && (
             <span className="w-1.5 h-1.5 rounded-full bg-primary absolute top-1 right-1" />
           )}
         </Button>
