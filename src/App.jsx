@@ -175,6 +175,7 @@ function App() {
         <Route path="/two-factor-auth" element={<TwoFactorAuthPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
+
         // Admin Routes
         <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
           <Route
@@ -190,6 +191,7 @@ function App() {
             <Route path="contributions" element={<Contributions />} />
           </Route>
         </Route>
+
         // Marketing Manager Route
         <Route
           element={<ProtectedRoute allowedRoles={["marketing_manager"]} />}
@@ -202,6 +204,7 @@ function App() {
             <Route path="contributions" element={<Contributions />} />
           </Route>
         </Route>
+
         // Student Routes
         <Route element={<ProtectedRoute allowedRoles={["student"]} />}>
           <Route
@@ -223,6 +226,7 @@ function App() {
             <Route path="notifications" element={<NotificationList />} />
           </Route>
         </Route>
+
         // Marketing Coordinator Routes
         <Route
           element={<ProtectedRoute allowedRoles={["marketing_coordinator"]} />}
@@ -242,17 +246,6 @@ function App() {
           </Route>
         </Route>
 
-        // Guest Routes
-        <Route element={<ProtectedRoute allowedRoles={["guest"]} />}>
-          <Route
-            path="/guest"
-            element={<DashboardLayout menuItems={guestMenuItems} />}
-          >
-            <Route path="dashboard" element={<GuestDashboard />} />
-            <Route path="profile" element={<UpdateProfileForm />} />
-          </Route>
-        </Route>
-        
         // Guest Routes
         <Route element={<ProtectedRoute allowedRoles={["guest"]} />}>
           <Route

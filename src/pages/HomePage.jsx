@@ -549,14 +549,6 @@ export function HomePage() {
                     </div>
                   ))}
                 </div>
-                <Button
-                  as={RouterLink}
-                  to="/articles"
-                  className="hp-view-btn"
-                  endContent={<LuArrowRight size={15} />}
-                >
-                  View All Updates
-                </Button>
               </div>
 
               {/* Right */}
@@ -597,7 +589,7 @@ export function HomePage() {
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button
                 as={RouterLink}
-                to="/register"
+                to="/student/submit-contribution"
                 className="hp-btn-primary"
               >
                 Start Contributing
